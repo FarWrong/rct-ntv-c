@@ -15,7 +15,7 @@ export default function Page() {
     <View style={defaultPageTheme().container}>
       <Image source={require('../../assets/bidenblast.jpg')} style={{width: bidenSize, height: bidenSize}}/>
       <Button onPress={()=>{setBidenSize(bidenSize+1);}} title="Go to About"></Button>
-      <Text>UNKSKADUNKSAUNSKADUNSKAUNKSADUNSKA</Text>
+      <Text>UNKSKADUNKSAUNSKADUNSKAUNKSADUNSBB</Text>
       <StatusBar style="auto" />
     </View>
   );
