@@ -1,22 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View,Image } from 'react-native';
 import registerRootComponent from 'expo/build/launch/registerRootComponent';
-import { User } from './types'
 import { createClient, Provider } from 'urql';
-import { useQuery } from 'urql'
-import { GetUsersDocument } from './graphql/generated'
-import { clientd } from './graphql/client';
+import React from 'react';
+import { Link } from 'expo-router';
+import { Button } from '../components/button';
+import { router } from 'expo-router';
 
 
-
-export default function App() {
-  const [results] = useQuery({
-    query: GetUsersDocument
-  })
-  console.log(results)
+export default function Page() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
+      <Image source={require('../../assets/bidenblast.jpg')} style={{width: 190, height: 190}}/>
+      <Button onPress={()=>{router.replace('/about');}} title="Go to About"></Button>
       <StatusBar style="auto" />
     </View>
   );
@@ -32,5 +28,4 @@ const styles = StyleSheet.create({
 });
 
 
-registerRootComponent(App);
 
