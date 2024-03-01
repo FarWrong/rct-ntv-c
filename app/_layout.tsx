@@ -10,7 +10,11 @@ import {Stack} from 'expo-router'
 export function RenderDevice() {
     const { theme } = useTheme();
     return(
-        <Stack>
+        <Stack screenOptions={{
+            contentStyle:{
+                
+              backgroundColor:theme.colors.background
+            }}}>
             <Stack.Screen name="(tabs)" options={{headerShown:false}}></Stack.Screen>
         </Stack>
     )

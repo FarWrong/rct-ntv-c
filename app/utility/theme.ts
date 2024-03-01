@@ -1,3 +1,4 @@
+import { DarkTheme } from '@react-navigation/native';
 // theme.ts
 export interface Theme {
   colors: {
@@ -24,7 +25,7 @@ export interface Theme {
 export const lightTheme: Theme = {
   colors: {
     primary: '#0AB3F9', // Existing
-    background: '#ffffff', // Existing
+    background: '#F6F7FB', // Existing
     text: '#000000', // Existing
     buttonBackground: '#7c3aed', // Tailwind bg-violet-600 equivalent
     buttonText: '#ffffff', // For button text
@@ -46,7 +47,7 @@ export const lightTheme: Theme = {
 export const darkTheme: Theme = {
   colors: {
     primary: '#6200ee', // Existing
-    background: '#ffffff', // Existing
+    background: 'yellow', // Existing
     text: '#000000', // Existing
     buttonBackground: '#7c3aed', // Tailwind bg-violet-600 equivalent
     buttonText: '#ffffff', // For button text

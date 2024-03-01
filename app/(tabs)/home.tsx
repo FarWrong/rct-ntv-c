@@ -6,26 +6,15 @@ import React from 'react';
 import { Link } from 'expo-router';
 import { Button } from '../components/button';
 import { router } from 'expo-router';
-
+import { defaultPageTheme } from '../utility/style';
 
 export default function Page() {
   return (
-    <View style={styles.container}>
+    <View style={defaultPageTheme().container}>
       <Image source={require('../../assets/bidenblast.jpg')} style={{width: 190, height: 190}}/>
       <Button onPress={()=>{router.replace('/about');}} title="Go to About"></Button>
       <StatusBar style="auto" />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
-
-
 
