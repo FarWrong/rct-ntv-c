@@ -1,20 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import registerRootComponent from 'expo/build/launch/registerRootComponent';
-import { User } from './types'
 import { createClient, Provider } from 'urql';
-import { useQuery } from 'urql'
-import { GetUsersDocument } from './graphql/generated'
-import { clientd } from './graphql/client';
-import App from './App';
+import React from 'react';
+import { Link, Redirect } from 'expo-router';
+import { Button } from './components/button';
+import { router } from 'expo-router';
 
 
-export default function Main() {
-  return (
-    <Provider value={clientd}>
-      <App />
-    </Provider>
-  );
+export default function Page() {
+  return <Redirect href="/home" />;
 }
 
 const styles = StyleSheet.create({
@@ -25,7 +20,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-
-registerRootComponent(Main);
-
