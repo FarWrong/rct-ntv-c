@@ -9,7 +9,7 @@ import { router } from 'expo-router';
 
 
 export default function Page() {
-  return <Redirect href="/home"/>;
+  return <Redirect href="/home" />;
 }
 
 const styles = StyleSheet.create({
@@ -20,6 +20,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-
-
