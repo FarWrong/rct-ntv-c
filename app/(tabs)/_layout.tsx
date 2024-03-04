@@ -16,6 +16,7 @@ export default () =>{
 
   const { theme } = useTheme();
   return (
+    
     <Tabs screenOptions={({ route }) => ({
       tabBarIcon: ({ focused, color, size }) => {
         let iconName;
