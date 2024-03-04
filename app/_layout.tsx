@@ -8,6 +8,7 @@ import {Stack} from 'expo-router'
 import { useApiContext,ApiProvider } from '../api/ApiContext';
 import { useNavigation } from 'expo-router';
 import { router } from 'expo-router';
+
 export function RenderDevice() {
     const { theme } = useTheme();
     const {loggedIn} = useApiContext();
@@ -22,7 +23,6 @@ export function RenderDevice() {
         <Stack.Screen name="(tabs)" options={{headerShown:false}}></Stack.Screen>
       </Stack>
     )
-
 }
 
 export default function RootLayout() {

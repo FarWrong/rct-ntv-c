@@ -1,13 +1,14 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View,Image } from 'react-native';
 import registerRootComponent from 'expo/build/launch/registerRootComponent';
+import { Link, router } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import React, { useState, useEffect } from 'react';
+import { Image, Text, View } from 'react-native';
 import { createClient, Provider } from 'urql';
-import React, {useState, useEffect} from 'react';
-import { Link } from 'expo-router';
+
 import { Button } from '../components/button';
-import { router } from 'expo-router';
 import { defaultPageTheme } from '../utility/style';
 import { TextInput } from 'react-native';
+
 
 
 export default function Page() {
@@ -19,10 +20,8 @@ export default function Page() {
   return (
     <View style={defaultPageTheme().container}>
       <Image source={require('../../assets/ricehat.jpg')} style={{width: bidenSize, height: bidenSize}}/>
-
       <Text>babo</Text>
       <StatusBar style="auto" />
     </View>
   );
 }
-
