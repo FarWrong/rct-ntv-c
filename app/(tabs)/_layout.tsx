@@ -4,7 +4,16 @@ import { Stack } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useTheme } from '../utility/ThemeContext';
 
-export default () => {
+import { Redirect } from 'expo-router';
+import { useApiContext } from '../../api/ApiContext';
+import { router } from 'expo-router';
+export default () =>{
+  const { loggedIn } = useApiContext();
+  
+  if(!loggedIn){
+    return <Redirect href="/login" />;
+  }
+
   const { theme } = useTheme();
   return (
     <Tabs screenOptions={({ route }) => ({

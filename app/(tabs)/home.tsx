@@ -7,22 +7,20 @@ import { createClient, Provider } from 'urql';
 
 import { Button } from '../components/button';
 import { defaultPageTheme } from '../utility/style';
+import { TextInput } from 'react-native';
+
 
 
 export default function Page() {
   const [bidenSize, setBidenSize] = useState(130);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+    // Here you would typically save the token to localStorage/sessionStorage and redirect the user
 
   return (
     <View style={defaultPageTheme().container}>
-      <Image
-        source={require('../../assets/bidenblast.jpg')}
-        style={{ width: bidenSize, height: bidenSize }}
-      />
-      <Button
-        onPress={() => { setBidenSize(bidenSize + 1); }}
-        title="Go to About"
-      />
-      <Text>UNKSKADUNKSAUNSKADUNSKAUNKSADUNSKA</Text>
+      <Image source={require('../../assets/ricehat.jpg')} style={{width: bidenSize, height: bidenSize}}/>
+      <Text>babo</Text>
       <StatusBar style="auto" />
     </View>
   );
