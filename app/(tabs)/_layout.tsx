@@ -22,8 +22,7 @@ export default () =>{
         let iconName;
         // Icon List
         if (route.name === 'home') iconName = 'home';
-        else if (route.name === 'about') iconName = 'help';
-        else iconName = 'log-in';
+        else iconName = 'help';
         // If icon isn't selected
         if (!focused) iconName += "-outline"
         // You can return any component that you like here!
@@ -35,7 +34,6 @@ export default () =>{
     >
       <Tabs.Screen name="home" />
       <Tabs.Screen name="about" />
-      <Tabs.Screen name="login" />
     </Tabs>
   );
 }
