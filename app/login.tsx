@@ -10,6 +10,7 @@ import { defaultPageTheme } from './utility/style';
 import { TextInput } from 'react-native';
 import { useApiContext } from './../api/ApiContext';
 import { ApiContext } from '../api/ApiContext';
+import { TextBox } from './components/textbox';
 
 
 
@@ -22,17 +23,19 @@ export default function Page() {
   return (
     <View style={defaultPageTheme().container}>
       <Image source={require('./../assets/ricehat.jpg')} style={{width: bidenSize, height: bidenSize}}/>
-      <TextInput
-        placeholder="Username"
+      <TextBox 
+        placeholder='Username'
         value={username}
         onChangeText={setUsername}
+        secure={false}
       />
-      <TextInput
-        placeholder="Password"
+      <TextBox 
+        placeholder='Password'
         value={password}
         onChangeText={setPassword}
-        secureTextEntry // Hides password input
-      /> <Button onPress={async () => {await loginUser(username,password);}} title="Try Login"></Button>
+        secure={true}
+      />
+      <Button onPress={async () => {await loginUser(username,password);}} title="Try Login"></Button>
       <Text>babo</Text>
       <StatusBar style="auto" />
     </View>
