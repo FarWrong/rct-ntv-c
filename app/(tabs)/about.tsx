@@ -8,7 +8,7 @@ import { defaultPageTheme } from '../utility/style';
 import { ApiContext, useApiContext } from '../../api/ApiContext';
 
 export default function Page() {
-  const {signoutUser} = useApiContext();
+  const { signoutUser } = useApiContext();
   return (
     <View style={defaultPageTheme().container}>
       <Image
@@ -19,8 +19,8 @@ export default function Page() {
         onPress={() => { router.replace('/'); }}
         title="Go Home"
       />
-      <Button 
-        onPress={()=>{signoutUser();}}
+      <Button
+        onPress={() => { signoutUser(); }}
         title="Signout"
       />
       <StatusBar style="auto" />

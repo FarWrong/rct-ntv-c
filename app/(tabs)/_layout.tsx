@@ -7,7 +7,7 @@ import { useTheme } from '../utility/ThemeContext';
 import { Redirect } from 'expo-router';
 import { useApiContext } from '../../api/ApiContext';
 import { router } from 'expo-router';
-export default () =>{
+export default () => {
   const { loggedIn } = useApiContext();
   
   if(!loggedIn){
@@ -32,8 +32,8 @@ export default () =>{
       tabBarInactiveTintColor: 'gray',
     })}
     >
-      <Tabs.Screen name="home" />
-      <Tabs.Screen name="about" />
+      <Tabs.Screen name="Home" />
+      <Tabs.Screen name="About" />
     </Tabs>
   );
 }
