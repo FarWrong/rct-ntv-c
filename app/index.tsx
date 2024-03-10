@@ -6,10 +6,17 @@ import React from 'react';
 import { Link, Redirect } from 'expo-router';
 import { Button } from './components/button';
 import { router } from 'expo-router';
-
+import { useApiContext } from '../api/ApiContext';
+import {Stack} from 'expo-router'
+import { useTheme } from './utility/ThemeContext';
 
 export default function Page() {
-  return <Redirect href="/home"/>;
+  const { theme } = useTheme();
+  const {loggedIn} = useApiContext();
+  if(!loggedIn){
+    return <Redirect href="/login" />;
+  }
+  return <Redirect href="/home" />
 }
 
 const styles = StyleSheet.create({
@@ -20,6 +27,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-
-
