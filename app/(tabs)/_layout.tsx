@@ -7,7 +7,7 @@ import { useTheme } from '../utility/ThemeContext';
 import { Redirect } from 'expo-router';
 import { useApiContext } from '../../api/ApiContext';
 import { router } from 'expo-router';
-export default () =>{
+export default () => {
   const { loggedIn } = useApiContext();
   
   if(!loggedIn){
@@ -22,8 +22,7 @@ export default () =>{
         let iconName;
         // Icon List
         if (route.name === 'home') iconName = 'home';
-        else if (route.name === 'about') iconName = 'help';
-        else iconName = 'log-in';
+        else iconName = 'help';
         // If icon isn't selected
         if (!focused) iconName += "-outline"
         // You can return any component that you like here!
@@ -33,9 +32,8 @@ export default () =>{
       tabBarInactiveTintColor: 'gray',
     })}
     >
-      <Tabs.Screen name="home" />
-      <Tabs.Screen name="about" />
-      <Tabs.Screen name="login" />
+      <Tabs.Screen name="Home" />
+      <Tabs.Screen name="About" />
     </Tabs>
   );
 }
