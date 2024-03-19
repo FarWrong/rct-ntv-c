@@ -43,9 +43,6 @@ export default function LoginPage() {
         source={require('./../assets/ricehat.jpg')}
         style={{width: 200, height: 200}}
       />
-      <TextInput
-        placeholder="Username"
-      <Image source={require('./../assets/ricehat.jpg')} style={{width: bidenSize, height: bidenSize}}/>
       <TextBox 
         placeholder='Username'
         value={username}
@@ -56,18 +53,13 @@ export default function LoginPage() {
         placeholder='Password'
         value={password}
         onChangeText={setPassword}
-        secureTextEntry // Hides password input
+        secure={true} // Hides password input
       />
       <Button 
         onPress={async () => {await loginUser(username,password);}}
         title="Try Login"
       />
       <StatusBar style="auto"/>
-        secure={true}
-      />
-      <Button onPress={async () => {await loginUser(username,password);}} title="Try Login"></Button>
-      <Text>babo</Text>
-      <StatusBar style="auto" />
     </View>
   );
 }
