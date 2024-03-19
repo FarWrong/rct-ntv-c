@@ -7,16 +7,14 @@ import { Link, Redirect } from 'expo-router';
 import { Button } from './components/button';
 import { router } from 'expo-router';
 import { useApiContext } from '../api/ApiContext';
-import {Stack} from 'expo-router'
+import { Stack } from 'expo-router'
 import { useTheme } from './utility/ThemeContext';
 
-export default function Page() {
-  const { theme } = useTheme();
-  const {loggedIn} = useApiContext();
-  if(!loggedIn){
-    return <Redirect href="/login" />;
-  }
-  return <Redirect href="/home" />
+
+// Determines where to redirect upon app load
+export default function StartPage() {
+  const { loggedIn } = useApiContext();
+  return <Redirect href={(loggedIn ? "/home" : "/login")}/>
 }
 
 const styles = StyleSheet.create({
