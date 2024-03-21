@@ -34,6 +34,7 @@ export default () => {
     >
       <Tabs.Screen name="Home" />
       <Tabs.Screen name="About" />
+      <Tabs.Screen name="Profile" />
     </Tabs>
   );
 }
