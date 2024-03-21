@@ -12,17 +12,37 @@ import { useApiContext } from './../api/ApiContext';
 import { ApiContext } from '../api/ApiContext';
 import { TextBox } from './components/textbox';
 
+/*
+// Manages API
+  const {loginUser} = useApiContext();
+  const loginAPI = async (user, pass) => { await loginUser(user,pass); }
+
+// Form Validation
+const [error, setError] = useState('');
+const showFormError = (error, showError) => {
+  showError(error);
+  setTimeout(() => {showError('')}, 1000);
+}
+
+const validateForm = (user, pass) => {
+  if (user.length < 3) return showFormError('Username is too short!', setError);
+  else return 0;
+}
+*/
 
 
-export default function Page() {
-  const [bidenSize, setBidenSize] = useState(130);
+export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-    // Here you would typically save the token to localStorage/sessionStorage and redirect the user
+
+  // Here you would typically save the token to localStorage/sessionStorage and redirect the user
   const {loginUser} = useApiContext();
   return (
     <View style={defaultPageTheme().container}>
-      <Image source={require('./../assets/ricehat.jpg')} style={{width: bidenSize, height: bidenSize}}/>
+      <Image 
+        source={require('./../assets/ricehat.jpg')}
+        style={{width: 200, height: 200}}
+      />
       <TextBox 
         placeholder='Username'
         value={username}
@@ -33,12 +53,13 @@ export default function Page() {
         placeholder='Password'
         value={password}
         onChangeText={setPassword}
-        secure={true}
+        secure={true} // Hides password input
       />
-      <Button onPress={async () => {await loginUser(username,password);}} title="Try Login"></Button>
-      <Text>babo</Text>
-      <StatusBar style="auto" />
+      <Button 
+        onPress={async () => {await loginUser(username,password);}}
+        title="Try Login"
+      />
+      <StatusBar style="auto"/>
     </View>
   );
 }
-
