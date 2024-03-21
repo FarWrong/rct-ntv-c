@@ -22,8 +22,8 @@ export default function Page() {
       {/*<Button onPress={()=>{setBidenSize(bidenSize+1);}} title="Go to About"></Button>*/}
       
       <TouchableOpacity style = {styles.loginbutton}>
-      <Text 
-      onPress={async () => {let user = await getUserInfo(authToken); setUserEmail(user.email)}}
+      <Text  
+        onPress={async () => {let user = await getUserInfo(authToken); setUserEmail(useremail);}}
       
       style={styles.login}>Log In</Text>
       </TouchableOpacity>

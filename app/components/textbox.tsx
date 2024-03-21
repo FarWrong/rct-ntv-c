@@ -25,7 +25,6 @@ export const TextBox: React.FC<TextboxProps> = ({ placeholder, value, onChangeTe
     // Controls highlighted box feature
     const [focus, setFocus] = useState(false);
     const toggleFocus = () => { setFocus(!focus) }
-    const calcSecureText = () => {return secure}
 
     return (
         <TextInput
@@ -34,6 +33,7 @@ export const TextBox: React.FC<TextboxProps> = ({ placeholder, value, onChangeTe
             placeholder={placeholder}
             value={value}
             onChangeText={onChangeText}
+            secureTextEntry={secure}
             style={[
                 {
                     borderColor: (focus ? theme.colors.primary
