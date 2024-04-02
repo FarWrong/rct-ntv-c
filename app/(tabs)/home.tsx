@@ -3,7 +3,7 @@ import { StyleSheet, Text, View,Image, LogBox, ImageBackground, TouchableOpacity
 import registerRootComponent from 'expo/build/launch/registerRootComponent';
 import { createClient, Provider } from 'urql';
 import React, {useState, useEffect} from 'react';
-import { Link } from 'expo-router';
+import { Link, Redirect } from 'expo-router';
 import { Button } from '../components/button';
 import { router } from 'expo-router';
 import { defaultPageTheme } from '../utility/style';
@@ -13,8 +13,15 @@ import { getUserInfo } from '../../api/User';
 
 export default function Page() {
   const {authToken} = useApiContext();
-  const [useremail, setUserEmail] = useState("nothing here :)");
+  const { loggedIn,userData } = useApiContext();
 
+  const [useremail, setUserEmail] = useState("nothing here :)");
+  if(!loggedIn){
+    return <Redirect href={"/login"}/>
+  }
+  if(userData?.firstLoggedin){
+    return <Redirect href={"/submit_data"}></Redirect>
+  }
   return (
     <View style={defaultPageTheme().container}>
       {/*<Image source={require('../../assets/ricehat.jpg')} style={{width: bidenSize, height: bidenSize}}/>*/}

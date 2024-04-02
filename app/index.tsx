@@ -9,12 +9,16 @@ import { router } from 'expo-router';
 import { useApiContext } from '../api/ApiContext';
 import { Stack } from 'expo-router'
 import { useTheme } from './utility/ThemeContext';
-
+import { useEffect } from 'react';
+import { useRootNavigationState } from 'expo-router';
 
 // Determines where to redirect upon app load
 export default function StartPage() {
-  const { loggedIn } = useApiContext();
-  return <Redirect href={(loggedIn ? "/home" : "/login")}/>
+  const rootNavigationState = useRootNavigationState();
+
+  if (!rootNavigationState?.key) return null;
+
+  return <Redirect href={"/home"}/>
 }
 
 const styles = StyleSheet.create({

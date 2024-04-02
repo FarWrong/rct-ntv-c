@@ -2,12 +2,16 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { Redirect, router, Stack } from 'expo-router';
 import { Tabs } from 'expo-router/tabs';
 import React from 'react';
-
+import { useEffect } from 'react';
 import { useApiContext } from '../../api/ApiContext';
 import { useTheme } from '../utility/ThemeContext';
 
+import { useRootNavigationState } from 'expo-router';
 
 export default () => {
+  const { loggedIn,userData } = useApiContext();
+
+  
   const { theme } = useTheme();
   return (
     <Tabs screenOptions={({ route }) => ({
