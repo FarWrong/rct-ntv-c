@@ -94,7 +94,7 @@ export const getUserInfo = async(token: string) => {
         userInfo.email = data.email;
         userInfo.firstLoggedin = data.first_login;
         userInfo.last_name = data.last_name
-        userInfo.sent_friend_requests = data.sent_friend_requests;
+        userInfo.sent_friend_requests = data.pending_friend_requests;
         userInfo.received_friend_requests = data.received_friend_requests;
         userInfo.friends = data.friends;
 

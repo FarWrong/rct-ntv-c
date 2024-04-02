@@ -4,6 +4,7 @@ import { router } from 'expo-router';
 import {UserType} from './User'
 import { getUserInfo } from './User';
 import { acceptFriendRequest } from './Friends';
+import {expectedExercise,getExercisePlan} from './Workouts'
 
 export interface ApiContextType {
   authToken: string;
@@ -12,6 +13,7 @@ export interface ApiContextType {
   signoutUser: () => void;
   updateUserData: () => Promise<null | String>;
   userData: null | UserType;
+  exercisePlan:null | Array<Array<expectedExercise>>;
 }
 
 
@@ -21,6 +23,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
   const [authToken, setAuthToken] = useState<string>('');
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [userData, setUserData] = useState<null | UserType>(null);
+  const [exercisePlan, setExercisePlan] = useState<null | Array<Array<expectedExercise>>>(null);
 
 
 
@@ -33,11 +36,15 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         return true;
   }
 
+
+
   const updateUserData = async(token?:string) => {
     let data = await getUserInfo(token ? token : authToken);
     if(data){
-      console.log("???",data)
       setUserData(data);
+      let plan = await getExercisePlan(token ? token : authToken);
+      console.log(plan);
+      setExercisePlan(plan);
       return "passed"
     }else{
       signoutUser();
@@ -73,7 +80,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
 
 
   return(
-  <ApiContext.Provider value={{ authToken,loggedIn,loginUser,signoutUser,updateUserData,userData}}>
+  <ApiContext.Provider value={{ authToken,loggedIn,loginUser,signoutUser,updateUserData,userData,exercisePlan}}>
     {children}
   </ApiContext.Provider>
   )
