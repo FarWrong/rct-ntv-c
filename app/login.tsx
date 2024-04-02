@@ -47,7 +47,10 @@ export default function LoginPage() {
         field='number-pad'
       />
       <Button 
-        onPress={async () => {if (form.ValidateForm(username, password)) {setError(''); await loginUser(username,password);}}}
+        onPress={async () => {
+          setError(form.ValidateForm(username, password));
+          if (error) await loginUser(username,password);
+        }}
         title="Try Login"
       />
       <StatusBar style="auto"/>
