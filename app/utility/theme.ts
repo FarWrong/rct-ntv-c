@@ -6,6 +6,7 @@ export interface Theme {
     secondary: string;
     background: string;
     text: string;
+    errorText: string,
     buttonBackground: string; // New: For button background color
     buttonText: string; // New: For button text color
   };
@@ -18,6 +19,7 @@ export interface Theme {
   button: {
     height: number;
     paddingHorizontal: number;
+    paddingVertical: number;
     borderRadius: number;
   };
   textBox: {
@@ -25,7 +27,9 @@ export interface Theme {
     gap: number;
     height: number;
     paddingHorizontal: number;
+    paddingVertical: number;
   }
+
   // Existing container style...
 }
 
@@ -35,6 +39,7 @@ export const lightTheme: Theme = {
     secondary: '#101010', // Added by Nick
     background: '#F6F7FB', // Existing
     text: '#000000', // Existing
+    errorText: '#ff0000', // Added by Nick
     buttonBackground: '#7c3aed', // Tailwind bg-violet-600 equivalent
     buttonText: '#ffffff', // For button text
   },
@@ -47,13 +52,15 @@ export const lightTheme: Theme = {
   button: {
     height: 40, // Tailwind h-10 equivalent in pixels
     paddingHorizontal: 24, // Tailwind px-6 equivalent in pixels
+    paddingVertical: 18, // Tailwind px-6 equivalent in pixels
     borderRadius: 9999, // A large value for fully rounded corners
   },
   textBox: {
     borderWidth: 2, // Tailwind px equivalent in pixels
     gap: 100, // Tailwind px equivalent in pixels
     height: 30, // Tailwind h-10 equivalent in pixels
-    paddingHorizontal: 24 // Tailwind px-6 equivalent in pixels
+    paddingHorizontal: 24, // Tailwind px-6 equivalent in pixels
+    paddingVertical: 18, // Tailwind px-6 equivalent in pixels
   }
   // Existing container style...
 };
@@ -64,6 +71,7 @@ export const darkTheme: Theme = {
     secondary: '#f0f0f0', // Added by Nick
     background: 'yellow', // Existing
     text: '#000000', // Existing
+    errorText: '#ff0000', // Added by Nick
     buttonBackground: '#7c3aed', // Tailwind bg-violet-600 equivalent
     buttonText: '#ffffff', // For button text
   },
@@ -76,13 +84,15 @@ export const darkTheme: Theme = {
   button: {
     height: 40, // Tailwind h-10 equivalent in pixels
     paddingHorizontal: 24, // Tailwind px-6 equivalent in pixels
+    paddingVertical: 18, // Tailwind px-6 equivalent in pixels
     borderRadius: 9999, // A large value for fully rounded corners
   },
   textBox: {
     borderWidth: 2, // Tailwind px equivalent in pixels
     gap: 100, // Tailwind px equivalent in pixels
     height: 30, // Tailwind h-10 equivalent in pixels
-    paddingHorizontal: 24 // Tailwind px-6 equivalent in pixels
+    paddingHorizontal: 24, // Tailwind px-6 equivalent in pixels
+    paddingVertical: 18, // Tailwind px-6 equivalent in pixels
   },
   // Existing container style...
 };

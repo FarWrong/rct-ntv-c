@@ -31,12 +31,12 @@ export default () => {
     })}>
 
       { /*Order of tabs*/ }
-      <Tabs.Screen name="home" options={{href: null}}/>
-      <Tabs.Screen name="shop" options={{title: "Shop"}}/> 
-      <Tabs.Screen name="plans" options={{title: "Plans"}}/>
-      <Tabs.Screen name="workout" options={{title: "Workout"}}/>
-      <Tabs.Screen name="friends" options={{title: "Friends"}}/>
-      <Tabs.Screen name="account" options={{title: "Account"}}/>
+      <Tabs.Screen name="home" options={{title: "Home", headerShown:false, href: null}}></Tabs.Screen>
+      <Tabs.Screen name="shop" options={{title: "Shop", headerShown:false}}/> 
+      <Tabs.Screen name="plans" options={{title: "Plans", headerShown:false}}/>
+      <Tabs.Screen name="workout" options={{title: "Workout", headerShown:false}}/>
+      <Tabs.Screen name="friends" options={{title: "Friends", headerShown:false}}/>
+      <Tabs.Screen name="account" options={{title: "Account", headerShown:false}}/>
     </Tabs>
   );
 }
