@@ -52,6 +52,29 @@ export const getExercisePlan = async(token:string) =>{
       errorMessage = error;
       return null;
   }
+}
 
+export const getWorkoutTypes = async(token:string) =>{
+  let errorMessage = "success"
+  try{
+      const response = await fetch('http://127.0.0.1:8000/users/wktypes/', {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+              "Authorization": "Bearer "  + token
+          },
+          });
+      if (!response.ok) {
+          console.error("Failed to fetch token.");
+          return null;
+      }
+        const data = await response.json();
+        console.log(data);
+        return data;
+  }catch(error:any){
+      console.log(error);
+      errorMessage = error;
+      return null;
+  }
 }
 
