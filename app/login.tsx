@@ -8,23 +8,19 @@ import { createClient, Provider } from 'urql';
 import { ApiContext, useApiContext } from './../api/ApiContext';
 import { Button } from './components/button';
 import { TextBox } from './components/textbox';
+import * as form from './utility/formValidation';
 import { defaultPageTheme } from './utility/style';
-import { FormValidation } from './utility/formValidation';
 
-var userRegex:RegExp = new RegExp('^\w{3-32}$');
-var passRegex:RegExp = new RegExp('^(?=.*[\d])(?=.*[!@#$%^&*])(?=.*[A-Z])(?=.*[a-z])[\w!@#$%^&*]{8,32}$');
 
 export default function LoginPage() {
   // User/Pass Variables
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  // Form validation
-  const [validUser, setValidUser] = useState(true); // Life Hack: Error text only
-  const [validPass, setValidPass] = useState(true); // appears on user input
-  const isValidForm = () => {
-    (validUser && validPass) ? true : false;
-  }
-  // Here you would typically save the token to localStorage/sessionStorage and redirect the user
+  const [username, setUser] = useState('');
+  const [password, setPass] = useState('');
+
+  // Error Logic
+  const [error, setError] = useState('');
+
+  // API Logic
   const {loginUser} = useApiContext();
 
   return (
@@ -33,17 +29,17 @@ export default function LoginPage() {
         source={require('./../assets/ricehat.jpg')}
         style={{width: 200, height: 200}}
       />
-      <Text style={{}}>{}</Text>
+      {error ? (<Text>{error}</Text>) : null}
       <TextBox 
         placeholder='Username'
         value={username}
-        onChangeText={setUsername}
+        onChangeText={setUser}
         secure={false}
       />
       <TextBox 
         placeholder='Password'
         value={password}
-        onChangeText={setPassword}
+        onChangeText={setPass}
         secure={true} // Hides password input
       />
       <TextBox 
@@ -51,7 +47,7 @@ export default function LoginPage() {
         field='number-pad'
       />
       <Button 
-        onPress={async () => {/*if (isValidForm())*/ await loginUser(username,password);}}
+        onPress={async () => {if (form.ValidateForm(username, password)) {setError(''); await loginUser(username,password);}}}
         title="Try Login"
       />
       <StatusBar style="auto"/>
