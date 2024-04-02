@@ -10,12 +10,15 @@ import { useApiContext,ApiProvider } from '../../api/ApiContext';
 import { acceptFriendRequest } from '../../api/Friends';
 import { TouchableOpacity } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-
+import { sendFriendRequest } from '../../api/Friends';
 
 export default function FriendsPage() {
     const { loggedIn,authToken,updateUserData,userData } = useApiContext();
-
+    const [friendName, setFriendName] = useState('');
+    const [errrorMessage, setErrorMessage] = useState('');
     function friendPendingComponent(username: string, index: number) {
+
+
         return (
           <View key={index} style={styles.friendRequestContainer}>
             <Text style={styles.username}>{username}</Text>
@@ -58,16 +61,23 @@ export default function FriendsPage() {
     
         checkAuth();
       }, []);
+
     return (
         <View style={defaultPageTheme().container}>
             
             {userData?.received_friend_requests?.map((val, idx) => friendPendingComponent(val,idx))}
             {userData?.friends?.map((val, idx) => friendComponent(val,idx))}
-
+            <TextBox 
+              placeholder='Friend Name'
+              value={friendName}
+              onChangeText={setFriendName}
+              secure={false}
+            />
             <Button
-                onPress={() => {router.replace('/' );}}
+                onPress={async () => {let xd = await sendFriendRequest(authToken,friendName);await updateUserData();setErrorMessage(xd)}}
                 title="Send Friend Request"
             />
+            {errrorMessage}
             <StatusBar style="auto"/>
         </View>
     );

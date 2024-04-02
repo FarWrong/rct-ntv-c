@@ -1,27 +1,62 @@
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { Image, Text, View } from 'react-native';
+import { Dimensions, Image, Text, View , StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
+import CalendarStrip from 'react-native-calendar-strip';
 
-import { Button } from '../components/button';
-import { defaultPageTheme } from '../utility/style';
+import { defaultPageTheme, styles } from '../utility/style';
 
 
-export default function WorkoutPage() {
+
+
+export default function WorkoutPage({navigation}) {
+  
     return (
-        <View style={defaultPageTheme().container}>
-            <Image
-                source={require('../../assets/workout.jpg')}
-                style={{width: 200, height: 200}}
-            />
-            <Button 
-                title="Start Workout"
-            />
-            <Button
-                onPress={() => {router.replace('/');}}
-                title="Go Home"
-            />
-            <StatusBar style="auto"/>
+        <View style = {styles.heading}>
+        <View style = {[styles.header, ]}>
+        <Text style = {styles.headerText} >Health Data</Text>
+        
+    
         </View>
-    );
-}
+    
+        <CalendarStrip 
+        style = {{height:100, paddingTop:20, paddingBottom:10,  }}
+        dateNumberStyle= {[styles.text, {fontSize: 10, fontWeight: 'bold'}]}
+        dateNameStyle = {styles.text}
+        showMonth= {false}
+        updateWeek = {true}
+        
+        />
+        <View
+        style = {styles.content}>
+            <View style = {styles.row}>
+                <Text style = {[styles.text, {fontWeight: 'bold'}]}>Steps</Text>
+    
+            </View>
+            <View style = {[styles.box, {padding: 40}]}>
+            <Text style = {[styles.text, {marginTop: 5, fontWeight: 'bold', fontSize: 20}]} >
+                8,760
+            </Text>
+            </View>
+      
+    </View>
+    
+    <View style={styles.content}>
+        <View style={styles.row}>
+            <Text style={[styles.text, { fontWeight: 'bold' }]}>Compared to your friends</Text>
+        </View>
+    
+        <View style={[styles.box, {width: '100%', padding: 30}]}>
+        
+                <Text style={[styles.text, {marginRight: 10}]}>Calories Burned</Text>
+               
+                <View style={styles.bar}></View> 
+              
+      
+      
+        </View>
+    </View>
+    
+    </View>
+      )
+    }

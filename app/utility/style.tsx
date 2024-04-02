@@ -9,6 +9,13 @@ export const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
     },
+    charts: {
+      alignItems: 'center', 
+      justifyContent: 'center',
+      padding: 10,
+      paddingBottom: 10
+   
+    },
     logo: {
       width: 130,
       height: 130,     
@@ -52,10 +59,11 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     paddingTop: 20,
-    paddingLeft: 20,
+    paddingLeft: 10,
+    paddingRight: 10
   },
   header: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     paddingVertical: 10,
     justifyContent: 'space-between',
     flexDirection : 'row', 
@@ -109,6 +117,27 @@ bar: {
     borderRadius: 8,
     backgroundColor: 'lightblue',
 },
+chartContainer: {
+  borderWidth: 1,
+  borderColor: '#e0e0e0',
+  borderRadius: 10,
+  padding: 10,
+  backgroundColor: 'white',
+  marginBottom: 10
+  
+},
+chart: {
+  marginVertical: 8,
+  borderRadius: 16,
+},
+periodSelector: {
+  flexDirection: 'row',
+  justifyContent: 'space-around',
+  marginTop: 20,
+  marginBottom: 20,
+},
+
+
 
 });
 
