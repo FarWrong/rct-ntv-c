@@ -50,27 +50,7 @@ const LineChartComponent = ({data, title}) => {
 );
 };
 
-const BarChartComponent = ({data, title}) => {
 
-  return (
-      <View style = {styles.chartContainer}>
-          <Text style = {styles.text}>{title}</Text>
-    
-          <LineChart 
-              data={data}
-              width={Dimensions.get('window').width - 60}
-              height={220}
-              chartConfig= {chartConfig}
-             
-              style = {styles.chart}
-
-       
-              />
-         
-              </View>
-
-);
-};
 
 {/*export default function Page() {
   const {authToken} = useApiContext();
@@ -125,6 +105,14 @@ const stepsdata = {
   ],
 };    
 
+const exercisedata = {
+  labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+  datasets: [
+    {data: [10,30,5,10,40,20,10],
+    },
+  ],
+};
+
 
 export default function HomePage() {
   const { loggedIn,authToken,updateUserData,userData } = useApiContext();
@@ -149,11 +137,14 @@ return (
       <ScrollView contentContainerStyle = {styles.charts}>
       
       <LineChartComponent data={weightdata} title="Weight"  />
-    <BarChartComponent data={stepsdata} title="Steps" />
+    <LineChartComponent data={stepsdata} title="Steps" />
+    <LineChartComponent data={exercisedata} title = "Exercise" />
     </ScrollView>
 
     </View>
 );
+
+
 
 
 
