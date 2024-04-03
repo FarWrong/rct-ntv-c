@@ -65,10 +65,36 @@ const LineChartComponent = ({data, title}) => {
   }
   return (
     <View style={defaultPageTheme().container}>
-
-      <Image source={requihvfcv gfgfgfg vgfggfgfffgfgffgfggffggfgfggtfre('../../assets/logo.png')} style={styles.logo}/> 
-      <Button onPress={()=>{setBidenSize(bidenSize+1);}} title="Go to About"></Button>
-      
+      {/*<Image source={require('../../assets/ricehat.jpg')} style={{width: bidenSize, height: bidenSize}}/>*/}
+      <Image source={require('../../assets/logo.png')} style={styles.logo}/> 
+      {/*<Button onPress={()=>{setBidenSize(bidenSize+1);}} title="Go to About"></Button>*/}
+      {exercisePlan ? exercisePlan[2].map((val, idx) => <View
+  style={{
+    backgroundColor: '#FFD700', // Golden background color
+    borderRadius: 16, // Increased border radius for rounder edges
+    padding: 24, // Increased padding for more space inside the block
+    marginBottom: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000', // Shadow color
+    shadowOffset: { width: 0, height: 2 }, // Shadow offset
+    shadowOpacity: 0.2, // Shadow opacity
+    shadowRadius: 4, // Shadow radius
+    elevation: 4, // Elevation for Android shadow
+  }}
+  key={idx}
+>
+  <Text
+    style={{
+      fontSize: 20, // Increased font size
+      fontWeight: 'bold',
+      color: '#333',
+      textAlign: 'center',
+    }}
+  >
+    {val.name}
+  </Text>
+</View>) : "lmao" }
       <TouchableOpacity style = {styles.loginbutton}>
       <Text  
         onPress={async () => {let user = await getUserInfo(authToken); setUserEmail(useremail);}}
