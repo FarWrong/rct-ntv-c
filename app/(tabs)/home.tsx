@@ -1,15 +1,15 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View,Image, LogBox, ImageBackground, TouchableOpacity } from 'react-native';
 import registerRootComponent from 'expo/build/launch/registerRootComponent';
-import { createClient, Provider } from 'urql';
+import { Link, Redirect, router } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import React, {useState, useEffect} from 'react';
-import { Link, Redirect } from 'expo-router';
-import { Button } from '../components/button';
-import { router } from 'expo-router';
-import { defaultPageTheme } from '../utility/style';
-import {styles} from '../utility/style';
+import { StyleSheet, Text, View,Image, LogBox, ImageBackground, TouchableOpacity } from 'react-native';
+import { createClient, Provider } from 'urql';
+
 import { useApiContext } from '../../api/ApiContext';
 import { getUserInfo } from '../../api/User';
+import { Button } from '../components/button';
+import { defaultPageTheme, styles } from '../utility/style';
+
 
 export default function Page() {
   const {authToken,exercisePlan} = useApiContext();

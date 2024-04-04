@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { useTheme } from './utility/ThemeContext';
 import { Tabs } from 'expo-router/tabs';
 import { useApiContext,ApiProvider } from '../api/ApiContext';
-import { useNavigation } from 'expo-router';
+import { Stack, useNavigation } from 'expo-router';
 import { router } from 'expo-router';
 import { useEffect } from 'react';
 import LoginPage from './login';

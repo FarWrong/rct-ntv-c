@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { KeyboardTypeOptions, StyleProp, TextInput, ViewStyle } from 'react-native';
+
 import { useTheme } from '../utility/ThemeContext';
-import { useState } from 'react';
 
 /**
  * The textbox file creates textboxes that take in text input

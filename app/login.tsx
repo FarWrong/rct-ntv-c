@@ -48,7 +48,7 @@ export default function LoginPage() {
       />
       <Button 
         onPress={async () => {
-          setError(form.ValidateForm(username, password));
+          setError(form.ValidateForm(username,password));
           if (error) await loginUser(username,password);
         }}
         title="Try Login"

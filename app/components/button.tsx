@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { TouchableOpacity, Text, StyleProp, ViewStyle } from 'react-native';
+
 import { useTheme } from '../utility/ThemeContext';
 
 // Black background and white text in light theme, inverted on dark theme
