@@ -42,14 +42,10 @@ export default function LoginPage() {
         onChangeText={setPass}
         secure={true} // Hides password input
       />
-      <TextBox 
-        placeholder='NumberTest'
-        field='number-pad'
-      />
       <Button 
         onPress={async () => {
           setError(form.ValidateForm(username,password));
-          if (error) await loginUser(username,password);
+          if (!error) await loginUser(username,password);
         }}
         title="Try Login"
       />
