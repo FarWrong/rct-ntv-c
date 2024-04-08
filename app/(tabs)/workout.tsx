@@ -1,8 +1,7 @@
-@ -0,0 +1,140 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, ScrollView } from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
-import moment from 'moment'; // Make sure moment is installed
+import moment from 'moment'; 
 
 const styles = StyleSheet.create({
   container: {
@@ -24,19 +23,18 @@ const styles = StyleSheet.create({
   },
   userStats: {
     marginBottom: 20,
-    padding: 20, // Increased padding for a larger box
+    padding: 20, 
     backgroundColor: '#f9f9f9',
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#ddd',
-    // You might also consider adjusting these for a bigger box
-    marginHorizontal: 1, // Adjust as needed to control width
-    marginTop: 20, // Adjust for more space above the box
+    marginHorizontal: 1, 
+    marginTop: 20, 
   },
   statText: {
-    fontSize: 18, // Larger font size for better readability
+    fontSize: 18,
     marginBottom: 10, // Space between each stat line
-    fontWeight: 'bold', // Optional: Makes text bold for emphasis
+    fontWeight: 'bold', 
   },
   leaderboardContainer: {
     marginTop: 20,
@@ -60,7 +58,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   highlightedRow: {
-    backgroundColor: '#e6f7ff', // Light blue to highlight the user
+    backgroundColor: '#e6f7ff', 
   },
   leaderboardText: {
     fontSize: 16,
@@ -78,12 +76,10 @@ export default function WorkoutPage() {
           startDate: moment(), // Today's date
           dateNameStyle: { color: 'red' }, // Style for the day of the week
           dateNumberStyle: { color: 'red' }, // Style for the date number
-          // For even more emphasis, you could customize the date container as well:
           dateContainerStyle: { backgroundColor: 'lightgrey' },
         },
       ];
   const [leaderboardData, setLeaderboardData] = useState([]);
-  // Assuming 'currentUser' identifies the logged-in user's position in the leaderboard
   const currentUser = 'User';
   const currentUserStats = { caloriesBurned: 500, milesWalked: 4.38 };
 
@@ -104,14 +100,14 @@ export default function WorkoutPage() {
       <Text style={styles.headerText}>Health Data</Text>
     </View>
     <CalendarStrip
-  style={{ height: 80, paddingTop: 5, paddingBottom: 5 }} // Reduced height and padding
+  style={{ height: 80, paddingTop: 5, paddingBottom: 5 }}
   calendarColor={'#f7f7f7'}
   customDatesStyles={customDateStyles}
   iconContainer={{ flex: 0.1 }}
-  dateNumberStyle={{ fontSize: 20 }} // Smaller date numbers
-  dateNameStyle={{ fontSize: 10 }} // Smaller day names
-  highlightDateNumberStyle={{ color: 'red', fontSize: 20 }} // Ensure highlighted date numbers match
-  highlightDateNameStyle={{ color: 'red', fontSize: 20 }} // Ensure highlighted day names match
+  dateNumberStyle={{ fontSize: 20 }} 
+  dateNameStyle={{ fontSize: 10 }} 
+  highlightDateNumberStyle={{ color: 'red', fontSize: 20 }} 
+  highlightDateNameStyle={{ color: 'red', fontSize: 20 }} 
 />
 
       {/* User's Own Stats */}
