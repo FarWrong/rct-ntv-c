@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   },
   leaderboardContainer: {
     marginTop: 20,
-    padding: 10,
+    padding: 30,
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 8,
