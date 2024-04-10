@@ -69,9 +69,9 @@ function IsValidEmail(email:string) {
 export function ValidateForm(username, password, passConfirm?, email?) {
     if (!IsValidUser(username)) return userInvalid;
     else if (!IsValidPass(password)) return passInvalid;
-    else if (typeof passConfirm !== undefined)
+    else if (passConfirm !== undefined)
         if (password === passConfirm) return passMatchInvalid;
-    else if (typeof email !== undefined)
+    else if (email !== undefined)
         if (!IsValidEmail(email)) return emailInvalid;
     return '';
 }

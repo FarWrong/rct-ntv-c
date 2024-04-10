@@ -4,7 +4,7 @@ import { KeyboardTypeOptions, StyleProp, TextInput, ViewStyle } from 'react-nati
 import { useTheme } from '../utility/ThemeContext';
 
 /**
- * The textbox file creates textboxes that take in text input
+ * The textbox component creates textboxes that take in text input
  * 
  * @param {string} placeholder - Text input when there is no text input
  * @param {string} value - Variable to pass input text to
@@ -52,7 +52,6 @@ export const TextBox: React.FC<TextboxProps> = ({ placeholder, value, field, onC
                 },
                 style
             ]}
-            
         />
     )
 }

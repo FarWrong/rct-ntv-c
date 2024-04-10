@@ -1,4 +1,3 @@
-import { DarkTheme } from '@react-navigation/native';
 // theme.ts
 export interface Theme {
   colors: {
@@ -7,7 +6,7 @@ export interface Theme {
     background: string;
     text: string;
     errorText: string,
-    buttonBackground: string; // New: For button background color
+    buttonPressed: string; // New: For button background color
     buttonText: string; // New: For button text color
   };
   fontSizes: {
@@ -28,9 +27,14 @@ export interface Theme {
     height: number;
     paddingHorizontal: number;
     paddingVertical: number;
+  };
+  popup: {
+    borderRadius: number;
+    padding: number;
+    flexBody: number;
+    flexClose: number;
+    margin: number;
   }
-
-  // Existing container style...
 }
 
 export const lightTheme: Theme = {
@@ -40,7 +44,7 @@ export const lightTheme: Theme = {
     background: '#F6F7FB', // Existing
     text: '#000000', // Existing
     errorText: '#ff0000', // Added by Nick
-    buttonBackground: '#7c3aed', // Tailwind bg-violet-600 equivalent
+    buttonPressed: '#0999CF', // Tailwind bg-violet-600 equivalent
     buttonText: '#ffffff', // For button text
   },
   fontSizes: {
@@ -61,6 +65,13 @@ export const lightTheme: Theme = {
     height: 30, // Tailwind h-10 equivalent in pixels
     paddingHorizontal: 24, // Tailwind px-6 equivalent in pixels
     paddingVertical: 18, // Tailwind px-6 equivalent in pixels
+  },
+  popup: {
+    borderRadius: 10,
+    padding: 10, // Tailwind px-6 equivalent in pixels
+    flexBody: 7, // Body takes up 4/5ths of popup
+    flexClose: 1, // Close button takes up 1/5th of popup
+    margin: 50
   }
   // Existing container style...
 };
@@ -72,7 +83,7 @@ export const darkTheme: Theme = {
     background: 'yellow', // Existing
     text: '#000000', // Existing
     errorText: '#ff0000', // Added by Nick
-    buttonBackground: '#7c3aed', // Tailwind bg-violet-600 equivalent
+    buttonPressed: '#4C00C0', // Tailwind bg-violet-600 equivalent
     buttonText: '#ffffff', // For button text
   },
   fontSizes: {
@@ -94,5 +105,12 @@ export const darkTheme: Theme = {
     paddingHorizontal: 24, // Tailwind px-6 equivalent in pixels
     paddingVertical: 18, // Tailwind px-6 equivalent in pixels
   },
+  popup: {
+    borderRadius: 10,
+    padding: 10, // Tailwind px-6 equivalent in pixels
+    flexBody: 7, // Body takes up 4/5ths of popup height
+    flexClose: 1, // Close button takes up 1/5th of popup height
+    margin: 50
+  }
   // Existing container style...
 };
