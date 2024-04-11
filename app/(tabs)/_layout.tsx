@@ -20,7 +20,7 @@ export default () => {
         // Icon List
         //sss
         if (route.name === 'shop') iconName = 'bag';
-        else if (route.name === 'plans') iconName = 'newspaper';
+        else if (route.name == 'home')iconName = 'home';
         else if (route.name === 'workout') iconName = 'barbell';
         else if (route.name === 'friends') iconName = 'people';
         else if (route.name === 'account') iconName = 'person';
@@ -31,16 +31,17 @@ export default () => {
         return <Ionicons name={iconName} size={size} color={color} />;
       },
       tabBarActiveTintColor: theme.colors.primary,
+
+    
       tabBarInactiveTintColor: 'gray'
     })}>
 
       { /*Order of tabs*/ }
-      <Tabs.Screen name="home" options={{href: null}}/>
-      <Tabs.Screen name="shop" options={{title: "Shop"}}/> 
-      <Tabs.Screen name="plans" options={{title: "Plans"}}/>
+      <Tabs.Screen name="home" options={{title: "Home"}}/>
       <Tabs.Screen name="workout" options={{title: "Workout"}}/>
       <Tabs.Screen name="friends" options={{title: "Friends"}}/>
-      <Tabs.Screen name="account" options={{title: "Account"}}/>
+      <Tabs.Screen name="profile" options={{title: "Profile"}}/>
+
     </Tabs>
   );
 }
