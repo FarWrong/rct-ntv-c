@@ -41,7 +41,7 @@ export const lightTheme: Theme = {
   fontSizes: {
     small: 12, // Existing
     medium: 14, // Existing
-    large: 16, // Existing
+    large: 32, // Existing
     button: 16, // Assuming a suitable size for button text
   },
   button: {

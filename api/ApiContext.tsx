@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import {UserType} from './User'
 import { getUserInfo } from './User';
 import { acceptFriendRequest } from './Friends';
-import {expectedExercise,getExercisePlan} from './Workouts'
+import {expectedExercise,getExercisePlan, Plan} from './Workouts'
 
 export interface ApiContextType {
   authToken: string;
@@ -13,7 +13,7 @@ export interface ApiContextType {
   signoutUser: () => void;
   updateUserData: () => Promise<null | String>;
   userData: null | UserType;
-  exercisePlan:null | Array<Array<expectedExercise>>;
+  exercisePlan:null | Plan;
 }
 
 

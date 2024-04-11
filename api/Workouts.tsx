@@ -22,13 +22,41 @@ enum BloodType {
   ON = 'O-',
 }
 
+export interface Plan{
+  workout_days:Array<Array<expectedExercise>>;
+  difficulty_level?:string;
+  name?:string;
+  description?:string;
+}
+
+
+export enum workout_category {
+  flexibility = 'F',
+  cardio = 'C',
+  strength = 'S',
+}
+
+export interface workoutTypeType {
+  name: string;
+  category: workout_category;
+}
 export interface expectedExercise {
   name?: string;
   type?: string;
   time?: number;
 }
 
+export function workout_category_to_color(category: workout_category) {
+  switch (category) {
+    case workout_category.cardio:
+      return '#FF0000';
+    case workout_category.flexibility:
+      return '#00FF00';
+    case workout_category.strength:
+      return '#0000FF';
+  }
 
+}
 export const getExercisePlan = async(token:string) =>{
   let errorMessage = "success"
   try{
@@ -41,12 +69,39 @@ export const getExercisePlan = async(token:string) =>{
           });
       if (!response.ok) {
           console.error("Failed to fetch token.");
+          console.log("WHAT");
+          return null;
+      }
+        const data = await response.json();
+        console.log("PLANNNN",data);
+        return data;
+  }catch(error:any){
+      console.log(error);
+      console.log("WHAT1");
+      errorMessage = error;
+      return null;
+  }
+}
+
+
+export const setUserPlan = async(token:string,plan:Plan) =>{
+  let errorMessage = "success"
+  try{
+      const response = await fetch('http://127.0.0.1:8000/users/plan/', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              "Authorization": "Bearer "  + token
+          },
+          body: JSON.stringify(plan),
+          });
+      if (!response.ok) {
+          console.error("Failed to fetch token.");
           return null;
       }
         const data = await response.json();
         console.log(data);
-
-        return data.workout_days;
+        return "success!";
   }catch(error:any){
       console.log(error);
       errorMessage = error;
@@ -68,9 +123,11 @@ export const getWorkoutTypes = async(token:string) =>{
           console.error("Failed to fetch token.");
           return null;
       }
+        
+        
         const data = await response.json();
-        console.log(data);
-        return data;
+        let workout_types:workoutType[] = data.workout_types;
+        return workout_types;
   }catch(error:any){
       console.log(error);
       errorMessage = error;
