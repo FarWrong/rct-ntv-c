@@ -34,15 +34,12 @@ export interface UserType {
   gender?: string;
   firstLoggedin?:boolean;
   weight?: number;
-  friends?:Array<string>;
-  sent_friend_requests?:Array<string>;
-  received_friend_requests?:Array<string>;
   //NOTE THIS IS THE CALCULATED NUMBER IN INCHES
   height?: number;
 }
 
 
-export const setUserInfo = async(token:string,user:UserType) =>{
+export const sendFriendRequest = async(token:string,user:UserType) =>{
   user.first_login = false;
   let errorMessage = "success"
   try{
@@ -71,34 +68,25 @@ export const setUserInfo = async(token:string,user:UserType) =>{
 }
 
 
-export const getUserInfo = async(token: string) => {
-  let userInfo: UserType = {}
+export const acceptFriendRequest = async(token: string,username:string) => {
   let errorMessage = "success"
   try{
-      const response = await fetch('http://127.0.0.1:8000/users/userinfo/', {
-          method: 'GET',
+      const response = await fetch('http://127.0.0.1:8000/users/friend/', {
+          method: 'POST',
           headers: {
               'Content-Type': 'application/json',
               "Authorization": "Bearer "  + token
           },
-          
+          body: JSON.stringify({ action:"accept_request", friend_username:username }),
           });
       
       if (!response.ok) {
-
           console.error("Failed to fetch token.");
           return null;
       }
         const data = await response.json();
         console.log(data);
-        userInfo.email = data.email;
-        userInfo.firstLoggedin = data.first_login;
-        userInfo.last_name = data.last_name
-        userInfo.sent_friend_requests = data.sent_friend_requests;
-        userInfo.received_friend_requests = data.received_friend_requests;
-        userInfo.friends = data.friends;
-
-        return userInfo;
+        return errorMessage;
   }catch(error:any){
       console.log(error);
       errorMessage = error;

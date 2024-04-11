@@ -1,27 +1,50 @@
-import registerRootComponent from 'expo/build/launch/registerRootComponent';
-import { Link, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect } from 'react';
-import { Image, Text, View } from 'react-native';
+import { StyleSheet, Text, View,Image, LogBox, ImageBackground, TouchableOpacity } from 'react-native';
+import registerRootComponent from 'expo/build/launch/registerRootComponent';
 import { createClient, Provider } from 'urql';
-
+import React, {useState, useEffect} from 'react';
+import { Link, Redirect } from 'expo-router';
 import { Button } from '../components/button';
+import { router } from 'expo-router';
 import { defaultPageTheme } from '../utility/style';
-import { TextInput } from 'react-native';
-
-
+import {styles} from '../utility/style';
+import { useApiContext } from '../../api/ApiContext';
+import { getUserInfo } from '../../api/User';
 
 export default function Page() {
-  const [bidenSize, setBidenSize] = useState(130);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-    // Here you would typically save the token to localStorage/sessionStorage and redirect the user
+  const {authToken} = useApiContext();
+  const { loggedIn,userData } = useApiContext();
 
+  const [useremail, setUserEmail] = useState("nothing here :)");
+  if(!loggedIn){
+    return <Redirect href={"/login"}/>
+  }
+  if(userData?.firstLoggedin){
+    return <Redirect href={"/submit_data"}></Redirect>
+  }
   return (
     <View style={defaultPageTheme().container}>
-      <Image source={require('../../assets/ricehat.jpg')} style={{width: bidenSize, height: bidenSize}}/>
-      <Text>babo</Text>
+      {/*<Image source={require('../../assets/ricehat.jpg')} style={{width: bidenSize, height: bidenSize}}/>*/}
+      <Image source={require('../../assets/logo.png')} style={styles.logo}/> 
+      {/*<Button onPress={()=>{setBidenSize(bidenSize+1);}} title="Go to About"></Button>*/}
+      
+      <TouchableOpacity style = {styles.loginbutton}>
+      <Text  
+        onPress={async () => {let user = await getUserInfo(authToken); setUserEmail(useremail);}}
+      
+      style={styles.login}>Log In</Text>
+      </TouchableOpacity>
+      {useremail}
+
+      <TouchableOpacity style = {styles.setupbutton}>
+      <Text style={styles.signup}>Sign Up</Text>
+      </TouchableOpacity>
+      
+      
       <StatusBar style="auto" />
     </View>
+     
+
   );
 }
+
