@@ -7,7 +7,16 @@ import { Button } from '../components/button';
 import { defaultPageTheme, styles } from '../utility/style';
 import { ApiContext, useApiContext } from '../../api/ApiContext';
 import { useTheme } from '../utility/ThemeContext';
-import { getWorkoutTypes, workoutTypeType,workout_category,workout_category_to_color,expectedExercise,Plan} from '../../api/Workouts';
+import { getWorkoutTypes, workoutTypeType,workout_category,workout_category_to_color,expectedExercise,Plan,setUserPlan} from '../../api/Workouts';
+function returnDayasNumber(day:string){
+  let daylist = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+  return daylist.indexOf(day);
+}
+
+function returnNumberasDay(day:number){
+  let daylist = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+  return daylist[day];
+}
 
 export  function EmojiPicker({ isVisible, children, onClose }) {
   const styles = StyleSheet.create({
@@ -46,7 +55,7 @@ function renderClickableSelector(newname: string,color:string,onPressFunc:(name:
   )
 }
 
-function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null) {
+function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authToken:string,updateUserData:()=>Promise<String>) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [WorkoutType, setWorkoutType] = useState<workoutTypeType|null>(null);
   const [day, setDay] = useState<string|null>(null);
@@ -81,15 +90,27 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null) {
     }
   }
 
+
+
+ 
+
   async function addToPlan(){
     if(WorkoutType && day && time){
       let submit_item:expectedExercise = {name:WorkoutType.name,time:parseInt(time.split("hr")[0]),type:WorkoutType.name} 
-      let new_workout_days = plans?.workout_days ? [...plans.workout_days,[submit_item]] : [[submit_item]];
       let new_plan = JSON.parse(JSON.stringify(plans));
-      new_plan.workout_days = new_workout_days;
+      let submit_blank = [[],[],[],[],[],[],[]]
+      let day_index = returnDayasNumber(day);
+      console.log("INDEX",day_index)
+      if(new_plan.workout_days){
+        new_plan.workout_days[day_index].push(submit_item);
+      }else{
+        submit_blank[day_index].push(submit_item);
+        new_plan.workout_days = submit_blank;
+      }
       console.log(new_plan);
+      await setUserPlan(authToken,new_plan);
+      await updateUserData(); 
     }
-
       console.log("Submitting plan")
   }
   const onModalClose = () => {
@@ -117,8 +138,11 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null) {
         margin: 20,
     }}>
       <Text style={fontStyle}>I </Text>
-      {(WorkoutType && day && time) ? <Text onPress={()=>{
-        addToPlan();
+      {(WorkoutType && day && time) ? <Text onPress={async ()=>{
+        await addToPlan();
+        setDay(null);
+        setTime(null);
+        setWorkoutType(null);
       }} style={[fontStyle,{color:'green'}]}>want  </Text> : <Text style={fontStyle}>want </Text>}
       <Text style={fontStyle}>to do </Text>
       <TouchableOpacity onPress={()=>{setModalChildren("workoutTypes");setIsModalVisible(true);return;}} style={clickStyle}><Text>{WorkoutType?.name}</Text></TouchableOpacity>
@@ -133,10 +157,32 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null) {
   );
 }
 
+function renderDay(ex:expectedExercise[],index:number){
+  return(<View>{ex.map((val,idx)=>(RenderE(val,index)))}</View>)
+}
+
+function RenderE(ex:expectedExercise,index:number){
+  let {theme} = useTheme();
+  let fontStyle = {
+    fontSize: theme.fontSizes.large,
+  };
+  return(<View style={{
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    margin: 20,
+}}><Text style={fontStyle}>I will do </Text>
+  <Text style={fontStyle}>{ex.name}</Text>
+  <Text style={fontStyle}> On </Text>
+  <Text style={fontStyle}>{returnNumberasDay(index)}</Text>
+  <Text style={fontStyle}> For</Text></View>
+  );
+}
 
 
 export default function Page() {
-  const {authToken,exercisePlan} = useApiContext();
+  const {authToken,exercisePlan,updateUserData} = useApiContext();
   const [WorkoutTypes, setWorkoutTypes] = useState<workoutTypeType[]>([]);
   useEffect(() => {
     const getTypesType = async () => {
@@ -154,9 +200,15 @@ export default function Page() {
   }, []);
   return (
       <View style = {styles.heading}>
-        {renderPlanMaker(WorkoutTypes,exercisePlan)}
+        {renderPlanMaker(WorkoutTypes,exercisePlan,authToken,updateUserData)}
+        
       <ScrollView showsVerticalScrollIndicator = {false}>
       </ScrollView>
+      <View>
+        {exercisePlan.workout_days.map((val, idx) => (
+          <View key={idx}>{renderDay(val, idx)}</View>
+        ))}
+      </View>
     </View>
 
   )
