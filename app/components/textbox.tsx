@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { KeyboardTypeOptions, Modal, StyleProp, Text, TextInput, ViewStyle, View } from 'react-native';
-import {styles} from '../utility/style';
+import { KeyboardTypeOptions, StyleProp, Text, TextInput, ViewStyle, View } from 'react-native';
 
+import { styles } from '../utility/style';
 import { useTheme } from '../utility/ThemeContext';
-//import use
 
 /**
  * The textbox component creates textboxes that take in text input
@@ -44,15 +43,9 @@ export const TextBox: React.FC<TextboxProps> = ({ placeholder, value,
     }
 
     return (
-        <View style={{
-            alignItems:'center', 
-            flexDirection: 'row', 
-            width:600, 
-            margin:5,
-            justifyContent:'space-evenly',
-        }}>
-            <View style={{flex:1, padding: 12}}/>
-            <View style={{flex:1, padding: 12, justifyContent: 'center'}}>
+        <View style={styles.textboxContainer}>
+            <View style={styles.textboxDefault}/>
+            <View style={[{justifyContent: 'center'}, styles.textboxDefault]}>
                 <TextInput
                     onFocus={toggleFocus} // Become primary color
                     onBlur={toggleFocus} // Become secondary color
@@ -61,27 +54,22 @@ export const TextBox: React.FC<TextboxProps> = ({ placeholder, value,
                     value={value}
                     onChangeText={v => handleUpdateText(v)}
                     secureTextEntry={secure}
-                    style={[{
-                        borderColor: (focus ? theme.colors.primary
-                            : theme.colors.secondary),
-                        borderWidth: theme.textBox.borderWidth,
-                        gap: theme.textBox.gap,
-                        height: theme.textBox.height,
-                        paddingHorizontal: theme.textBox.paddingHorizontal,
-                    }, style]}
+                    style={[
+                        {borderColor: (focus ? theme.colors.primary
+                            : theme.colors.secondary)},
+                        styles.textboxField,
+                        style
+                    ]}
                 />
             </View>
             {error ? (
-                <View style={{
-                    flex:1,
+                <View style={[{
                     backgroundColor: '#ffffff',
-                    //alignSelf: 'flex-end',
-                    padding: 12,
                     borderRadius: 5,
-                }}>
+                }, styles.textboxDefault]}>
                     <Text style={{flexWrap:'wrap', fontSize:10}}>{error}</Text>
                 </View>
-            ) : (<View style={{flex:1, padding: 12}}/>)}
+            ) : (<View style={styles.textboxDefault}/>)}
         </View>
     )
 }

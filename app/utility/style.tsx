@@ -1,18 +1,105 @@
 import { StyleSheet } from 'react-native';
 import { useTheme } from './ThemeContext';
 
+
+/**
+ * 
+ * DO NOT USE THIS FILE FOR COLORS!!!!!!!!! 
+ * 
+ * Store colors in theme. Use this file for everything else CSS related
+ * 
+*/
+
+
+
+/** Formatting Constants */
+const fontSmall:number = 10;
+const fontMedium:number = 12;
+const fontLarge:number = 16;
+const fontTitle:number = 24;
+
+const paddingSmall:number = 6;
+const paddingMedium:number = 12;
+const paddingLarge:number = 24;
+const paddingExtraLarge:number = 48;
+
+
+
 export const styles = StyleSheet.create({
-  container: {
+  /** TextBox Component */
+  textboxContainer: { 
+    flexDirection: 'row', 
+    alignItems:'center',
+    justifyContent:'space-evenly',
+    width:600, 
+    margin:5,
+  },
+  textboxDefault: {
+    flex:1,
+    padding: paddingSmall
+  },
+  textboxField: {
+    borderWidth: 1,
+    height: 30,
+    paddingHorizontal: paddingMedium,
+    paddingVertical: paddingSmall,
+  },
+  textboxErrorText: {
+    flexWrap:'wrap',
+    fontSize: fontSmall
+  },
+
+  /** Popup Component */
+  popupBackground: {
     flex: 1,
-    backgroundColor: '#fff',
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+  popupContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    margin: 50,
+    borderRadius: 10,
+  },
+  popupBody: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    padding: paddingMedium,
+  },
+  popupClose: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 50,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+
+  /** Button Component */
+  buttonContainer:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 40,
+    borderRadius: 9999, // perfectly round
+    paddingHorizontal: paddingLarge,
+    paddingVertical: paddingMedium,
+  },
+  buttonText:{
+    fontSize: fontLarge,
+    fontWeight: 'bold'
+  },
+
+  /** FIX PLEASE!!!!! */
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
   },
   charts: {
     alignItems: 'center', 
     justifyContent: 'center',
-    padding: 10,
-    paddingBottom: 10
+    padding: paddingMedium,
   },
   logo: {
     width: 130,
@@ -21,8 +108,8 @@ export const styles = StyleSheet.create({
   signup: {
     color: '#00B5EE',
     marginTop: 10,
-    padding: 20,
-    fontSize: 25,
+    padding: paddingLarge,
+    fontSize: fontTitle,
     fontWeight: 'bold',
     textAlign: 'center',
     textAlignVertical: 'center'
@@ -30,7 +117,7 @@ export const styles = StyleSheet.create({
   login: {
     color: 'white',
     marginTop: 10,
-    fontSize: 25,
+    fontSize: fontTitle,
     fontWeight: 'bold',
     textAlign: 'center',
     textAlignVertical: 'center',
@@ -39,7 +126,7 @@ export const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginTop: 10,
     marginBottom: 5,
-    paddingHorizontal: 50,
+    paddingHorizontal: paddingExtraLarge,
     borderRadius: 50,
     alignItems:'center',
   },
@@ -47,33 +134,30 @@ export const styles = StyleSheet.create({
     backgroundColor: '#00B5EE',
     marginTop: 10,
     marginBottom: 5,
-    paddingHorizontal: 50,
+    paddingHorizontal: paddingExtraLarge,
     borderRadius: 50,
     alignItems:'center',
   },
   heading: {
     flex: 1,
     backgroundColor: 'white',
-    paddingTop: 20,
-    paddingLeft: 10,
-    paddingRight: 10
+    paddingTop: paddingLarge,
+    paddingLeft: paddingMedium,
+    paddingRight: paddingMedium
   },
   header: {
-    paddingHorizontal: 10,
-    paddingVertical: 10,
+    padding: paddingMedium,
     justifyContent: 'space-between',
     flexDirection : 'row', 
     alignItems: 'center'
   },
   headerText: {
-    fontSize: 24,
+    fontSize: fontTitle,
     fontWeight: 'bold'
   },
   content: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 20,
+    padding: paddingLarge,
   },
   row: {
     flexDirection: 'row',
@@ -83,6 +167,7 @@ export const styles = StyleSheet.create({
   text: {
     color: '#777'
   },
+
   avatar: {
     height: 40,
     width: 40,
@@ -91,13 +176,14 @@ export const styles = StyleSheet.create({
   box: {
     backgroundColor: '#F0F0F0',
     borderRadius: 10,
-    padding: 10,
+    padding: paddingMedium,
     alignItems: 'center',
     flex: 0.17,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     width: '30%'
   },
+  // wdym padding?
   padding: {
     flexDirection: 'row',
     alignItems: 'center'
@@ -112,7 +198,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#e0e0e0',
     borderRadius: 10,
-    padding: 10,
+    padding: paddingMedium,
     backgroundColor: 'white',
     marginBottom: 10
   },
@@ -123,10 +209,11 @@ export const styles = StyleSheet.create({
   periodSelector: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop: 20,
-    marginBottom: 20,
+    marginVertical: 20,
   },
 });
+
+
 
 export function defaultPageTheme() {
   const {theme} = useTheme();
