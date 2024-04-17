@@ -23,6 +23,7 @@ export default () => {
         else if (route.name === 'workout') iconName = 'barbell';
         else if (route.name === 'friends') iconName = 'people';
         else if (route.name === 'account') iconName = 'person';
+        else if (route.name === 'plan') iconName = 'barbell';
         else iconName = 'help';
         // If icon isn't selected
         if (!focused) iconName += "-outline"
