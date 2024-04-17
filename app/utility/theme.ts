@@ -80,7 +80,7 @@ export const darkTheme: Theme = {
   colors: {
     primary: '#6200ee', // Existing
     secondary: '#f0f0f0', // Added by Nick
-    background: 'yellow', // Existing
+    background: '202020', // Existing
     text: '#000000', // Existing
     errorText: '#ff0000', // Added by Nick
     buttonPressed: '#4C00C0', // Tailwind bg-violet-600 equivalent

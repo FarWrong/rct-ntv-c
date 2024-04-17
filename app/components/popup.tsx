@@ -29,7 +29,7 @@ export const Popup: React.FC<PopupProps> = ({ children, togglePopup, ...props })
         style={{
           alignContent: 'center',
           justifyContent: 'center',
-          flex:1,
+          flex: 1,
           backgroundColor: 'rgba(0, 0, 0, 0.5)',
         }}
       >

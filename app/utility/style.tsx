@@ -1,59 +1,55 @@
-import { StyleSheet, Text, View,Image } from 'react-native';
-import React from 'react';
+import { StyleSheet } from 'react-native';
 import { useTheme } from './ThemeContext';
 
 export const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    charts: {
-      alignItems: 'center', 
-      justifyContent: 'center',
-      padding: 10,
-      paddingBottom: 10
-   
-    },
-    logo: {
-      width: 130,
-      height: 130,     
-    },
-    signup: {
-      color: '#00B5EE',
-      marginTop: 10,
-      fontSize: 25,
-      fontWeight: 'bold',
-      textAlign: 'center',
-      textAlignVertical: 'center',  
-
-    },
-    login: {
-      color: 'white',
-      marginTop: 10,
-      fontSize: 25,
-      fontWeight: 'bold',
-      textAlign: 'center',
-      textAlignVertical: 'center',
-
-    },
-    loginbutton: {
-      backgroundColor: 'white',
-      marginTop: 10,
-      marginBottom: 5,
-      paddingHorizontal: 50,
-      borderRadius: 50,
-      alignItems:'center',
-    },
-
-    setupbutton: {
-      backgroundColor: '#00B5EE',
-      marginTop: 10,
-      marginBottom: 5,
-      paddingHorizontal: 50,
-      borderRadius: 50,
-      alignItems:'center',
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  charts: {
+    alignItems: 'center', 
+    justifyContent: 'center',
+    padding: 10,
+    paddingBottom: 10
+  },
+  logo: {
+    width: 130,
+    height: 130,     
+  },
+  signup: {
+    color: '#00B5EE',
+    marginTop: 10,
+    padding: 20,
+    fontSize: 25,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    textAlignVertical: 'center'
+  },
+  login: {
+    color: 'white',
+    marginTop: 10,
+    fontSize: 25,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+  },
+  loginbutton: {
+    backgroundColor: 'white',
+    marginTop: 10,
+    marginBottom: 5,
+    paddingHorizontal: 50,
+    borderRadius: 50,
+    alignItems:'center',
+  },
+  setupbutton: {
+    backgroundColor: '#00B5EE',
+    marginTop: 10,
+    marginBottom: 5,
+    paddingHorizontal: 50,
+    borderRadius: 50,
+    alignItems:'center',
   },
   heading: {
     flex: 1,
@@ -78,7 +74,6 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 20,
     paddingBottom: 20,
-  
   },
   row: {
     flexDirection: 'row',
@@ -88,9 +83,7 @@ export const styles = StyleSheet.create({
   text: {
     color: '#777'
   },
-  
   avatar: {
-
     height: 40,
     width: 40,
     borderRadius: 20
@@ -109,36 +102,30 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
-  
-
-bar: {
+  bar: {
     flex: 1,
     height: 8,
     borderRadius: 8,
     backgroundColor: 'lightblue',
-},
-chartContainer: {
-  borderWidth: 1,
-  borderColor: '#e0e0e0',
-  borderRadius: 10,
-  padding: 10,
-  backgroundColor: 'white',
-  marginBottom: 10
-  
-},
-chart: {
-  marginVertical: 8,
-  borderRadius: 16,
-},
-periodSelector: {
-  flexDirection: 'row',
-  justifyContent: 'space-around',
-  marginTop: 20,
-  marginBottom: 20,
-},
-
-
-
+  },
+  chartContainer: {
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    borderRadius: 10,
+    padding: 10,
+    backgroundColor: 'white',
+    marginBottom: 10
+  },
+  chart: {
+    marginVertical: 8,
+    borderRadius: 16,
+  },
+  periodSelector: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 20,
+    marginBottom: 20,
+  },
 });
 
 export function defaultPageTheme() {
@@ -150,10 +137,6 @@ export function defaultPageTheme() {
       alignItems: 'center',
       justifyContent: 'center',
     },
-    
-    
-    
-
   });
   return styles
 }

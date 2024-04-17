@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { KeyboardTypeOptions, StyleProp, TextInput, ViewStyle } from 'react-native';
+import { KeyboardTypeOptions, Modal, StyleProp, Text, TextInput, ViewStyle, View } from 'react-native';
+import {styles} from '../utility/style';
 
 import { useTheme } from '../utility/ThemeContext';
+//import use
 
 /**
  * The textbox component creates textboxes that take in text input
@@ -12,46 +14,74 @@ import { useTheme } from '../utility/ThemeContext';
  * @param {boolean} secure - Check if the text field should be secure
  * @param {StyleProp} style - Allow custom styles to be passed
  * @param {KeyboardTypeOptions} field - Determines the keyboard used for the input
+ * @param {function()} validate - A function used to validate the input
  */
 interface TextboxProps {
-    placeholder?: string;
-    value?: string;
+    placeholder: string;
+    value: string;
+    onChangeText: (string) => void;
     field?: KeyboardTypeOptions;
-    onChangeText?: (string) => void;
     secure?: boolean;
+    validate?: (string) => string;
     style?: StyleProp<ViewStyle>;
 }
 
-export const TextBox: React.FC<TextboxProps> = ({ placeholder, value, field, onChangeText, secure, style }) => {
+export const TextBox: React.FC<TextboxProps> = ({ placeholder, value,
+                                                  onChangeText, field,
+                                                  secure, validate, style }) => {
     const { theme } = useTheme();
     // Controls highlighted box feature
     const [focus, setFocus] = useState(false);
     const toggleFocus = () => { setFocus(!focus) }
+    // Controls error functionality
+    const [error, setError] = useState('');
     // Controls keyboard
     const keyboard = (typeof field !== undefined) ? field : "default";
 
+    const handleUpdateText = (val) => {
+        if (validate !== undefined) setError(validate(val));
+        onChangeText(val);
+    }
+
     return (
-        <TextInput
-            onFocus={toggleFocus} // Become primary color
-            onBlur={toggleFocus} // Become secondary color
-            keyboardType={keyboard}
-            placeholder={placeholder}
-            value={value}
-            onChangeText={onChangeText}
-            secureTextEntry={secure}
-            style={[
-                {
-                    borderColor: (focus ? theme.colors.primary
-                        : theme.colors.secondary),
-                    borderWidth: theme.textBox.borderWidth,
-                    gap: theme.textBox.gap,
-                    height: theme.textBox.height,
-                    paddingHorizontal: theme.textBox.paddingHorizontal,
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                },
-                style
-            ]}
-        />
+        <View style={{
+            alignItems:'center', 
+            flexDirection: 'row', 
+            width:600, 
+            margin:5,
+            justifyContent:'space-evenly',
+        }}>
+            <View style={{flex:1, padding: 12}}/>
+            <View style={{flex:1, padding: 12, justifyContent: 'center'}}>
+                <TextInput
+                    onFocus={toggleFocus} // Become primary color
+                    onBlur={toggleFocus} // Become secondary color
+                    keyboardType={keyboard}
+                    placeholder={placeholder}
+                    value={value}
+                    onChangeText={v => handleUpdateText(v)}
+                    secureTextEntry={secure}
+                    style={[{
+                        borderColor: (focus ? theme.colors.primary
+                            : theme.colors.secondary),
+                        borderWidth: theme.textBox.borderWidth,
+                        gap: theme.textBox.gap,
+                        height: theme.textBox.height,
+                        paddingHorizontal: theme.textBox.paddingHorizontal,
+                    }, style]}
+                />
+            </View>
+            {error ? (
+                <View style={{
+                    flex:1,
+                    backgroundColor: '#ffffff',
+                    //alignSelf: 'flex-end',
+                    padding: 12,
+                    borderRadius: 5,
+                }}>
+                    <Text style={{flexWrap:'wrap', fontSize:10}}>{error}</Text>
+                </View>
+            ) : (<View style={{flex:1, padding: 12}}/>)}
+        </View>
     )
 }

@@ -8,7 +8,7 @@ import { createClient, Provider } from 'urql';
 import { ApiContext, useApiContext } from './../api/ApiContext';
 import { Button } from './components/button';
 import { TextBox } from './components/textbox';
-import * as form from './utility/formValidation';
+import { ValidateForm, ValidateUser } from './utility/formValidation';
 import { defaultPageTheme } from './utility/style';
 
 
@@ -35,6 +35,7 @@ export default function LoginPage() {
         value={username}
         onChangeText={setUser}
         secure={false}
+        validate={ValidateUser}
       />
       <TextBox 
         placeholder='Password'
@@ -44,7 +45,7 @@ export default function LoginPage() {
       />
       <Button 
         onPress={async () => {
-          setError(form.ValidateForm(username,password));
+          setError(ValidateForm(username,password));
           if (!error) await loginUser(username,password);
         }}
         title="Try Login"
