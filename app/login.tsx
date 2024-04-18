@@ -7,9 +7,27 @@ import { createClient, Provider } from 'urql';
 
 import { ApiContext, useApiContext } from './../api/ApiContext';
 import { Button } from './components/button';
-import { TextBox } from './components/textbox';
-import { ValidateForm, ValidateUser } from './utility/formValidation';
 import { defaultPageTheme } from './utility/style';
+import { TextInput } from 'react-native';
+import { TextBox } from './components/textbox';
+
+/*
+// Manages API
+  const {loginUser} = useApiContext();
+  const loginAPI = async (user, pass) => { await loginUser(user,pass); }
+
+// Form Validation
+const [error, setError] = useState('');
+const showFormError = (error, showError) => {
+  showError(error);
+  setTimeout(() => {showError('')}, 1000);
+}
+
+const validateForm = (user, pass) => {
+  if (user.length < 3) return showFormError('Username is too short!', setError);
+  else return 0;
+}
+*/
 
 
 export default function LoginPage() {
@@ -26,29 +44,29 @@ export default function LoginPage() {
   return (
     <View style={defaultPageTheme().container}>
       <Image 
-        source={require('./../assets/ricehat.jpg')}
-        style={{width: 200, height: 200}}
+        source={require('./../assets/logo.png')}
+        style={{width: 120, height: 120}}
       />
-      {error ? (<Text>{error}</Text>) : null}
-      <TextBox 
+      <TextInput
+        style= {[styles.input, {marginTop: 50}]}
         placeholder='Username'
         value={username}
-        onChangeText={setUser}
-        secure={false}
-        validate={ValidateUser}
+        onChangeText={setUsername}
+        autoCapitalize = 'none'
       />
-      <TextBox 
+      <TextInput
+      style = {styles.input}
         placeholder='Password'
         value={password}
         onChangeText={setPass}
         secure={true} // Hides password input
+        onChangeText={setPassword}
+        secureTextEntry = {true}
       />
       <Button 
-        onPress={async () => {
-          setError(ValidateForm(username,password));
-          if (!error) await loginUser(username,password);
-        }}
-        title="Try Login"
+        onPress={async () => {await loginUser(username,password);}}
+        title="Log In"
+        style = {styles.setupbutton}
       />
       <StatusBar style="auto"/>
     </View>
