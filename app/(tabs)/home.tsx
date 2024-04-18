@@ -11,6 +11,7 @@ import {styles} from '../utility/style';
 import { useApiContext } from '../../api/ApiContext';
 import { getUserInfo } from '../../api/User';
 import CalendarStrip from 'react-native-calendar-strip';
+import { ButtonGroup } from 'react-native-elements';
 import {
   LineChart,
   BarChart,
@@ -30,6 +31,8 @@ const chartConfig = {
   style: {borderRadius: 16},
   
 };
+
+
 
 const LineChartComponent = ({data, title}) => {
 
@@ -52,68 +55,9 @@ const LineChartComponent = ({data, title}) => {
 
 
 
-{/*export default function Page() {
-  const {authToken} = useApiContext();
-  const { loggedIn,userData } = useApiContext();
 
-  const [useremail, setUserEmail] = useState("nothing here :)");
-  if(!loggedIn){
-    return <Redirect href={"/login"}/>
-  }
-  if(userData?.firstLoggedin){
-    return <Redirect href={"/submit_data"}></Redirect>
-  }
-  return (
-    <View style={defaultPageTheme().container}>
-      {/*<Image source={require('../../assets/ricehat.jpg')} style={{width: bidenSize, height: bidenSize}}/>*/}
-      <Image source={require('../../assets/logo.png')} style={styles.logo}/> 
-      {/*<Button onPress={()=>{setBidenSize(bidenSize+1);}} title="Go to About"></Button>*/}
-      {exercisePlan ? exercisePlan[2].map((val, idx) => <View
-  style={{
-    backgroundColor: '#FFD700', // Golden background color
-    borderRadius: 16, // Increased border radius for rounder edges
-    padding: 24, // Increased padding for more space inside the block
-    marginBottom: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000', // Shadow color
-    shadowOffset: { width: 0, height: 2 }, // Shadow offset
-    shadowOpacity: 0.2, // Shadow opacity
-    shadowRadius: 4, // Shadow radius
-    elevation: 4, // Elevation for Android shadow
-  }}
-  key={idx}
->
-  <Text
-    style={{
-      fontSize: 20, // Increased font size
-      fontWeight: 'bold',
-      color: '#333',
-      textAlign: 'center',
-    }}
-  >
-    {val.name}
-  </Text>
-</View>) : "lmao" }
-      <TouchableOpacity style = {styles.loginbutton}>
-      <Text  
-        onPress={async () => {let user = await getUserInfo(authToken); setUserEmail(useremail);}}
-      
-      style={styles.login}>Log In</Text>
-      </TouchableOpacity>
-      {useremail}
 
-      <TouchableOpacity style = {styles.setupbutton}>
-      <Text style={styles.signup}>Sign Up</Text>
-      </TouchableOpacity>
-      
-      
-      <StatusBar style="auto" />
-  </View>
-     
 
-  );
-}*/}
 
 const weightdata = {
   labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -140,8 +84,33 @@ const exercisedata = {
 };
 
 
+
+const stepsdataLastWeek = {
+  labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+  datasets: [
+      {data: [3000,1540,880,4430,3008,1000,2240],
+      },
+  ],
+}; 
+
+const exercisedataLastWeek = {
+  labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+  datasets: [
+    {data: [20,40,10,5,50,10,20],
+    },
+  ],
+};
+
 export default function HomePage() {
   const { loggedIn,authToken,updateUserData,userData } = useApiContext();
+  const [selectedTime, setSelectedTime] = useState(0);
+
+
+  const timeOptions = ['D', 'W', 'M', 'Y'];
+
+  const handleTimeChange = (timeIndex) => {
+    setSelectedTime(timeIndex);
+  }
 
   if(!loggedIn){
     return <Redirect href={"/login"}/>
@@ -155,23 +124,41 @@ export default function HomePage() {
 return (
     <View style = {styles.heading}>
       <View style = {[styles.header, ]}>
-      <Text style = {styles.headerText} >Hello, USER</Text>
+      <Text style = {styles.headerText} >Hello, USER!</Text>
       <Image source={require('assets/pfp.png')} style={styles.avatar}/>
       </View>
+
+      <ButtonGroup 
+        onPress = {handleTimeChange}
+        selectedIndex = {selectedTime}
+        buttons= {timeOptions}
+        containerStyle = {styles.buttonGroupContainer}
+        textStyle = {styles.text}
+       
+       />
       
       
       <ScrollView contentContainerStyle = {styles.charts}>
+        {selectedTime === 0 ? (
+          <>
+          
+          <LineChartComponent data={stepsdata} title="Steps" />
+          <LineChartComponent data={exercisedata} title = "Exercise Minutes" />
+          <LineChartComponent data={weightdata} title="Weight"  />
+          </>
+        ) : (
+          <>
+          
+          <LineChartComponent data={stepsdataLastWeek} title="Steps" />
+          <LineChartComponent data={exercisedataLastWeek} title = "Exercise Minutes" />
+          <LineChartComponent data={weightdata} title="Weight"  />
+          </>
+        )}
+
       
-      <LineChartComponent data={weightdata} title="Weight"  />
-    <LineChartComponent data={stepsdata} title="Steps" />
-    <LineChartComponent data={exercisedata} title = "Exercise" />
+      
     </ScrollView>
 
     </View>
 );
-
-
-
-
-
 }

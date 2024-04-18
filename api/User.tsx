@@ -32,13 +32,14 @@ export interface UserType {
   wheel_chair?:Boolean;
   age?: number;
   gender?: string;
-  firstLoggedin?:boolean;
+  firstLoggedin?:Boolean;
   weight?: number;
   friends?:Array<string>;
   sent_friend_requests?:Array<string>;
   received_friend_requests?:Array<string>;
   //NOTE THIS IS THE CALCULATED NUMBER IN INCHES
   height?: number;
+  username?: string;
 }
 
 
@@ -88,7 +89,9 @@ export const getUserInfo = async(token: string) => {
 
           console.error("Failed to fetch token.");
           return null;
+
       }
+      
         const data = await response.json();
         console.log(data);
         userInfo.email = data.email;
@@ -98,10 +101,21 @@ export const getUserInfo = async(token: string) => {
         userInfo.received_friend_requests = data.received_friend_requests;
         userInfo.friends = data.friends;
 
+        userInfo.height = data.height;
+        userInfo.weight = data.weight;
+        userInfo.username = data.username;
+        userInfo.age = data.age;
+        console.log(userInfo,"wegot it!")
+
+
+      
+
         return userInfo;
   }catch(error:any){
       console.log(error);
       errorMessage = error;
       return null;
   }
+
+ 
 }

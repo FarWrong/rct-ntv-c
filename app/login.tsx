@@ -1,12 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View,Image } from 'react-native';
+import { StyleSheet, Text, View,Image , } from 'react-native';
 import registerRootComponent from 'expo/build/launch/registerRootComponent';
 import { createClient, Provider } from 'urql';
 import React, {useState, useEffect} from 'react';
 import { Link } from 'expo-router';
 import { Button } from './components/button';
 import { router } from 'expo-router';
-import { defaultPageTheme } from './utility/style';
+import { defaultPageTheme, styles } from './utility/style';
 import { TextInput } from 'react-native';
 import { useApiContext } from './../api/ApiContext';
 import { ApiContext } from '../api/ApiContext';
@@ -40,24 +40,27 @@ export default function LoginPage() {
   return (
     <View style={defaultPageTheme().container}>
       <Image 
-        source={require('./../assets/ricehat.jpg')}
-        style={{width: 200, height: 200}}
+        source={require('./../assets/logo.png')}
+        style={{width: 120, height: 120}}
       />
-      <TextBox 
+      <TextInput
+        style= {[styles.input, {marginTop: 50}]}
         placeholder='Username'
         value={username}
         onChangeText={setUsername}
-        secure={false}
+        autoCapitalize = 'none'
       />
-      <TextBox 
+      <TextInput
+      style = {styles.input}
         placeholder='Password'
         value={password}
         onChangeText={setPassword}
-        secure={true} // Hides password input
+        secureTextEntry = {true}
       />
       <Button 
         onPress={async () => {await loginUser(username,password);}}
-        title="Try Login"
+        title="Log In"
+        style = {styles.setupbutton}
       />
       <StatusBar style="auto"/>
     </View>
