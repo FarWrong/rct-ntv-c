@@ -14,7 +14,7 @@ import { useTheme } from './ThemeContext';
 
 /** Formatting Constants */
 const fontSmall:number = 10;
-const fontMedium:number = 12;
+const fontMedium:number = 13;
 const fontLarge:number = 16;
 const fontTitle:number = 24;
 
@@ -39,10 +39,13 @@ export const styles = StyleSheet.create({
     padding: paddingSmall
   },
   textboxField: {
+    //backgroundColor: '#F0F0F0',
     borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
     height: 30,
-    paddingHorizontal: paddingMedium,
-    paddingVertical: paddingSmall,
+    fontSize: fontLarge,
   },
   textboxErrorText: {
     flexWrap:'wrap',
@@ -58,31 +61,39 @@ export const styles = StyleSheet.create({
   popupContainer: {
     flex: 1,
     flexDirection: 'column',
+    width: '75%',
+    minHeight: 200,
+    alignItems: 'center',
+    justifyContent: 'center',
     margin: 50,
+    padding: 20,
     borderRadius: 10,
   },
   popupBody: {
     flex: 1,
+    padding: paddingMedium,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: paddingMedium,
   },
   popupClose: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    width: 30,
+    height: 30,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    height: 50,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
   },
 
   /** Button Component */
   buttonContainer:{
     alignItems: 'center',
     justifyContent: 'center',
-    height: 40,
+    //height: 40,
     borderRadius: 9999, // perfectly round
-    paddingHorizontal: paddingLarge,
-    paddingVertical: paddingMedium,
+    paddingHorizontal: paddingExtraLarge,
+    paddingVertical: paddingSmall,
   },
   buttonText:{
     fontSize: fontLarge,
@@ -158,6 +169,7 @@ export const styles = StyleSheet.create({
   content: {
     flex: 1,
     padding: paddingLarge,
+    gap: 20,
   },
   row: {
     flexDirection: 'row',
@@ -193,90 +205,34 @@ export const styles = StyleSheet.create({
     height: 8,
     borderRadius: 8,
     backgroundColor: 'lightblue',
-},
-chartContainer: {
-  borderWidth: 1,
-  borderColor: '#e0e0e0',
-  borderRadius: 10,
-  padding: 10,
-  backgroundColor: 'white',
-  marginBottom: 10
-  
-},
-chart: {
-  marginVertical: 8,
-  borderRadius: 16,
-},
-periodSelector: {
-  flexDirection: 'row',
-  justifyContent: 'space-around',
-  marginTop: 20,
-  marginBottom: 20,
-},
-buttonGroupContainer: {
-  height: 20,
+  },
+  chartContainer: {
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    borderRadius: 10,
+    padding: 10,
+    backgroundColor: 'white',
+    marginBottom: 10
+  },
+  chart: {
+    marginVertical: 8,
+    borderRadius: 16,
+  },
+  periodSelector: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  buttonGroupContainer: {
+    height: 20,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 10,
     marginBottom: 10,
     borderRadius: 10,
-},
-modalContainer: {
-  flex: 1,
-  backgroundColor: 'rgba(0, 0, 0, 0.5)', 
-  justifyContent: 'center',
-  alignItems: 'center',
-},
-modalContent: {
-  backgroundColor: 'white',
-  padding: 20,
-  borderRadius: 10,
-  width: '50%',
-  alignItems: 'center',
-  justifyContent: 'center',
-  minHeight: 200
-},
-settingsbutton: {
-  backgroundColor: '#00B5EE',
-  marginTop: 5,
-  marginBottom: 2,
-  paddingHorizontal: 40,
-  paddingVertical: 2,
-  borderRadius: 50,
-  alignItems:'center',
-},
-settingsbuttonText: {
-  backgroundColor: '#00B5EE',
-  color: 'white',
-  marginTop: 5,
-  marginBottom: 5,
-  paddingHorizontal: 10,
-  borderRadius: 50,
-  alignItems:'center',
-},
-input: {
-  backgroundColor: '#F0F0F0',
-  borderRadius: 10,
-  paddingHorizontal: 15,
-  paddingVertical: 10,
-  marginBottom: 10,
-  width: '40%', // Adjust width as needed
-  color: '#333', // Text color
-  fontSize: 16,
-},
-closeButton: {
-  position: 'absolute',
-  top: 10,
-  left: 10,
-  borderRadius: 20,
-  width: 30,
-  height: 30,
-  alignItems: 'center',
-  justifyContent: 'center',
-},
-
-
+  }
 });
 
 
@@ -290,8 +246,6 @@ export function defaultPageTheme() {
       alignItems: 'center',
       justifyContent: 'center',
     },
-    
-
   });
   return styles
 }

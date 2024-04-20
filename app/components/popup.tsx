@@ -11,21 +11,25 @@ import { styles } from '../utility/style';
  * NOTE: ALWAYS pass the {visible} component. It should be a React Hook, with {togglePopup}
  * changing its variable.
  * 
- * @param {React.ReactNode} children - Content inside of the Modal
- * @param {function()} togglePopup - Function that toggles whether or not the popup is open/closed
- * @param {any} x - Other components that can be passed to Modal
+ * @param children    - Content inside of the Modal
+ * @param togglePopup - Toggles whether or not the popup is open/closed
+ * @param visible     - Whether or not the current popup is visible
  */
 interface PopupProps {
   children?: React.ReactNode;
-  togglePopup: () => void;
-  [x: string]: any;
+  togglePopup: (boolean) => void;
+  visible: boolean;
 }
 
-export const Popup: React.FC<PopupProps> = ({ children, togglePopup, ...props }) => {
+export const Popup: React.FC<PopupProps> = ({ children, togglePopup, visible, ...props }) => {
   const { theme } = useTheme();
   
   return (
-    <Modal {...props} animationType={'fade'} transparent={true}>
+    <Modal {...props} 
+      animationType={'fade'}
+      transparent={true}
+      visible={visible}
+    >
       <View style={[
         {backgroundColor: theme.colors.shadow},
         styles.popupBackground
@@ -39,15 +43,12 @@ export const Popup: React.FC<PopupProps> = ({ children, togglePopup, ...props })
           </View>
           <TouchableHighlight 
             underlayColor={theme.colors.buttonPressed}
-            onPress={togglePopup}
-            style={[
-              {backgroundColor: theme.colors.primary},
-              styles.popupClose
-            ]}
+            onPress={() => togglePopup(false)}
+            style={styles.popupClose}
           >
             <Ionicons
-              name={'close-circle-outline'}
-              size={40}
+              name='close'
+              size={20}
               color={theme.colors.secondary}
             />
           </TouchableHighlight>

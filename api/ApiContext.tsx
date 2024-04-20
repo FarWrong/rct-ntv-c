@@ -9,11 +9,11 @@ import {expectedExercise,getExercisePlan, Plan} from './Workouts'
 export interface ApiContextType {
   authToken: string;
   loggedIn: boolean;
-  loginUser: (username:string,password:string) => Promise<null | String>;
+  loginUser: (username:string,password:string) => Promise<String | null>;
   signoutUser: () => void;
-  updateUserData: () => Promise<null | String>;
-  userData: null | UserType;
-  exercisePlan:null | Plan;
+  updateUserData: () => Promise<String | null>;
+  userData: UserType | null;
+  exercisePlan: Plan | null;
 }
 
 
@@ -22,9 +22,8 @@ export const ApiContext = createContext<ApiContextType | undefined>(undefined);
 export const ApiProvider = ({ children }: { children: ReactNode }) => {
   const [authToken, setAuthToken] = useState<string>('');
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
-  const [userData, setUserData] = useState<null | UserType>(null);
-  const [exercisePlan, setExercisePlan] = useState<null | Array<Array<expectedExercise>>>(null);
-
+  const [userData, setUserData] = useState<UserType | null>(null);
+  const [exercisePlan, setExercisePlan] = useState<Array<Array<expectedExercise>> | null>(null);
 
 
 
@@ -56,35 +55,34 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
   
 
   const loginUser = async(username:string,password:string) => {
-
     try{
-        const response = await fetch('http://127.0.0.1:8000/api/token/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username, password }),
-            });
+      const response = await fetch('http://127.0.0.1:8000/api/token/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
         
-        if (!response.ok) {
-            return "could not connect to server";
-        }
-          const data = await response.json();
-          setAuthToken(data.access);
-          setLoggedIn(true);
-          router.replace("/");
-          updateUserData(data.access);
-          return null;
+      if (!response.ok) {
+        return "could not connect to server";
+      }
+      
+      const data = await response.json();
+      setAuthToken(data.access);
+      setLoggedIn(true);
+      router.replace("/");
+      updateUserData(data.access);
+      return null;
+    
     }catch(error:any){
-        return error;
+      return error;
     }
   }
 
 
   return(
-  <ApiContext.Provider value={{ authToken,loggedIn,loginUser,signoutUser,updateUserData,userData,exercisePlan}}>
-    {children}
-  </ApiContext.Provider>
+    <ApiContext.Provider value={{ authToken,loggedIn,loginUser,signoutUser,updateUserData,userData,exercisePlan}}>
+      {children}
+    </ApiContext.Provider>
   )
 }
 

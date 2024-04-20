@@ -8,12 +8,14 @@ import { defaultPageTheme, styles } from '../utility/style';
 import { ApiContext, useApiContext } from '../../api/ApiContext';
 import { useTheme } from '../utility/ThemeContext';
 import { getWorkoutTypes, workoutTypeType,workout_category,workout_category_to_color,expectedExercise,Plan,setUserPlan} from '../../api/Workouts';
-function returnDayasNumber(day:string){
+
+
+function returnDayasNumber(day:string) {
   let daylist = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
   return daylist.indexOf(day);
 }
 
-function returnNumberasDay(day:number){
+function returnNumberasDay(day:number) {
   let daylist = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
   return daylist[day];
 }
@@ -55,7 +57,7 @@ function renderClickableSelector(newname: string,color:string,onPressFunc:(name:
   )
 }
 
-function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authToken:string,updateUserData:()=>Promise<String>) {
+function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authToken:string,updateUserData:()=>Promise<String|null>) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [WorkoutType, setWorkoutType] = useState<workoutTypeType|null>(null);
   const [day, setDay] = useState<string|null>(null);
@@ -118,12 +120,12 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authT
   };
   let {theme} = useTheme();
   let fontStyle = {
-    fontSize: theme.fontSizes.large,
+    fontSize: 16, // Temp fix
   };
   let clickStyle = {
-      height: theme.fontSizes.large,
+      height: 16, //temp
       backgroundColor: theme.colors.primary,
-      minWidth: theme.fontSizes.large * 2,
+      minWidth: 32, //temp
       borderRadius: 20,
       marginTop: 7,
       marginLeft: 10,
@@ -162,9 +164,9 @@ function renderDay(ex:expectedExercise[],index:number){
 }
 
 function RenderE(ex:expectedExercise,index:number){
-  let {theme} = useTheme();
+  const {theme} = useTheme();
   let fontStyle = {
-    fontSize: theme.fontSizes.large,
+    fontSize: 16, //temp
   };
   return(<View style={{
     flexDirection: 'row',
@@ -205,7 +207,7 @@ export default function Page() {
       <ScrollView showsVerticalScrollIndicator = {false}>
       </ScrollView>
       <View>
-        {exercisePlan.workout_days.map((val, idx) => (
+        {exercisePlan?.workout_days.map((val, idx) => (
           <View key={idx}>{renderDay(val, idx)}</View>
         ))}
       </View>

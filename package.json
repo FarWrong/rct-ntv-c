@@ -16,6 +16,8 @@
     "@react-native-community/cli-platform-ios": "^13.6.3",
     "@react-native-vector-icons/ionicons": "^7.2.2-alpha.3",
     "@react-navigation/stack": "^6.3.29",
+    "@rneui/base": "^4.0.0-rc.8",
+    "@rneui/themed": "^4.0.0-rc.8",
     "@tanstack/react-query": "^5.18.1",
     "@urql/exchange-graphcache": "^6.4.1",
     "@urql/storage-rn": "^1.1.0",

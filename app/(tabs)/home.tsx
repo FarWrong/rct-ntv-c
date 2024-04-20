@@ -17,7 +17,7 @@ import {
   ContributionGraph,
   StackedBarChart
 } from "react-native-chart-kit";
-import React from 'react';
+import React, { useState } from 'react';
 
 
 

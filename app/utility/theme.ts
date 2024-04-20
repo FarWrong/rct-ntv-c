@@ -5,35 +5,44 @@ export interface Theme {
     secondary: string;
     background: string;
     text: string;
+    textPlaceholder: string;
     errorText: string,
     shadow: string,
     buttonPressed: string; // New: For button background color
     buttonText: string; // New: For button text color
+    textbox: string;
+    textboxHighlight:string;
   };
 }
 
 export const lightTheme: Theme = {
   colors: {
-    primary: '#0AB3F9',
-    secondary: '#101010',
+    primary: '#00B5EE',
+    secondary: '#111',
     background: '#F6F7FB',
     shadow: 'rgba(0, 0, 0, 0.5)', // Added
-    text: '#000000',
-    errorText: '#ff0000',
+    text: '#000',
+    textPlaceholder: '#888',
+    errorText: '#F00',
     buttonPressed: '#0999CF',
-    buttonText: '#ffffff',
+    buttonText: '#FFF',
+    textbox: '#E8E6E4',
+    textboxHighlight: '#F4F2F0'
   },
 };
 
 export const darkTheme: Theme = {
   colors: {
     primary: '#6200ee',
-    secondary: '#f0f0f0',
-    background: '202020',
+    secondary: '#EEE',
+    background: '#222',
     shadow: 'rgba(0, 0, 0, 0.5)', // Added
-    text: '#000000',
-    errorText: '#ff0000',
+    text: '#CCC',
+    textPlaceholder: '#888',
+    errorText: '#F00',
     buttonPressed: '#4C00C0',
-    buttonText: '#ffffff',
+    buttonText: '#FFF',
+    textbox: '#111',
+    textboxHighlight: '#222'
   },
 };
