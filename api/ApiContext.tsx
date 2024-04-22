@@ -6,7 +6,7 @@ import { getUserInfo } from './User';
 import { acceptFriendRequest } from './Friends';
 import {expectedExercise,getExercisePlan, Plan} from './Workouts'
 import { workoutTypeType } from './Workouts';
-
+import { getExercise } from './Exercise';
 export interface exerciseType{
   start:Date | undefined,
   workouts_type:workoutTypeType
@@ -51,10 +51,9 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     let data = await getUserInfo(token ? token : authToken);
     if(data){
       setUserData(data);
-      console.log("success",data);
       let plan = await getExercisePlan(token ? token : authToken);
-      console.log(plan);
       setExercisePlan(plan);
+      let exercises = await getExercise(token ? token : authToken);
       return "passed"
     }else{
       signoutUser();

@@ -42,6 +42,7 @@ export interface UserType {
   //NOTE THIS IS THE CALCULATED NUMBER IN INCHES
   height?: number;
   username?: string;
+  isWorking?: Boolean;
 }
 
 
@@ -106,6 +107,7 @@ export const getUserInfo = async(token: string) => {
         userInfo.weight = data.weight;
         userInfo.username = data.username;
         userInfo.age = data.age;
+        userInfo.isWorking = data.is_working;
         console.log(userInfo,"wegot it!")
 
 

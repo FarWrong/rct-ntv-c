@@ -57,9 +57,9 @@ export interface workoutTypeType {
   category: workout_category;
 }
 export interface expectedExercise {
-  name?: string;
-  type?: string;
-  time?: number;
+  name: string;
+  type: string;
+  time: number;
 }
 
 
@@ -161,12 +161,12 @@ export const setUserPlan = async(token:string,plan:Plan) =>{
 export const getExercise = async(token:string) =>{
   let errorMessage = "success"
   try{
-      const response = await fetch('http://127.0.0.1:8000/users/excersise_all/', {
+      const response = await fetch('http://127.0.0.1:8000/users/exercise_all/', {
           method: 'GET',
           headers: {
               'Content-Type': 'application/json',
               "Authorization": "Bearer "  + token
-          },
+          }
           });
       if (!response.ok) {
           console.error("Failed to fetch token.");
@@ -174,7 +174,7 @@ export const getExercise = async(token:string) =>{
       } 
         const data = await response.json();
         let return_list:exerciseType[] = []
-        for (let i=0;i<data.ex.length();i++){
+        for (let i=0;i<data.ex.length;i++){
           let ex =data.ex[i];
           let return_item:exerciseType = {
             start:string_to_date(ex.start),
@@ -186,6 +186,7 @@ export const getExercise = async(token:string) =>{
           }
           return_list.push(return_item)
         }
+        console.log("Excersises here : ",return_list)
         return return_list;
   }catch(error:any){
       console.log(error);
@@ -194,3 +195,40 @@ export const getExercise = async(token:string) =>{
   }
 }
 
+export const startExercise = async(token:string,exp:expectedExercise) =>{
+  let errorMessage = "success"
+  try{
+      const response = await fetch('http://127.0.0.1:8000/users/exercise_all/', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              "Authorization": "Bearer "  + token
+          },
+          body: JSON.stringify(exp),
+          });
+      if (!response.ok) {
+          console.error("Failed to fetch token.");
+          return null;
+      } 
+        const data = await response.json();
+        let return_list:exerciseType[] = []
+        for (let i=0;i<data.ex.length;i++){
+          let ex =data.ex[i];
+          let return_item:exerciseType = {
+            start:string_to_date(ex.start),
+            end:string_to_date(ex.end),
+            workout_type:{
+              name:ex.name,
+              category:ex.category
+            }
+          }
+          return_list.push(return_item)
+        }
+        console.log("Excersises here : ",return_list)
+        return return_list;
+  }catch(error:any){
+      console.log(error);
+      errorMessage = error;
+      return null;
+  }
+}
