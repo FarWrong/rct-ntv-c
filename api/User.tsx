@@ -1,7 +1,9 @@
 // ThemeContext.tsx
-import React, { createContext, useContext, ReactNode, useState } from 'react';
 import { router } from 'expo-router';
+import React, { createContext, useContext, ReactNode, useState } from 'react';
+
 import { ApiContextType } from './ApiContext';
+
 
 export const getUserGender = (context:ApiContextType) => {
   context
@@ -32,13 +34,14 @@ export interface UserType {
   wheel_chair?:Boolean;
   age?: number;
   gender?: string;
-  firstLoggedin?:boolean;
+  firstLoggedin?:Boolean;
   weight?: number;
   friends?:Array<string>;
   sent_friend_requests?:Array<string>;
   received_friend_requests?:Array<string>;
   //NOTE THIS IS THE CALCULATED NUMBER IN INCHES
   height?: number;
+  username?: string;
 }
 
 
@@ -75,20 +78,21 @@ export const getUserInfo = async(token: string) => {
   let userInfo: UserType = {}
   let errorMessage = "success"
   try{
-      const response = await fetch('http://127.0.0.1:8000/users/userinfo/', {
-          method: 'GET',
-          headers: {
-              'Content-Type': 'application/json',
-              "Authorization": "Bearer "  + token
-          },
-          
-          });
+    const response = await fetch('http://127.0.0.1:8000/users/userinfo/', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer "  + token
+      },    
+    });
       
       if (!response.ok) {
 
           console.error("Failed to fetch token.");
           return null;
+
       }
+      
         const data = await response.json();
         console.log(data);
         userInfo.email = data.email;
@@ -98,10 +102,21 @@ export const getUserInfo = async(token: string) => {
         userInfo.received_friend_requests = data.received_friend_requests;
         userInfo.friends = data.friends;
 
-        return userInfo;
-  }catch(error:any){
-      console.log(error);
-      errorMessage = error;
-      return null;
+        userInfo.height = data.height;
+        userInfo.weight = data.weight;
+        userInfo.username = data.username;
+        userInfo.age = data.age;
+        console.log(userInfo,"wegot it!")
+
+
+      
+
+    return userInfo;
+  } catch(error:any) {
+    console.log(error);
+    errorMessage = error;
+    return null;
   }
+
+ 
 }

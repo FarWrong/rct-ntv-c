@@ -1,15 +1,14 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { Image, Text, View } from 'react-native';
-import { StyleSheet } from 'react-native';
+import { Image, Text, StyleSheet, TouchableOpacity, View } from 'react-native';
+
+import { useApiContext,ApiProvider } from '../../api/ApiContext';
+import { acceptFriendRequest } from '../../api/Friends';
 import { Button } from '../components/button';
 import { TextBox } from '../components/textbox';
 import { defaultPageTheme } from '../utility/style';
-import { useApiContext,ApiProvider } from '../../api/ApiContext';
-import { acceptFriendRequest } from '../../api/Friends';
-import { TouchableOpacity } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { sendFriendRequest } from '../../api/Friends';
 
 export default function FriendsPage() {

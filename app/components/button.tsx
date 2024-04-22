@@ -1,5 +1,7 @@
-import * as React from 'react';
-import { TouchableOpacity, Text, StyleProp, ViewStyle } from 'react-native';
+import React from 'react';
+import { TouchableHighlight, Text, StyleProp, ViewStyle } from 'react-native';
+
+import { styles } from '../utility/style';
 import { useTheme } from '../utility/ThemeContext';
 
 // Black background and white text in light theme, inverted on dark theme
@@ -13,27 +15,21 @@ export const Button: React.FC<ButtonProps> = ({ title, onPress, style }) => {
   const { theme } = useTheme();
 
   return (
-    <TouchableOpacity
+    <TouchableHighlight
+      underlayColor={theme.colors.buttonPressed}
       onPress={onPress}
       style={[
-        {
-          borderRadius: theme.button.borderRadius,
-          backgroundColor: theme.colors.primary,
-          height: theme.button.height,
-          paddingHorizontal: theme.button.paddingHorizontal,
-          alignItems: 'center',
-          justifyContent: 'center'
-        },
+        {backgroundColor: theme.colors.primary},
+        styles.buttonContainer,
         style // Allows for additional styling to be applied
       ]}
     >
-      <Text style={{
-        color: theme.colors.buttonText,
-        fontSize: theme.fontSizes.button,
-        fontWeight: 'bold', // Matches "font-semibold"
-      }}>
+      <Text style={[
+        {color: theme.colors.buttonText},
+        styles.buttonText
+      ]}>
         {title || 'Button'}
       </Text>
-    </TouchableOpacity>
+    </TouchableHighlight>
   );
 };

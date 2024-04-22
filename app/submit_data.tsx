@@ -1,16 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View,Image, LogBox, ImageBackground, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View,Image, LogBox, ImageBackground, TouchableOpacity , TextInput} from 'react-native';
 import registerRootComponent from 'expo/build/launch/registerRootComponent';
 import { createClient, Provider } from 'urql';
 import React, {useState, useEffect} from 'react';
 import { Link } from 'expo-router';
 import { Button } from './components/button';
 import { router } from 'expo-router';
-import { defaultPageTheme } from './utility/style';
+import { defaultPageTheme , styles} from './utility/style';
 import { useApiContext } from './../api/ApiContext';
 import { setUserInfo } from './../api/User';
 import { TextBox } from './components/textbox';
 import { UserType } from './../api/User';
+
 
 export default function Page() {
   const {authToken,updateUserData} = useApiContext();
@@ -19,44 +20,43 @@ export default function Page() {
   return (
     <View style={defaultPageTheme().container}>
       {/*<Image source={require('../../assets/ricehat.jpg')} style={{width: bidenSize, height: bidenSize}}/>*/}
-      <Image source={require('./../assets/logo.png')} /> 
-      {/*<Button onPress={()=>{setBidenSize(bidenSize+1);}} title="Go to About"></Button>*/}
-      GREETINGS NEWCOMER PLEASE TURN ON APPLE SYNC!
-      FAILING THAT, TELL US SOME THINGS ABOUT YOURSELF
-      <TextBox
-  placeholder="Age"
-  value={userData.age?.toString() || ''}
-  onChangeText={(text) => {
-    const age = parseInt(text, 10);
-    if (!isNaN(age)) {
-      setUserData({ ...userData, age });
-    }
-  }}
-  secure={false}
-/>
+      <Image source={require('./../assets/logo.png')} 
+      style={{width: 120, height: 120}}/> 
+      <Text style = {[styles.headerText, {fontSize: 20}]}>
+        Your account is not registered with FitHub
+      </Text>
+      <Text style = {[styles.headerText, {fontSize: 15, fontWeight: 'normal', marginTop: 5}]}>
+        Please import from Apple Health or fill out the following information:
+      </Text>
+      
+  
 
-<TextBox
+<TextInput
+  style = {[styles.input, {marginTop: 50}]}
   placeholder="First Name"
   value={userData.first_name?.toString() || ''}
   onChangeText={(text) => setUserData({ ...userData, first_name: text })}
-  secure={false}
+ 
 />
 
-<TextBox
+<TextInput
+  style = {styles.input}
   placeholder="Last Name"
   value={userData.last_name?.toString() || ''}
   onChangeText={(text) => setUserData({ ...userData, last_name: text })}
-  secure={false}
+  
 />
 
-<TextBox
+<TextInput
+  style = {styles.input}
   placeholder="Gender"
   value={userData.gender?.toString() || ''}
   onChangeText={(text) => setUserData({ ...userData, gender: text })}
-  secure={false}
+  
 />
 
-<TextBox
+<TextInput
+  style = {styles.input}
   placeholder="Weight"
   value={userData.weight?.toString() || ''}
   onChangeText={(text) => {
@@ -65,10 +65,11 @@ export default function Page() {
       setUserData({ ...userData, weight });
     }
   }}
-  secure={false}
+  
 />
 
-<TextBox
+<TextInput
+  style = {styles.input}
   placeholder="Height"
   value={userData.height?.toString() || ''}
   onChangeText={(text) => {
@@ -77,9 +78,10 @@ export default function Page() {
       setUserData({ ...userData, height });
     }
   }}
-  secure={false}
+
 />
         <Button onPress={async ()=>{await setUserInfo(authToken,userData);await updateUserData();router.navigate("/")}} title="Okay I'm done"></Button>
+        <Button title="Import!" style = {{marginTop: 5,}} />
       <StatusBar style="auto" />
     </View>
      
