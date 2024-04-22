@@ -8,7 +8,7 @@ import { defaultPageTheme, styles } from '../utility/style';
 
 
 export default function WorkoutPage() {
-  const { loggedIn,authToken,updateUserData,userData , exercisePlan, } = useApiContext();
+  const { loggedIn,authToken,updateUserData,userData , exercisePlan } = useApiContext();
   const [currentDate, setCurrentDate] = useState(new Date());
 
 
@@ -39,8 +39,8 @@ export default function WorkoutPage() {
           </Text>
         </View>
       </View>
-      {exercisePlan 
-          ? exercisePlan[2].map((val, idx) => <Text>val.name</Text>)
+      {(exercisePlan && exercisePlan[2]) 
+          ? exercisePlan[2]?.map((val, idx) => <Text>val.name</Text>)
           : "lmao"}
       <View style={styles.content}>
         <View style={styles.row}>

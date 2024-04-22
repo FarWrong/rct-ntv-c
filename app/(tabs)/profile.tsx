@@ -14,11 +14,12 @@ import { Popup } from '../components/popup';
 /** Custom type for data to update */
 type ProfileType = 'username' | 'email' | 'age' | 'weight' | 'height' | undefined;
 /** Detemines API token to connect with the database */
-const {authToken, updateUserData, userData} = useApiContext();
-
 
 /** Helper function that automatically updates the user information */
 async function handleUpdate(dataType: ProfileType, togglePopup, value) {
+  const {authToken, updateUserData, userData} = useApiContext();
+
+
   var updatedUserData: UserType|null;
 
   if (dataType === 'username') updatedUserData = {...userData, username: value};
@@ -66,6 +67,7 @@ interface EditDataFieldProps {
 
 const EditDataField: React.FC<EditDataFieldProps> = ({ dataType, togglePopup, visible,
                                                        updateValue, value }) => {
+  const {authToken, updateUserData, userData} = useApiContext();                                 
   const dataText = (dataType !== undefined) ? dataType.toUpperCase() : "Error";
   var dataVar: string|undefined;
 
@@ -110,7 +112,9 @@ const EditDataField: React.FC<EditDataFieldProps> = ({ dataType, togglePopup, vi
 
 
 export default function ProfilePage() {
-  console.log(authToken)
+  const {authToken, updateUserData, userData} = useApiContext();
+
+
   const [usernameModalVisible, setUsernameModalVisible] = useState(false);
   const [emailModalVisible, setEmailModalVisible] = useState(false);
   const [ageModalVisible, setAgeModalVisible] = useState(false);

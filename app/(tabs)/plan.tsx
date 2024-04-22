@@ -1,7 +1,7 @@
 import { Link, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { Modal,Image, Text, View, TouchableOpacity, ScrollView } from 'react-native';
+import { Modal,Image, Text, View, TouchableOpacity, ScrollView, GestureResponderEvent } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { Button } from '../components/button';
 import { defaultPageTheme, styles } from '../utility/style';
@@ -120,16 +120,39 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authT
   }
 
 
+  
 
+  function renderButtonSelector(onPress_func:((event: GestureResponderEvent) => void), text?:String | null) {
+    
+    
+    let fontStyle = {
+      fontSize: 23, // Temp fix
+      fontWeight: 'bold',
+    };
+    let clickStyle = {
+      height: 35, //temp
+      backgroundColor: theme.colors.primary,
+      minWidth: 39, //temp
+      borderRadius: 20,
+      margin:3,
+      padding:5
+  };
+    return(
+    <TouchableOpacity onPress={onPress_func} style={clickStyle}>
+    <View style={{justifyContent:'center',flex:1}}>
+      {text ? <Text style={fontStyle}>{text}</Text> : <Text></Text>}
+    </View>
+    </TouchableOpacity>
+    )
+  }
  
 
   async function addToPlan(){
     if(WorkoutType && day && time){
-      let submit_item:expectedExercise = {name:WorkoutType.name,time:parseInt(time.split("hr")[0]),type:WorkoutType.name} 
+      let submit_item:expectedExercise = {name:WorkoutType.name,time:returnTimeasNumber(time),type:WorkoutType.name} 
       let new_plan = JSON.parse(JSON.stringify(plans));
       let submit_blank:expectedExercise[][] = [[],[],[],[],[],[],[]]
       let day_index = returnDayasNumber(day);
-      console.log("INDEX",day_index)
       if(new_plan.workout_days){
         new_plan.workout_days[day_index].push(submit_item);
       }else{
@@ -137,7 +160,6 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authT
         new_plan.workout_days = submit_blank;
       }
       new_plan.time = returnTimeasNumber(time);
-      console.log(new_plan);
       await setUserPlan(authToken,new_plan);
       await updateUserData(); 
     }
@@ -148,16 +170,15 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authT
   };
   let {theme} = useTheme();
   let fontStyle = {
-    fontSize: 16, // Temp fix
+    fontSize: 23, // Temp fix
+    fontWeight: 'bold',
+    
   };
   let clickStyle = {
-      height: 16, //temp
+      height: 100, //temp
       backgroundColor: theme.colors.primary,
       minWidth: 32, //temp
       borderRadius: 20,
-      marginTop: 7,
-      marginLeft: 10,
-      marginRight: 10,
   };
   return (
     <View style={{
@@ -165,6 +186,7 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authT
         flexWrap: 'wrap',
         justifyContent: 'flex-start',
         alignItems: 'center',
+
         margin: 20,
     }}>
       <Text style={fontStyle}>I </Text>
@@ -173,13 +195,14 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authT
         setDay(null);
         setTime(null);
         setWorkoutType(null);
-      }} style={[fontStyle,{color:'green'}]}>want  </Text> : <Text style={fontStyle}>want </Text>}
+      }} style={[fontStyle,{color:'green'}]}>want </Text> : <Text style={fontStyle}>want </Text>}
       <Text style={fontStyle}>to do </Text>
-      <TouchableOpacity onPress={()=>{setModalChildren("workoutTypes");setIsModalVisible(true);return;}} style={clickStyle}><Text>{WorkoutType?.name}</Text></TouchableOpacity>
-      <Text style={fontStyle}>every</Text>
-      <TouchableOpacity onPress={()=>{setModalChildren("days");setIsModalVisible(true);return;}} style={clickStyle}><Text>{day}</Text></TouchableOpacity>
-      <Text style={fontStyle}>for</Text>
-      <TouchableOpacity onPress={()=>{setModalChildren("time");setIsModalVisible(true);return;}} style={clickStyle}><Text>{time}</Text></TouchableOpacity>
+      {renderButtonSelector(()=>{setModalChildren("workoutTypes");setIsModalVisible(true);return;}, WorkoutType?.name )}
+      <Text style={fontStyle}> every </Text>
+      {renderButtonSelector(()=>{setModalChildren("days");setIsModalVisible(true);return;}, day )}
+      <Text style={fontStyle}> for </Text>
+      {renderButtonSelector(()=>{setModalChildren("time");setIsModalVisible(true);return;}, time )}
+
       <EmojiPicker isVisible={isModalVisible} onClose={onModalClose}>
         {renderModalChildren()}
       </EmojiPicker>
@@ -194,7 +217,7 @@ function renderDay(ex:expectedExercise[],index:number){
 function RenderE(ex:expectedExercise,index:number){
   const {theme} = useTheme();
   let fontStyle = {
-    fontSize: 16, //temp
+    fontSize: 19, //temp
   };
   return(<View style={{
     flexDirection: 'row',
@@ -235,13 +258,11 @@ export default function Page() {
       <View style = {styles.heading}>
         {renderPlanMaker(WorkoutTypes,exercisePlan,authToken,updateUserData)}
         
-      <ScrollView showsVerticalScrollIndicator = {false}>
-      </ScrollView>
-      <View>
+      <ScrollView>
         {exercisePlan?.workout_days.map((val, idx) => (
           <View key={idx}>{renderDay(val, idx)}</View>
         ))}
-      </View>
+      </ScrollView>
     </View>
 
   )
