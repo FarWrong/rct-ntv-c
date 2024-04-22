@@ -20,6 +20,33 @@ function returnNumberasDay(day:number) {
   return daylist[day];
 }
 
+function returnTimeasNumber(time:string | undefined){
+  if(!time){
+    return 0;
+  }
+  let timelist = {
+    "30min":30,
+    "1hr":60,
+    "1hr 30min":90,
+    "2hr":120,
+  }
+  return timelist[time];
+}
+
+function returnNumberasTime(time:number | undefined){
+  if(!time){
+    return "ERR";
+  }
+  let timelist = {
+    30:"30min",
+    60:"1hr",
+    90:"1hr 30min",
+    120:"2hr",
+  }
+  return timelist[time];
+}
+
+
 export  function EmojiPicker({ isVisible, children, onClose }) {
   const styles = StyleSheet.create({
     modalContent: {
@@ -100,7 +127,7 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authT
     if(WorkoutType && day && time){
       let submit_item:expectedExercise = {name:WorkoutType.name,time:parseInt(time.split("hr")[0]),type:WorkoutType.name} 
       let new_plan = JSON.parse(JSON.stringify(plans));
-      let submit_blank = [[],[],[],[],[],[],[]]
+      let submit_blank:expectedExercise[][] = [[],[],[],[],[],[],[]]
       let day_index = returnDayasNumber(day);
       console.log("INDEX",day_index)
       if(new_plan.workout_days){
@@ -109,6 +136,7 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authT
         submit_blank[day_index].push(submit_item);
         new_plan.workout_days = submit_blank;
       }
+      new_plan.time = returnTimeasNumber(time);
       console.log(new_plan);
       await setUserPlan(authToken,new_plan);
       await updateUserData(); 
@@ -176,9 +204,12 @@ function RenderE(ex:expectedExercise,index:number){
     margin: 20,
 }}><Text style={fontStyle}>I will do </Text>
   <Text style={fontStyle}>{ex.name}</Text>
-  <Text style={fontStyle}> On </Text>
+  <Text style={fontStyle}>On</Text>
   <Text style={fontStyle}>{returnNumberasDay(index)}</Text>
-  <Text style={fontStyle}> For</Text></View>
+  <Text style={fontStyle}> For </Text>
+  <Text style={fontStyle}>{returnNumberasTime(ex?.time)}</Text>
+  </View>
+
   );
 }
 
