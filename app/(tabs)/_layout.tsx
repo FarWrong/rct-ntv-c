@@ -1,12 +1,14 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Redirect, router, Stack, useRootNavigationState } from 'expo-router';
 import { Tabs } from 'expo-router/tabs';
-import React, { useEffect } from 'react';
-import { TouchableOpacity } from 'react-native';
+import React, { DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_FORM_ACTIONS, useEffect } from 'react';
+import { TouchableOpacity, View } from 'react-native';
 import { useApiContext } from '../../api/ApiContext';
 import { useTheme } from '../utility/ThemeContext';
 import { StyleSheet } from 'react-native';
-
+import { getNextExercise,startExerciseDirect } from '../../api/Exercise';
+import { UserType } from '../../api/User';
+import { Plan } from '../../api/Workouts';
 
 const styles = StyleSheet.create({
   tabBar: {
@@ -35,9 +37,38 @@ const styles = StyleSheet.create({
 });
 
 
-export default () => {
-  const { loggedIn,userData } = useApiContext();
 
+
+export default () => {
+  const { authToken,loggedIn,userData ,updateUserData,exercisePlan,exercises} = useApiContext();
+  
+  function returnButtonSelector(user:UserType,plan:Plan){
+    if(user?.isWorking){
+      return(<TouchableOpacity style={styles.button} onPress={()=>{
+        let next = getNextExercise(exercisePlan,exercises);
+        if(next){
+          startExerciseDirect(authToken,next);
+          updateUserData();
+        }
+      }}>
+        
+        <Ionicons name="checkmark-done-circle-outline" size={40} color="#fff" />
+      </TouchableOpacity>)
+    }
+    return(
+      
+      <TouchableOpacity style={styles.button} onPress={()=>{
+        let next = getNextExercise(exercisePlan,exercises);
+        if(next){
+          startExerciseDirect(authToken,next);
+          updateUserData();
+        }
+      }}>
+        
+        <Ionicons name="bicycle" size={40} color="#fff" />
+      </TouchableOpacity>
+    )
+  }
   
   const { theme } = useTheme();
   return (
@@ -72,10 +103,7 @@ export default () => {
       <Tabs.Screen
         name="exercise"
         options={{
-          tabBarButton: () => (
-            <TouchableOpacity style={styles.button} onPress={()=>{console.log("based")}}>
-              <Ionicons name="bicycle" size={40} color="#fff" />
-            </TouchableOpacity>
+          tabBarButton: () => (returnButtonSelector(userData,exercisePlan)
           ),
         }}
       />

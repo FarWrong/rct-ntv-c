@@ -3,7 +3,7 @@ import React, { createContext, useContext, ReactNode, useState } from 'react';
 import { router } from 'expo-router';
 import { ApiContextType } from './ApiContext';
 import { workout_category } from './Workouts';
-
+import { expectedExercise } from './Workouts';
 function string_to_date(input: string): Date {
   // Parse the input string into a Date object
   const date = new Date(input);
@@ -56,12 +56,34 @@ export interface workoutTypeType {
   name: string;
   category: workout_category;
 }
-export interface expectedExercise {
-  name: string;
-  type: string;
-  time: number;
-}
 
+export const getNextExercise = (plan_data: Plan | null, ex_data: exerciseType[]): expectedExercise | null => {
+  if (!plan_data) {
+    return null;
+  }
+
+  const currentDate = new Date();
+  const day_data: expectedExercise[] = plan_data.workout_days[currentDate.getDay()];
+
+  // Filter ex_data to get exercises done on the same day
+  const exercisesDoneToday = ex_data.filter((exercise) => {
+    const exerciseDate = exercise.start;
+    return (
+      exerciseDate &&
+      exerciseDate.getFullYear() === currentDate.getFullYear() &&
+      exerciseDate.getMonth() === currentDate.getMonth() &&
+      exerciseDate.getDate() === currentDate.getDate()
+    );
+  });
+
+  // Create a Set of completed exercise names from exercisesDoneToday
+  const completedExercisesToday = new Set(exercisesDoneToday.map((exercise) => exercise.workout_type.name));
+
+  // Find the first exercise in day_data that is not in the completedExercisesToday Set
+  const nextExercise = day_data.find((exercise) => !completedExercisesToday.has(exercise.name));
+
+  return nextExercise || null;
+};
 
 
 export function workout_category_to_color(category: workout_category) {
@@ -75,10 +97,11 @@ export function workout_category_to_color(category: workout_category) {
   }
 
 }
-export const startExcersise = async(token:string) =>{
+
+export const endExercise = async(token:string) =>{
   try{
-      const response = await fetch('http://127.0.0.1:8000/users/plan/', {
-          method: 'GET',
+      const response = await fetch('http://127.0.0.1:8000/users/end_ex/', {
+          method: 'POST',
           headers: {
               'Content-Type': 'application/json',
               "Authorization": "Bearer "  + token
@@ -170,7 +193,7 @@ export const getExercise = async(token:string) =>{
           });
       if (!response.ok) {
           console.error("Failed to fetch token.");
-          return null;
+          return [];
       } 
         const data = await response.json();
         let return_list:exerciseType[] = []
@@ -191,14 +214,16 @@ export const getExercise = async(token:string) =>{
   }catch(error:any){
       console.log(error);
       errorMessage = error;
-      return null;
+      return [];
   }
 }
 
-export const startExercise = async(token:string,exp:expectedExercise) =>{
+
+
+export const startExerciseDirect = async(token:string,exp:expectedExercise) =>{
   let errorMessage = "success"
   try{
-      const response = await fetch('http://127.0.0.1:8000/users/exercise_all/', {
+      const response = await fetch('http://127.0.0.1:8000/users/strt_ex/', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',

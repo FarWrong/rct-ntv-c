@@ -6,12 +6,7 @@ import { getUserInfo } from './User';
 import { acceptFriendRequest } from './Friends';
 import {expectedExercise,getExercisePlan, Plan} from './Workouts'
 import { workoutTypeType } from './Workouts';
-import { getExercise } from './Exercise';
-export interface exerciseType{
-  start:Date | undefined,
-  workouts_type:workoutTypeType
-  end: Date | undefined,
-}
+import {getExercise,exerciseType} from './Exercise'
 
 
 export interface ApiContextType {
@@ -22,7 +17,7 @@ export interface ApiContextType {
   updateUserData: () => Promise<String | null>;
   userData: UserType | null;
   exercisePlan: Plan | null;
-  excersises:Array<exerciseType>
+  exercises:Array<exerciseType>
 }
 
 
@@ -32,7 +27,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
   const [authToken, setAuthToken] = useState<string>('');
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [userData, setUserData] = useState<UserType | null>(null);
-  const [exercisePlan, setExercisePlan] = useState<Array<Array<expectedExercise>> | null>(null);
+  const [exercisePlan, setExercisePlan] = useState<Plan| null>(null);
   const [exercises, setExercises] = useState<Array<exerciseType>>([]);
 
 
@@ -54,6 +49,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
       let plan = await getExercisePlan(token ? token : authToken);
       setExercisePlan(plan);
       let exercises = await getExercise(token ? token : authToken);
+      setExercises(exercises);
       return "passed"
     }else{
       signoutUser();

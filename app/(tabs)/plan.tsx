@@ -10,13 +10,13 @@ import { useTheme } from '../utility/ThemeContext';
 import { getWorkoutTypes, workoutTypeType,workout_category,workout_category_to_color,expectedExercise,Plan,setUserPlan} from '../../api/Workouts';
 
 
-function returnDayasNumber(day:string) {
-  let daylist = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+export function returnDayasNumber(day:string) {
+  let daylist = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
   return daylist.indexOf(day);
 }
 
-function returnNumberasDay(day:number) {
-  let daylist = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+export function returnNumberasDay(day:number) {
+  let daylist = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
   return daylist[day];
 }
 
@@ -127,7 +127,7 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authT
     
     let fontStyle = {
       fontSize: 23, // Temp fix
-      fontWeight: 'bold',
+      fontWeight: "bold",
     };
     let clickStyle = {
       height: 35, //temp

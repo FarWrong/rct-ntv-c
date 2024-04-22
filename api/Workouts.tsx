@@ -41,9 +41,9 @@ export interface workoutTypeType {
   category: workout_category;
 }
 export interface expectedExercise {
-  name?: string;
-  type?: string;
-  time?: number;
+  name: string;
+  type: string;
+  time: number;
 }
 
 
