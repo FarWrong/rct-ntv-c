@@ -5,6 +5,14 @@ import {UserType} from './User'
 import { getUserInfo } from './User';
 import { acceptFriendRequest } from './Friends';
 import {expectedExercise,getExercisePlan, Plan} from './Workouts'
+import { workoutTypeType } from './Workouts';
+
+export interface exerciseType{
+  start:Date | undefined,
+  workouts_type:workoutTypeType
+  end: Date | undefined,
+}
+
 
 export interface ApiContextType {
   authToken: string;
@@ -14,6 +22,7 @@ export interface ApiContextType {
   updateUserData: () => Promise<String | null>;
   userData: UserType | null;
   exercisePlan: Plan | null;
+  excersises:Array<exerciseType>
 }
 
 
@@ -24,6 +33,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [userData, setUserData] = useState<UserType | null>(null);
   const [exercisePlan, setExercisePlan] = useState<Array<Array<expectedExercise>> | null>(null);
+  const [exercises, setExercises] = useState<Array<exerciseType>>([]);
 
 
 
@@ -80,7 +90,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
 
 
   return(
-    <ApiContext.Provider value={{ authToken,loggedIn,loginUser,signoutUser,updateUserData,userData,exercisePlan}}>
+    <ApiContext.Provider value={{ authToken,loggedIn,loginUser,signoutUser,updateUserData,userData,exercisePlan,exercises}}>
       {children}
     </ApiContext.Provider>
   )
