@@ -6,7 +6,6 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "scheme": "app-scheme",
-
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -30,7 +29,8 @@
       "bundler": "metro"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "react-native-health"
     ]
   }
 }

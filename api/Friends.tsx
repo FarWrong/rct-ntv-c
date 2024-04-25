@@ -39,22 +39,24 @@ export interface UserType {
 }
 
 
-export const sendFriendRequest = async(token:string,user:UserType) =>{
-  user.first_login = false;
+export const sendFriendRequest = async(token:string,username:string) =>{
   let errorMessage = "success"
   try{
-      const response = await fetch('http://127.0.0.1:8000/users/userinfo/', {
+      const response = await fetch('http://127.0.0.1:8000/users/friend/', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
               "Authorization": "Bearer "  + token
           },
-          body: JSON.stringify(user),
+          body: JSON.stringify({ action:"send_request", friend_username:username }),
           });
       
       if (!response.ok) {
+        
+          const data = await response.json();
+          console.log(data);
           console.error("Failed to fetch token.");
-          return null;
+          return data.error;
       }
         const data = await response.json();
         console.log(data);
@@ -62,7 +64,7 @@ export const sendFriendRequest = async(token:string,user:UserType) =>{
   }catch(error:any){
       console.log(error);
       errorMessage = error;
-      return null;
+      return "BIg error";
   }
 
 }
@@ -81,6 +83,7 @@ export const acceptFriendRequest = async(token: string,username:string) => {
           });
       
       if (!response.ok) {
+          console.log(response);
           console.error("Failed to fetch token.");
           return null;
       }
@@ -90,6 +93,6 @@ export const acceptFriendRequest = async(token: string,username:string) => {
   }catch(error:any){
       console.log(error);
       errorMessage = error;
-      return null;
+      return error;
   }
 }
