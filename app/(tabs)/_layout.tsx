@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
 export default () => {
   const { authToken,loggedIn,userData ,updateUserData,exercisePlan,exercises} = useApiContext();
   
-  function returnButtonSelector(user:UserType,plan:Plan){
+  function returnButtonSelector(user:UserType|null, plan:Plan|null){
     if(user?.isWorking){
       return(<TouchableOpacity style={styles.button} onPress={()=>{
         let next = getNextExercise(exercisePlan,exercises);
