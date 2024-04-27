@@ -7,7 +7,6 @@ import { createClient, Provider } from 'urql';
 import { useApiContext } from '../../api/ApiContext';
 import {styles} from '../utility/style';
 import { getUserInfo } from '../../api/User';
-import * as health from '../utility/appleHealth';
 import CalendarStrip from 'react-native-calendar-strip';
 import { ButtonGroup } from 'react-native-elements';
 import {
@@ -19,33 +18,37 @@ import {
   StackedBarChart
 } from "react-native-chart-kit";
 import React, { useState } from 'react';
-import { Button } from '../components/button';
 
 
 
 const chartConfig = {
   backgroundGradientFrom: '#00B5EE',
   backgroundGradientTo: '#0077B6',
+
   color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
   style: {borderRadius: 16},
+  
 };
 
 
 
 const LineChartComponent = ({data, title}) => {
+
   return (
-    <View style = {styles.chartContainer}>
-      <Text style = {styles.text}>{title}</Text>
-      <LineChart
-        data={data}
-        width={Dimensions.get('window').width - 60}
-        height={220}
-        chartConfig= {chartConfig}
-        bezier
-        style = {styles.chart}
-      />
-    </View>
-  );
+      <View style = {styles.chartContainer}>
+          <Text style = {styles.text}>{title}</Text>
+          <LineChart
+              data={data}
+              width={Dimensions.get('window').width - 60}
+              height={220}
+              chartConfig= {chartConfig}
+              bezier
+              
+              style = {styles.chart}
+              />
+              </View>
+
+);
 };
 
 
@@ -56,41 +59,45 @@ const LineChartComponent = ({data, title}) => {
 
 const weightdata = {
   labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-  datasets: [{ data: [100,120,130,140,150,140,140,130,120,110,120,130]}]
+  datasets: [
+      {data: [100,120,130,140,150,140,140,130,120,110,120,130],
+      },
+  ],
 };
 
 const stepsdata = {
   labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-  datasets: [{ data: [1000,1340,780,3430,7008,9000,3240] }]
+  datasets: [
+      {data: [1000,1340,780,3430,7008,9000,3240],
+      },
+  ],
 };    
 
 const exercisedata = {
   labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-  datasets: [{ data: [10,30,5,10,40,20,10] }]
+  datasets: [
+    {data: [10,30,5,10,40,20,10],
+    },
+  ],
 };
+
+
 
 const stepsdataLastWeek = {
   labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-  datasets: [{ data: [3000,1540,880,4430,3008,1000,2240] }]
+  datasets: [
+      {data: [3000,1540,880,4430,3008,1000,2240],
+      },
+  ],
 }; 
 
 const exercisedataLastWeek = {
   labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-  datasets: [{ data: [20,40,10,5,50,10,20] }]
+  datasets: [
+    {data: [20,40,10,5,50,10,20],
+    },
+  ],
 };
-
-
-
-
-
-//
-const checkData : string | undefined = health.HKInit();
-
-
-
-
-
-
 
 export default function HomePage() {
   const { loggedIn,authToken,updateUserData,userData } = useApiContext();
@@ -109,40 +116,14 @@ export default function HomePage() {
   if(userData?.firstLoggedin){
     return <Redirect href={"/submit_data"}></Redirect>
   }
-  /*
-  const handlePressGetAuthStatus = () => {
-    AppleHealthKit.getAuthStatus(permissions, (err, result) => {
-      if (err) {
-        console.error(err);
-      }
-      setAuthStatus(result);
-    });
-  };
-  */
-  var HKText : string = "";
-  
-  const determineHKText = () => {
-    if (typeof checkData === "undefined")
-      HKText = "No errors in linking health data!";
-    else
-      HKText = checkData;
-  }
-
 
   
 
 return (
     <View style = {styles.heading}>
       <View style = {[styles.header, ]}>
-        <Text style = {styles.headerText} >Hello, USER!</Text>
-        <Image source={require('assets/pfp.png')} style={styles.avatar}/>
-
-        <Button
-          onPress={determineHKText}
-          title="Check HK Status"
-        >
-        </Button>
-        <Text>{HKText || "hi"}</Text>
+      <Text style = {styles.headerText} >Hello, USER!</Text>
+      <Image source={require('assets/pfp.png')} style={styles.avatar}/>
       </View>
 
       <ButtonGroup 
@@ -151,23 +132,31 @@ return (
         buttons= {timeOptions}
         containerStyle = {styles.buttonGroupContainer}
         textStyle = {styles.text}
-      />
-        
+       
+       />
+      
+      
       <ScrollView contentContainerStyle = {styles.charts}>
         {selectedTime === 0 ? (
           <>
-            <LineChartComponent data={stepsdata} title="Steps" />
-            <LineChartComponent data={exercisedata} title = "Exercise Minutes" />
-            <LineChartComponent data={weightdata} title="Weight"  />
+          
+          <LineChartComponent data={stepsdata} title="Steps" />
+          <LineChartComponent data={exercisedata} title = "Exercise Minutes" />
+          <LineChartComponent data={weightdata} title="Weight"  />
           </>
         ) : (
-          <>  
-            <LineChartComponent data={stepsdataLastWeek} title="Steps" />
-            <LineChartComponent data={exercisedataLastWeek} title = "Exercise Minutes" />
-            <LineChartComponent data={weightdata} title="Weight"  />
+          <>
+          
+          <LineChartComponent data={stepsdataLastWeek} title="Steps" />
+          <LineChartComponent data={exercisedataLastWeek} title = "Exercise Minutes" />
+          <LineChartComponent data={weightdata} title="Weight"  />
           </>
-        )}     
-      </ScrollView>
+        )}
+
+      
+      
+    </ScrollView>
+
     </View>
-  );
+);
 }

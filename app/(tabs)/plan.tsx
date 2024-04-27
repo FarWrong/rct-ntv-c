@@ -123,6 +123,12 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authT
   
 
   function renderButtonSelector(onPress_func:((event: GestureResponderEvent) => void), text?:String | null) {
+    
+    
+    let fontStyle = {
+      fontSize: 23, // Temp fix
+      fontWeight: "bold",
+    };
     let clickStyle = {
       height: 35, //temp
       backgroundColor: theme.colors.primary,
@@ -134,7 +140,7 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authT
     return(
     <TouchableOpacity onPress={onPress_func} style={clickStyle}>
     <View style={{justifyContent:'center',flex:1}}>
-      {text ? <Text style={styles.planPopupText}>{text}</Text> : <Text></Text>}
+      {text ? <Text style={fontStyle}>{text}</Text> : <Text></Text>}
     </View>
     </TouchableOpacity>
     )
@@ -147,12 +153,6 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authT
       let new_plan = JSON.parse(JSON.stringify(plans));
       let submit_blank:expectedExercise[][] = [[],[],[],[],[],[],[]]
       let day_index = returnDayasNumber(day);
-      if(!new_plan){
-        new_plan = {
-          name:"test",
-          workout_days:submit_blank
-        }
-      }
       if(new_plan.workout_days){
         new_plan.workout_days[day_index].push(submit_item);
       }else{
@@ -169,7 +169,11 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authT
     setIsModalVisible(false);
   };
   let {theme} = useTheme();
-
+  let fontStyle = {
+    fontSize: 23, // Temp fix
+    fontWeight: 'bold',
+    
+  };
   let clickStyle = {
       height: 100, //temp
       backgroundColor: theme.colors.primary,
@@ -185,18 +189,18 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authT
 
         margin: 20,
     }}>
-      <Text style={styles.planPopupText}>I </Text>
+      <Text style={fontStyle}>I </Text>
       {(WorkoutType && day && time) ? <Text onPress={async ()=>{
         await addToPlan();
         setDay(null);
         setTime(null);
         setWorkoutType(null);
-      }} style={[styles.planPopupText,{color:'green'}]}>want </Text> : <Text style={styles.planPopupText}>want </Text>}
-      <Text style={styles.planPopupText}>to do </Text>
+      }} style={[fontStyle,{color:'green'}]}>want </Text> : <Text style={fontStyle}>want </Text>}
+      <Text style={fontStyle}>to do </Text>
       {renderButtonSelector(()=>{setModalChildren("workoutTypes");setIsModalVisible(true);return;}, WorkoutType?.name )}
-      <Text style={styles.planPopupText}> every </Text>
+      <Text style={fontStyle}> every </Text>
       {renderButtonSelector(()=>{setModalChildren("days");setIsModalVisible(true);return;}, day )}
-      <Text style={styles.planPopupText}> for </Text>
+      <Text style={fontStyle}> for </Text>
       {renderButtonSelector(()=>{setModalChildren("time");setIsModalVisible(true);return;}, time )}
 
       <EmojiPicker isVisible={isModalVisible} onClose={onModalClose}>

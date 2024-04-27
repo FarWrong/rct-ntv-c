@@ -1,6 +1,6 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import React from 'react';
-import { Modal, TouchableOpacity, View } from 'react-native';
+import { Modal, TouchableHighlight, View } from 'react-native';
 
 import { useTheme } from '../utility/ThemeContext';
 import { styles } from '../utility/style';
@@ -41,7 +41,8 @@ export const Popup: React.FC<PopupProps> = ({ children, togglePopup, visible, ..
           <View style={styles.popupBody}>
             {children}
           </View>
-          <TouchableOpacity 
+          <TouchableHighlight 
+            underlayColor={theme.colors.buttonPressed}
             onPress={() => togglePopup(false)}
             style={styles.popupClose}
           >
@@ -50,7 +51,7 @@ export const Popup: React.FC<PopupProps> = ({ children, togglePopup, visible, ..
               size={20}
               color={theme.colors.secondary}
             />
-          </TouchableOpacity>
+          </TouchableHighlight>
         </View>
       </View>
     </Modal>

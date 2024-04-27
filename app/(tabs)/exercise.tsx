@@ -27,24 +27,28 @@ const chartConfig = {
 
   color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
   style: {borderRadius: 16},
+  
 };
 
 
 
 const LineChartComponent = ({data, title}) => {
+
   return (
-    <View style = {styles.chartContainer}>
-      <Text style = {styles.text}>{title}</Text>
-      <LineChart
-        data={data}
-        width={Dimensions.get('window').width - 60}
-        height={220}
-        chartConfig= {chartConfig}
-        bezier      
-        style = {styles.chart}
-      />
-    </View>
-  );
+      <View style = {styles.chartContainer}>
+          <Text style = {styles.text}>{title}</Text>
+          <LineChart
+              data={data}
+              width={Dimensions.get('window').width - 60}
+              height={220}
+              chartConfig= {chartConfig}
+              bezier
+              
+              style = {styles.chart}
+              />
+              </View>
+
+);
 };
 
 

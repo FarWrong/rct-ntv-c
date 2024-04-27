@@ -100,13 +100,6 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
 
-  /** Plan CSS */
-  planPopupText: {
-    fontSize: fontTitle,
-    fontWeight: 'bold'
-  },
-
-  
   /** FIX PLEASE!!!!! */
   container: {
     flex: 1,
