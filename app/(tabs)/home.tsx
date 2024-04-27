@@ -18,6 +18,7 @@ import {
   StackedBarChart
 } from "react-native-chart-kit";
 import React, { useState } from 'react';
+import useHealthData from '../../api/HealthKit';
 
 
 
@@ -33,7 +34,7 @@ const chartConfig = {
 
 
 const LineChartComponent = ({data, title}) => {
-
+ 
   return (
       <View style = {styles.chartContainer}>
           <Text style = {styles.text}>{title}</Text>
@@ -102,8 +103,8 @@ const exercisedataLastWeek = {
 export default function HomePage() {
   const { loggedIn,authToken,updateUserData,userData } = useApiContext();
   const [selectedTime, setSelectedTime] = useState(0);
-
-
+  const {steps,dailySteps} = useHealthData();
+  console.log(steps);
   const timeOptions = ['D', 'W', 'M', 'Y'];
 
   const handleTimeChange = (timeIndex) => {
@@ -140,14 +141,14 @@ return (
         {selectedTime === 0 ? (
           <>
           
-          <LineChartComponent data={stepsdata} title="Steps" />
+          <LineChartComponent data={dailySteps ? dailySteps:stepsdataLastWeek} title="Steps" />
           <LineChartComponent data={exercisedata} title = "Exercise Minutes" />
           <LineChartComponent data={weightdata} title="Weight"  />
           </>
         ) : (
           <>
           
-          <LineChartComponent data={stepsdataLastWeek} title="Steps" />
+          <LineChartComponent data={dailySteps ? dailySteps:stepsdataLastWeek} title="Steps" />
           <LineChartComponent data={exercisedataLastWeek} title = "Exercise Minutes" />
           <LineChartComponent data={weightdata} title="Weight"  />
           </>
