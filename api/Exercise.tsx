@@ -22,6 +22,7 @@ export interface exerciseType{
   start: Date | undefined,
   workout_type: WorkoutTypeType
   end: Date | undefined,
+  expectedTime:number
 }
 
 
@@ -205,7 +206,8 @@ export const getExercise = async(token:string) =>{
             workout_type:{
               name:ex.name,
               category:ex.category
-            }
+            },
+            expectedTime:ex.fuffilment
           }
           return_list.push(return_item)
         }
@@ -245,7 +247,8 @@ export const startExerciseDirect = async(token:string,exp:ExpectedExercise) =>{
             workout_type:{
               name:ex.name,
               category:ex.category
-            }
+            },
+            expectedTime:ex.fuffilment
           }
           return_list.push(return_item)
         }

@@ -232,21 +232,27 @@ function renderPlanMaker(workout_types:WorkoutTypeType[],plans:Plan | null,authT
     if(WorkoutType && day && time){
       let submit_item:ExpectedExercise = {name:WorkoutType.name,time:returnTimeAsNumber(time),type:WorkoutType.name} 
       let new_plan = JSON.parse(JSON.stringify(plans));
-      let submit_blank:ExpectedExercise[][] = [[],[],[],[],[],[],[]]
-      let day_index = returnDayAsNumber(day);
+
+      let submit_blank:expectedExercise[][] = [[],[],[],[],[],[],[]]
+      let day_index = returnDayasNumber(day);
       if(!new_plan){
         new_plan = {
-          name:"test",
           workout_days:submit_blank
         }
       }
-      if(new_plan.workout_days){
+      
+      if(new_plan && new_plan.workout_days){
         new_plan.workout_days[day_index].push(submit_item);
       }else{
         submit_blank[day_index].push(submit_item);
         new_plan.workout_days = submit_blank;
       }
-      new_plan.time = returnTimeAsNumber(time);
+
+      if(!new_plan.plan_name){
+        new_plan.plan_name ="test"
+      }
+      new_plan.time = returnTimeasNumber(time);
+
       await setUserPlan(authToken,new_plan);
       await updateUserData(); 
     }
