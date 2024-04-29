@@ -11,9 +11,11 @@ import { Stack } from 'expo-router'
 import { useTheme } from './utility/ThemeContext';
 import { useEffect } from 'react';
 import { useRootNavigationState } from 'expo-router';
-
+import useHealthData from "../api/HealthKit"
 // Determines where to redirect upon app load
 export default function StartPage() {
+
+
   const rootNavigationState = useRootNavigationState();
 
   if (!rootNavigationState?.key) return null;

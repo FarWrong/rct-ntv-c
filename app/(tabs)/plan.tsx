@@ -38,7 +38,7 @@ function returnNumberasTime(time:number | undefined){
     return "ERR";
   }
   let timelist = {
-    30:"30min",
+    30:"30 min",
     60:"1hr",
     90:"1hr 30min",
     120:"2hr",
@@ -47,57 +47,105 @@ function returnNumberasTime(time:number | undefined){
 }
 
 
-export  function EmojiPicker({ isVisible, children, onClose }) {
+export function EmojiPicker({ isVisible, children }) {
+  const theme = useTheme();
   const styles = StyleSheet.create({
     modalContent: {
-      height: '25%',
+      height: '40%',
       width: '100%',
-      backgroundColor: '#25292e',
-      borderTopRightRadius: 18,
-      borderTopLeftRadius: 18,
+      backgroundColor: theme.colors?.background || '#FFFFFF',
+      borderTopRightRadius: 20,
+      borderTopLeftRadius: 20,
       position: 'absolute',
-      bottom: 0,
-    }});
+      bottom: '30%', 
+      padding: 20,
+      justifyContent: 'center', 
+    },
+    modalText: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      color: theme.colors?.text || '#000000',
+      textAlign: 'center',
+      marginBottom: 10,
+    }
+  });
+
   return (
     <Modal animationType="slide" transparent={true} visible={isVisible}>
-      <View style={styles.modalContent} >
-        <View >
-          <Text >Choose a sticker</Text>
-        </View>
+      <View style={styles.modalContent}>
         {children}
       </View>
     </Modal>
   );
-  }
+}
 
 
-function renderClickableSelector(newname: string,color:string,onPressFunc:(name:string)=>void){
-  let style = {
-    backgroundColor: color,
-    borderRadius: 20,
-    margin: 10
-  }
+
+function renderClickableSelector(name: string, color: string, onPressFunc: (name: string) => void) {
+  const theme = useTheme();
+  const style = StyleSheet.create({
+    button: {
+      backgroundColor: color,
+      borderRadius: 15,
+      margin: 10,
+      padding: 10,
+      alignItems: 'center',
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5,
+    },
+    buttonText: {
+      color: theme.colors?.onPrimary || '#FFFFFF',
+      fontSize: 16,
+      fontWeight: '500',
+    }
+  });
+
   return (
-    <TouchableOpacity onPress={()=>{onPressFunc(newname)}} style={style}>
-      <Text >{newname}</Text>
+    <TouchableOpacity onPress={() => onPressFunc(name)} style={style.button}>
+      <Text style={style.buttonText}>{name}</Text>
     </TouchableOpacity>
   )
+}
+function handleModalOpen(contentType) {
+  setModalContent(contentType); 
+  setIsModalVisible(true);
+}
+function workoutTypeOnPress(name) {
+  setWorkoutType(workoutTypes.find(val => val.name === name));
+  setIsModalVisible(false);
+}
+
+function dateOnPress(day) {
+  setDay(day);
+  setIsModalVisible(false);
+}
+
+function timeOnPress(time) {
+  setTime(time);
+  setIsModalVisible(false);
 }
 
 function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authToken:string,updateUserData:()=>Promise<String|null>) {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modalContent, setModalContent] = useState(''); 
   const [WorkoutType, setWorkoutType] = useState<workoutTypeType|null>(null);
   const [day, setDay] = useState<string|null>(null);
   const [time, setTime] = useState<string|null>(null);
   const [modalChildren,setModalChildren] = useState<string|null>(null);
 
+
+
   function workout_type_onPress(name: string){
-    let workoutType = workout_types.find((val)=>val.name == name)
-    if(workoutType){
+    let workoutType = workout_types.find((val) => val.name === name);
+    if (workoutType) {
       setWorkoutType(workoutType);
     }
     setIsModalVisible(false);
   }
+  
 
   function date_onPress(name: string){
     setDay(name);
@@ -109,16 +157,74 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authT
     setIsModalVisible(false);
   }
 
-  function renderModalChildren(){
-    if(modalChildren == "workoutTypes"){
-      return workout_types.map((val,idx)=> renderClickableSelector(val.name,workout_category_to_color(val.category),workout_type_onPress))
-    }else if(modalChildren == "days"){
-      return ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"].map((val,idx)=> renderClickableSelector(val,"blue",date_onPress))
-    }else if(modalChildren == "time"){
-      return ["30min","1hr","1hr 30min","2hr"].map((val,idx)=> renderClickableSelector(val,"blue",time_onPress))
+
+
+  function workoutCategoryToColor(category) {
+    const categoryColors = {
+      'Strength': '#FF5733',  
+      'Cardio': '#33C1FF',   
+      'Flexibility': '#D633FF', 
+      'Balance': '#33FF57'    
+    };
+  
+    return categoryColors[category] || '#007AFF'; 
+  }
+  
+
+  function renderModalChildren() {
+    const theme = useTheme();
+    if (modalChildren === "workoutTypes") {
+      return workout_types.map((val, idx) => 
+        renderClickableSelector(val.name, workoutCategoryToColor(val.category), workout_type_onPress)
+      );
+    } else if (modalChildren === "days") {
+      const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const dayButtonStyle = StyleSheet.create({
+        container: {
+          flexDirection: 'row', 
+          flexWrap: 'wrap', 
+          justifyContent: 'center', 
+          padding: 10,
+        },
+        button: {
+          backgroundColor: theme.colors?.primary || '#007AFF', 
+          width: '13%', 
+          margin: 4,
+          paddingVertical: 10,
+          borderRadius: 5,
+          alignItems: 'center',
+          justifyContent: 'center',
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.2,
+          shadowRadius: 1.5,
+          elevation: 3,
+        },
+        buttonText: {
+          color: '#FFFFFF', 
+          fontSize: 16,
+          fontWeight: '500',
+        }
+      });
+  
+      return (
+        <View style={dayButtonStyle.container}>
+          {daysOfWeek.map((day, idx) => (
+            <TouchableOpacity key={idx} style={dayButtonStyle.button} onPress={() => date_onPress(day)}>
+              <Text style={dayButtonStyle.buttonText}>{day}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      );
+    } else if (modalChildren === "time") {
+      return ["30min", "1hr", "1hr 30min", "2hr"].map((val, idx) => 
+        renderClickableSelector(val, '#007AFF', time_onPress)
+      );
+    } else {
+      return null;
     }
   }
-
+  
 
   
 
@@ -180,12 +286,12 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authT
   };
   let {theme} = useTheme();
   let fontStyle = {
-    fontSize: 23, // Temp fix
+    fontSize: 23, 
     fontWeight: 'bold',
     
   };
   let clickStyle = {
-      height: 100, //temp
+      height: 100, //temp 
       backgroundColor: theme.colors.primary,
       minWidth: 32, //temp
       borderRadius: 20,

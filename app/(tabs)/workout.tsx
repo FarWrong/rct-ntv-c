@@ -3,14 +3,22 @@ import { Text, View, StyleSheet, ScrollView } from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import { useApiContext } from '../../api/ApiContext';
 import { defaultPageTheme, styles } from '../utility/style';
+import useHealthData from '../../api/HealthKit';
 
+export interface simpleData{
+  data:number[]
+}
 
-
+export interface GraphData
+{
+  labels: string[]
+  datasets: simpleData[]
+};
 
 export default function WorkoutPage() {
   const { loggedIn,authToken,updateUserData,userData , exercisePlan } = useApiContext();
   const [currentDate, setCurrentDate] = useState(new Date());
-
+  const {steps} = useHealthData();
 
   useEffect(() => {
     setCurrentDate(new Date());
@@ -35,13 +43,13 @@ export default function WorkoutPage() {
         </View>
         <View style = {[styles.box, {padding: 30}]}>
           <Text style = {[styles.text, {marginTop: 5, fontWeight: 'bold', fontSize: 20}]} >
-            8,760
+           {steps}
           </Text>
         </View>
       </View>
       {(exercisePlan && exercisePlan[2]) 
           ? exercisePlan[2]?.map((val, idx) => <Text>val.name</Text>)
-          : "lmao"}
+          : <Text>lmao</Text>}
       <View style={styles.content}>
         <View style={styles.row}>
           <Text style={[styles.text, { fontWeight: 'bold' }]}>Compared to your friends</Text>
