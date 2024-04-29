@@ -3,7 +3,7 @@ import React, { createContext, useContext, ReactNode, useState } from 'react';
 import { router } from 'expo-router';
 import { ApiContextType } from './ApiContext';
 import { workout_category } from './Workouts';
-import { expectedExercise } from './Workouts';
+import { ExpectedExercise } from './Workouts';
 function string_to_date(input: string): Date {
   // Parse the input string into a Date object
   const date = new Date(input);
@@ -19,8 +19,8 @@ function string_to_date(input: string): Date {
 }
 
 export interface exerciseType{
-  start:Date | undefined,
-  workout_type:workoutTypeType
+  start: Date | undefined,
+  workout_type: WorkoutTypeType
   end: Date | undefined,
 }
 
@@ -45,25 +45,25 @@ enum BloodType {
 }
 
 export interface Plan{
-  workout_days:Array<Array<expectedExercise>>;
+  workout_days:Array<Array<ExpectedExercise>>;
   difficulty_level?:string;
   plan_name?:string;
   description?:string;
 }
 
 
-export interface workoutTypeType {
+export interface WorkoutTypeType {
   name: string;
   category: workout_category;
 }
 
-export const getNextExercise = (plan_data: Plan | null, ex_data: exerciseType[]): expectedExercise | null => {
+export const getNextExercise = (plan_data: Plan | null, ex_data: exerciseType[]): ExpectedExercise | null => {
   if (!plan_data) {
     return null;
   }
 
   const currentDate = new Date();
-  const day_data: expectedExercise[] = plan_data.workout_days[currentDate.getDay()];
+  const day_data: ExpectedExercise[] = plan_data.workout_days[currentDate.getDay()];
 
   // Filter ex_data to get exercises done on the same day
   const exercisesDoneToday = ex_data.filter((exercise) => {
@@ -134,7 +134,7 @@ export const setUserPlan = async(token:string,plan:Plan) =>{
   let real_work:exportedExercise[] = []
   for(let i =0;i<plan.workout_days.length;i++){
     for(let j=0;j<plan.workout_days[i].length;j++){
-      let expect:expectedExercise = plan.workout_days[i][j]
+      let expect:ExpectedExercise = plan.workout_days[i][j]
       let real = real_work.find((val)=> (val.name == expect.name) && val.time == expect.time)
       if(!real){
         real_work.push({
@@ -220,7 +220,7 @@ export const getExercise = async(token:string) =>{
 
 
 
-export const startExerciseDirect = async(token:string,exp:expectedExercise) =>{
+export const startExerciseDirect = async(token:string,exp:ExpectedExercise) =>{
   let errorMessage = "success"
   try{
       const response = await fetch('http://127.0.0.1:8000/users/strt_ex/', {

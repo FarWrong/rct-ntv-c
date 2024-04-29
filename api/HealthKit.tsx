@@ -12,6 +12,9 @@ const { Permissions } = AppleHealthKit.Constants;
 const permissions: HealthKitPermissions = {
   permissions: {
     read: [
+      Permissions.BloodType,
+      Permissions.Weight,
+      Permissions.Height,
       Permissions.Steps,
       Permissions.FlightsClimbed,
       Permissions.DistanceWalkingRunning,
@@ -20,31 +23,33 @@ const permissions: HealthKitPermissions = {
   },
 };
 
-export interface step_day{
+/** Steps taken for a given day */
+export interface StepDay{
   day_of_week:string,
   steps:number
 }
 
-
-export interface simpleData{
+/** Bullet points for a graph */
+export interface SimpleData {
   data:number[]
 }
 
-export interface GraphData
-{
+/** Data for graph */
+export interface GraphData {
   labels: string[]
-  datasets: simpleData[]
+  datasets: SimpleData[]
 };
 
 
 const useHealthData = () => {
   const [steps, setSteps] = useState(0);
-  const [dailySteps, setdailySteps] = useState<GraphData  | undefined>();
+  const [dailySteps, setDailySteps] = useState<GraphData|undefined>();
   const [flights, setFlights] = useState(0);
   const [distance, setDistance] = useState(0);
 
 	// HealthKit implementation
   const [hasPermissions, setHasPermission] = useState(false);
+  
   useEffect(() => {
     if (!hasPermissions) {
       return;
@@ -94,13 +99,10 @@ const useHealthData = () => {
         }
         let res_data = {
           labels: labels,
-          datasets: [
-            {data: stepcounts,
-            },
-          ],
+          datasets: [{data: stepcounts}]
         };
 
-          setdailySteps(res_data);
+        setDailySteps(res_data);
       });
 
       
@@ -122,7 +124,7 @@ const useHealthData = () => {
     });
   }, []);
 
-  return { steps, flights, distance,dailySteps };
+  return { steps, flights, distance, dailySteps };
 };
 
 export default useHealthData;

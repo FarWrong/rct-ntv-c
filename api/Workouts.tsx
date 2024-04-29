@@ -22,8 +22,8 @@ enum BloodType {
   ON = 'O-',
 }
 
-export interface Plan{
-  workout_days:Array<Array<expectedExercise>>;
+export interface Plan {
+  workout_days:Array<Array<ExpectedExercise>>;
   difficulty_level?:string;
   plan_name?:string;
   description?:string;
@@ -36,11 +36,11 @@ export enum workout_category {
   strength = 'S',
 }
 
-export interface workoutTypeType {
+export interface WorkoutTypeType {
   name: string;
   category: workout_category;
 }
-export interface expectedExercise {
+export interface ExpectedExercise {
   name: string;
   type: string;
   time: number;
@@ -97,7 +97,7 @@ export const setUserPlan = async(token:string,plan:Plan) =>{
   let real_work:exportedExercise[] = []
   for(let i =0;i<plan.workout_days.length;i++){
     for(let j=0;j<plan.workout_days[i].length;j++){
-      let expect:expectedExercise = plan.workout_days[i][j]
+      let expect:ExpectedExercise = plan.workout_days[i][j]
       let real = real_work.find((val)=> (val.name == expect.name) && val.time == expect.time)
       if(!real){
         real_work.push({
@@ -151,7 +151,7 @@ export const getWorkoutTypes = async(token:string) =>{
           method: 'GET',
           headers: {
               'Content-Type': 'application/json',
-              "Authorization": "Bearer "  + token
+              "Authorization": "Bearer " + token
           },
           });
       if (!response.ok) {
@@ -161,7 +161,7 @@ export const getWorkoutTypes = async(token:string) =>{
         
         
         const data = await response.json();
-        let workout_types:workoutTypeType[] = data.workout_types;
+        let workout_types:WorkoutTypeType[] = data.workout_types;
         return workout_types;
   }catch(error:any){
       console.log(error);

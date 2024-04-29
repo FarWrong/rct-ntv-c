@@ -1,26 +1,26 @@
 import { Link, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { Modal,Image, Text, View, TouchableOpacity, ScrollView, GestureResponderEvent } from 'react-native';
+import { Modal, Image, Text, View, TouchableOpacity, ScrollView, GestureResponderEvent } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { Button } from '../components/button';
 import { defaultPageTheme, styles } from '../utility/style';
 import { ApiContext, useApiContext } from '../../api/ApiContext';
 import { useTheme } from '../utility/ThemeContext';
-import { getWorkoutTypes, workoutTypeType,workout_category,workout_category_to_color,expectedExercise,Plan,setUserPlan} from '../../api/Workouts';
+import { getWorkoutTypes, WorkoutTypeType,workout_category,workout_category_to_color,ExpectedExercise,Plan,setUserPlan} from '../../api/Workouts';
 
 
-export function returnDayasNumber(day:string) {
+export function returnDayAsNumber(day:string) {
   let daylist = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
   return daylist.indexOf(day);
 }
 
-export function returnNumberasDay(day:number) {
+export function returnNumberAsDay(day:number) {
   let daylist = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
   return daylist[day];
 }
 
-function returnTimeasNumber(time:string | undefined){
+function returnTimeAsNumber(time:string | undefined){
   if(!time){
     return 0;
   }
@@ -33,7 +33,7 @@ function returnTimeasNumber(time:string | undefined){
   return timelist[time];
 }
 
-function returnNumberasTime(time:number | undefined){
+function returnNumberAsTime(time:number | undefined){
   if(!time){
     return "ERR";
   }
@@ -47,8 +47,8 @@ function returnNumberasTime(time:number | undefined){
 }
 
 
-export function EmojiPicker({ isVisible, children }) {
-  const theme = useTheme();
+export function EmojiPicker({ isVisible, children, ...props }) {
+  const {theme} = useTheme();
   const styles = StyleSheet.create({
     modalContent: {
       height: '40%',
@@ -71,7 +71,7 @@ export function EmojiPicker({ isVisible, children }) {
   });
 
   return (
-    <Modal animationType="slide" transparent={true} visible={isVisible}>
+    <Modal {...props} animationType="slide" transparent={true} visible={isVisible}>
       <View style={styles.modalContent}>
         {children}
       </View>
@@ -82,7 +82,7 @@ export function EmojiPicker({ isVisible, children }) {
 
 
 function renderClickableSelector(name: string, color: string, onPressFunc: (name: string) => void) {
-  const theme = useTheme();
+  const {theme} = useTheme();
   const style = StyleSheet.create({
     button: {
       backgroundColor: color,
@@ -97,7 +97,7 @@ function renderClickableSelector(name: string, color: string, onPressFunc: (name
       elevation: 5,
     },
     buttonText: {
-      color: theme.colors?.onPrimary || '#FFFFFF',
+      color: theme.colors?.primary || '#FFFFFF',
       fontSize: 16,
       fontWeight: '500',
     }
@@ -109,33 +109,14 @@ function renderClickableSelector(name: string, color: string, onPressFunc: (name
     </TouchableOpacity>
   )
 }
-function handleModalOpen(contentType) {
-  setModalContent(contentType); 
-  setIsModalVisible(true);
-}
-function workoutTypeOnPress(name) {
-  setWorkoutType(workoutTypes.find(val => val.name === name));
-  setIsModalVisible(false);
-}
 
-function dateOnPress(day) {
-  setDay(day);
-  setIsModalVisible(false);
-}
-
-function timeOnPress(time) {
-  setTime(time);
-  setIsModalVisible(false);
-}
-
-function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authToken:string,updateUserData:()=>Promise<String|null>) {
+function renderPlanMaker(workout_types:WorkoutTypeType[],plans:Plan | null,authToken:string,updateUserData:()=>Promise<String|null>) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState(''); 
-  const [WorkoutType, setWorkoutType] = useState<workoutTypeType|null>(null);
+  const [WorkoutType, setWorkoutType] = useState<WorkoutTypeType|null>(null);
   const [day, setDay] = useState<string|null>(null);
   const [time, setTime] = useState<string|null>(null);
   const [modalChildren,setModalChildren] = useState<string|null>(null);
-
 
 
   function workout_type_onPress(name: string){
@@ -172,7 +153,7 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authT
   
 
   function renderModalChildren() {
-    const theme = useTheme();
+    const {theme} = useTheme();
     if (modalChildren === "workoutTypes") {
       return workout_types.map((val, idx) => 
         renderClickableSelector(val.name, workoutCategoryToColor(val.category), workout_type_onPress)
@@ -229,12 +210,6 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authT
   
 
   function renderButtonSelector(onPress_func:((event: GestureResponderEvent) => void), text?:String | null) {
-    
-    
-    let fontStyle = {
-      fontSize: 23, // Temp fix
-      fontWeight: "bold",
-    };
     let clickStyle = {
       height: 35, //temp
       backgroundColor: theme.colors.primary,
@@ -245,9 +220,9 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authT
   };
     return(
     <TouchableOpacity onPress={onPress_func} style={clickStyle}>
-    <View style={{justifyContent:'center',flex:1}}>
-      {text ? <Text style={fontStyle}>{text}</Text> : <Text></Text>}
-    </View>
+      <View style={{justifyContent:'center',flex:1}}>
+        {text ? <Text style={styles.planPopupText}>{text}</Text> : <Text></Text>}
+      </View>
     </TouchableOpacity>
     )
   }
@@ -255,17 +230,23 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authT
 
   async function addToPlan(){
     if(WorkoutType && day && time){
-      let submit_item:expectedExercise = {name:WorkoutType.name,time:returnTimeasNumber(time),type:WorkoutType.name} 
+      let submit_item:ExpectedExercise = {name:WorkoutType.name,time:returnTimeAsNumber(time),type:WorkoutType.name} 
       let new_plan = JSON.parse(JSON.stringify(plans));
-      let submit_blank:expectedExercise[][] = [[],[],[],[],[],[],[]]
-      let day_index = returnDayasNumber(day);
+      let submit_blank:ExpectedExercise[][] = [[],[],[],[],[],[],[]]
+      let day_index = returnDayAsNumber(day);
+      if(!new_plan){
+        new_plan = {
+          name:"test",
+          workout_days:submit_blank
+        }
+      }
       if(new_plan.workout_days){
         new_plan.workout_days[day_index].push(submit_item);
       }else{
         submit_blank[day_index].push(submit_item);
         new_plan.workout_days = submit_blank;
       }
-      new_plan.time = returnTimeasNumber(time);
+      new_plan.time = returnTimeAsNumber(time);
       await setUserPlan(authToken,new_plan);
       await updateUserData(); 
     }
@@ -275,11 +256,7 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authT
     setIsModalVisible(false);
   };
   let {theme} = useTheme();
-  let fontStyle = {
-    fontSize: 23, 
-    fontWeight: 'bold',
-    
-  };
+
   let clickStyle = {
       height: 100, //temp 
       backgroundColor: theme.colors.primary,
@@ -292,21 +269,20 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authT
         flexWrap: 'wrap',
         justifyContent: 'flex-start',
         alignItems: 'center',
-
         margin: 20,
     }}>
-      <Text style={fontStyle}>I </Text>
+      <Text style={styles.planPopupText}>I </Text>
       {(WorkoutType && day && time) ? <Text onPress={async ()=>{
         await addToPlan();
         setDay(null);
         setTime(null);
         setWorkoutType(null);
-      }} style={[fontStyle,{color:'green'}]}>want </Text> : <Text style={fontStyle}>want </Text>}
-      <Text style={fontStyle}>to do </Text>
+      }} style={[styles.planPopupText,{color:'green'}]}>want </Text> : <Text style={styles.planPopupText}>want </Text>}
+      <Text style={styles.planPopupText}>to do </Text>
       {renderButtonSelector(()=>{setModalChildren("workoutTypes");setIsModalVisible(true);return;}, WorkoutType?.name )}
-      <Text style={fontStyle}> every </Text>
+      <Text style={styles.planPopupText}> every </Text>
       {renderButtonSelector(()=>{setModalChildren("days");setIsModalVisible(true);return;}, day )}
-      <Text style={fontStyle}> for </Text>
+      <Text style={styles.planPopupText}> for </Text>
       {renderButtonSelector(()=>{setModalChildren("time");setIsModalVisible(true);return;}, time )}
 
       <EmojiPicker isVisible={isModalVisible} onClose={onModalClose}>
@@ -316,36 +292,38 @@ function renderPlanMaker(workout_types:workoutTypeType[],plans:Plan | null,authT
   );
 }
 
-function renderDay(ex:expectedExercise[],index:number){
+function renderDay(ex:ExpectedExercise[],index:number){
   return(<View>{ex.map((val,idx)=>(RenderE(val,index)))}</View>)
 }
 
-function RenderE(ex:expectedExercise,index:number){
+function RenderE(ex:ExpectedExercise,index:number){
   const {theme} = useTheme();
   let fontStyle = {
     fontSize: 19, //temp
   };
-  return(<View style={{
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    margin: 20,
-}}><Text style={fontStyle}>I will do </Text>
-  <Text style={fontStyle}>{ex.name}</Text>
-  <Text style={fontStyle}>On</Text>
-  <Text style={fontStyle}>{returnNumberasDay(index)}</Text>
-  <Text style={fontStyle}> For </Text>
-  <Text style={fontStyle}>{returnNumberasTime(ex?.time)}</Text>
-  </View>
 
+  return(
+    <View style={{
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+      margin: 20,
+    }}>
+      <Text style={fontStyle}>I will do </Text>
+      <Text style={fontStyle}>{ex.name}</Text>
+      <Text style={fontStyle}>On</Text>
+      <Text style={fontStyle}>{returnNumberAsDay(index)}</Text>
+      <Text style={fontStyle}> For </Text>
+      <Text style={fontStyle}>{returnNumberAsTime(ex?.time)}</Text>
+    </View>
   );
 }
 
 
 export default function Page() {
   const {authToken,exercisePlan,updateUserData} = useApiContext();
-  const [WorkoutTypes, setWorkoutTypes] = useState<workoutTypeType[]>([]);
+  const [WorkoutTypes, setWorkoutTypes] = useState<WorkoutTypeType[]>([]);
   useEffect(() => {
     const getTypesType = async () => {
       try {
@@ -360,16 +338,15 @@ export default function Page() {
 
     getTypesType();
   }, []);
+
   return (
-      <View style = {styles.heading}>
-        {renderPlanMaker(WorkoutTypes,exercisePlan,authToken,updateUserData)}
-        
+    <View style = {styles.heading}>
+      {renderPlanMaker(WorkoutTypes,exercisePlan,authToken,updateUserData)}
       <ScrollView>
         {exercisePlan?.workout_days.map((val, idx) => (
           <View key={idx}>{renderDay(val, idx)}</View>
         ))}
       </ScrollView>
     </View>
-
   )
 } 
