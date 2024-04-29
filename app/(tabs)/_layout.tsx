@@ -6,7 +6,7 @@ import { TouchableOpacity, View } from 'react-native';
 import { useApiContext } from '../../api/ApiContext';
 import { useTheme } from '../utility/ThemeContext';
 import { StyleSheet } from 'react-native';
-import { getNextExercise,startExerciseDirect } from '../../api/Exercise';
+import { endExercise, getNextExercise,startExerciseDirect } from '../../api/Exercise';
 import { UserType } from '../../api/User';
 import { Plan } from '../../api/Workouts';
 
@@ -42,23 +42,21 @@ const styles = StyleSheet.create({
 export default () => {
   const { authToken,loggedIn,userData ,updateUserData,exercisePlan,exercises} = useApiContext();
   
-  function returnButtonSelector(user:UserType,plan:Plan){
+  function returnButtonSelector(user:UserType | null,plan:Plan |null){
     if(user?.isWorking){
       return(<TouchableOpacity style={styles.button} onPress={()=>{
-        let next = getNextExercise(exercisePlan,exercises);
-        if(next){
-          startExerciseDirect(authToken,next);
-          updateUserData();
-        }
+        endExercise(authToken);
+        updateUserData();
       }}>
         
         <Ionicons name="checkmark-done-circle-outline" size={40} color="#fff" />
       </TouchableOpacity>)
     }
+    let next = getNextExercise(exercisePlan,exercises);
+    if(next){
     return(
       
       <TouchableOpacity style={styles.button} onPress={()=>{
-        let next = getNextExercise(exercisePlan,exercises);
         if(next){
           startExerciseDirect(authToken,next);
           updateUserData();
@@ -66,6 +64,14 @@ export default () => {
       }}>
         
         <Ionicons name="bicycle" size={40} color="#fff" />
+      </TouchableOpacity>
+    )
+    }
+    return(
+      
+      <TouchableOpacity style={styles.button}>
+        
+        <Ionicons name="bicycle" size={40} color="red" />
       </TouchableOpacity>
     )
   }
@@ -100,6 +106,7 @@ export default () => {
       { /*Order of tabs*/ }
       <Tabs.Screen name="home" options={{title: "Home"}}/>
       <Tabs.Screen name="workout" options={{title: "Workout"}}/>
+      <Tabs.Screen name="feed" options={{title: "Feed"}}/>
       <Tabs.Screen
         name="exercise"
         options={{
@@ -109,7 +116,7 @@ export default () => {
       />
       <Tabs.Screen name="friends" options={{title: "Friends"}}/>
       <Tabs.Screen name="profile" options={{title: "Profile"}}/>
-      
+      <Tabs.Screen name="plan" options={{title: "Plan"}}/>
 
     </Tabs>
   </>
