@@ -236,19 +236,9 @@ const handleHeightUpdate = async () => {
 
               
               
-               <View style = {{marginVertical: 10}}></View>
+               
 
-              <View style = {styles.row}>
-                  <Text style = {styles.text}>Privacy</Text>
-                  <TouchableOpacity>
-                  <Text style = {[styles.text, {fontWeight: 'bold',color: '#00B5EE'}]}>Edit</Text>
-                  </TouchableOpacity>
-
-              </View>
-              <Text style = {[styles.text, {marginTop: 5, fontWeight: 'bold'}]} >
-                  CURRENT SETTINGS
-
-              </Text>
+              
 
               <View style = {{marginVertical: 10}}></View>
 

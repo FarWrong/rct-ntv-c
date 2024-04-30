@@ -72,6 +72,7 @@ export default function FriendsPage() {
               value={friendName}
               onChangeText={setFriendName}
               secure={false}
+              style = {styles.input}
             />
             <Button
                 onPress={async () => {let xd = await sendFriendRequest(authToken,friendName);await updateUserData();setErrorMessage(xd)}}
@@ -128,5 +129,15 @@ const styles = StyleSheet.create({
       fontSize: 16,
       fontWeight: 'bold',
       marginRight: 5,
+    },
+    input: {
+      backgroundColor: '#F0F0F0',
+      borderRadius: 10,
+      paddingHorizontal: 15,
+      paddingVertical: 10,
+      marginBottom: 10,
+      width: '40%', // Adjust width as needed
+      color: '#333', // Text color
+      fontSize: 16,
     },
   });

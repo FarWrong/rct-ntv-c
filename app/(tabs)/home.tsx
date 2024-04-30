@@ -37,6 +37,7 @@ const chartConfig = {
 const LineChartComponent = ({data, title}) => {
 
   return (
+ 
       <View style = {styles.chartContainer}>
           <Text style = {styles.text}>{title}</Text>
           <LineChart
@@ -50,7 +51,10 @@ const LineChartComponent = ({data, title}) => {
               />
               </View>
 
+     
+
 );
+  
 };
 
 
@@ -124,7 +128,7 @@ export default function HomePage() {
 return (
     <View style = {styles.heading}>
       <View style = {[styles.header, ]}>
-      <Text style = {styles.headerText} >Hello, USER!</Text>
+      <Text style = {styles.headerText} >Hello, {userData?.username ? userData.username : "USER"}</Text>
       <Image source={require('assets/pfp.png')} style={styles.avatar}/>
       </View>
 
@@ -137,7 +141,7 @@ return (
        
        />
       
-      
+   
       <ScrollView contentContainerStyle = {styles.charts}>
         {selectedTime === 0 ? (
           <>
@@ -147,7 +151,11 @@ return (
           <LineChartComponent data={weightdata} title="Weight"  />
           </>
         ) : (
+
+        
           <>
+
+             
           
           <LineChartComponent data={stepsdataLastWeek} title="Steps" />
           <LineChartComponent data={exercisedataLastWeek} title = "Exercise Minutes" />
@@ -155,10 +163,11 @@ return (
           </>
         )}
 
-      
+   
       
     </ScrollView>
 
     </View>
 );
+      
 }
