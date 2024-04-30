@@ -44,16 +44,18 @@ export default function FriendsPage() {
     }
   };
 
-  const renderFeedItem = ({ item: exercise }: { item: feedType }) => {
-    const actualDuration = exercise.end && exercise.start ? Math.floor((exercise.end.getTime() - exercise.start.getTime()) / 1000) : 0;
-    const isFulfilled = actualDuration >= exercise.expectedTime;
+  const renderFeedItem = ({item}:{item:feedType}) => {
+    console.log("END TIME", item.end.toISOString());
+    console.log(item.expectedTime);
+    const actualDuration = (item.end && item.start) ? Math.floor((item.end.getTime() - item.start.getTime()) / 1000) : 0;
+    const isFulfilled = actualDuration >= item.expectedTime;
 
     return (
-      <View style={[styles.feedItem, { backgroundColor: isFulfilled ? '#C8E6C9' : getCategoryColor(exercise.workout_type.category) }]}>
-        <Text style={styles.username}>{exercise.username}</Text>
-        <Text style={styles.workoutType}>{exercise.workout_type.name}</Text>
-        <Text style={styles.category}>Category: {exercise.workout_type.category}</Text>
-        <Text style={styles.duration}>Expected Duration: {formatDuration(exercise.fulfillment)}</Text>
+      <View style={[styles.feedItem, { backgroundColor: isFulfilled ? '#C8E6C9' : getCategoryColor(item.workout_type.category) }]}>
+        <Text style={styles.username}>{item.user}</Text>
+        <Text style={styles.workoutType}>{item.workout_type.name}</Text>
+        <Text style={styles.category}>Category: {item.workout_type.category ? item.workout_type.category : "d"}</Text>
+        <Text style={styles.duration}>Expected Duration: {formatDuration(item.expectedTime)}</Text>
         <Text style={styles.actualDuration}>Actual Duration: {formatDuration(actualDuration)}</Text>
         <Text style={styles.fulfilled}>{isFulfilled ? 'Fulfilled' : 'Not Fulfilled'}</Text>
       </View>

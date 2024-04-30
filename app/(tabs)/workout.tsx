@@ -55,9 +55,18 @@ export default function WorkoutPage() {
           <Text style={[styles.text, { fontWeight: 'bold' }]}>Compared to your friends</Text>
         </View>
         <View style={[styles.box, {width: '100%', padding: 30}]}>
-          <Text style={[styles.text, {marginRight: 10}]}>Calories Burned</Text>
+          <Text style={[styles.text, {marginRight: 10}]}>Workouts Completed</Text>
           <View style={styles.bar}></View> 
         </View>
+        <View style={[styles.box, {width: '100%', padding: 30}]}>
+          <Text style={[styles.text, {marginRight: 10}]}>Workouts Failed</Text>
+          <View style={styles.bar}></View> 
+        </View>
+        <View style={[styles.box, {width: '100%', padding: 30}]}>
+          <Text style={[styles.text, {marginRight: 10}]}>Steps</Text>
+          <View style={styles.bar}></View> 
+        </View>
+        <View style={{height:20}}></View>
       </View>
     </ScrollView>
   );

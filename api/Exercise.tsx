@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import { ApiContextType } from './ApiContext';
 import { workout_category } from './Workouts';
 import { ExpectedExercise } from './Workouts';
-function string_to_date(input: string): Date | undefined {
+export function string_to_date(input: string): Date | undefined {
   // Parse the input string into a Date object
   const date = new Date(input);
 
