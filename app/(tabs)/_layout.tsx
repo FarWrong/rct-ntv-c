@@ -1,16 +1,17 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Redirect, router, Stack, useRootNavigationState } from 'expo-router';
 import { Tabs } from 'expo-router/tabs';
-import React, { DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_FORM_ACTIONS, useEffect } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import React, { DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_FORM_ACTIONS, useEffect, useState } from 'react';
+import { Modal,Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useApiContext } from '../../api/ApiContext';
 import { useTheme } from '../utility/ThemeContext';
 import { StyleSheet } from 'react-native';
-import { endExercise, getNextExercise,startExerciseDirect } from '../../api/Exercise';
+import { endExercise, exerciseType, getNextExercises,startExerciseDirect } from '../../api/Exercise';
 import { UserType } from '../../api/User';
-import { Plan } from '../../api/Workouts';
-
-const styles = StyleSheet.create({
+import { ExpectedExercise, Plan } from '../../api/Workouts';
+import { styles } from '../utility/style';
+import { returnNumberAsTime } from './plan';
+const styles1 = StyleSheet.create({
   tabBar: {
     position: 'absolute',
     bottom: 0,
@@ -39,27 +40,75 @@ const styles = StyleSheet.create({
 
 
 
+
 export default () => {
   const { authToken,loggedIn,userData ,updateUserData,exercisePlan,exercises} = useApiContext();
+  const [wrkSlct, setWrkSlctVisible] = useState(false);
+  const [workoutOptions, setWorkoutOptions] = useState<ExpectedExercise[]>([]);
+  const [time, setTime] = useState(Date.now());
+
+
+  useEffect(() => {
+    const updateOptions = async () => {
+      console.log("Updating workout options");
+      let options = getNextExercises(exercisePlan, exercises);
+      setWorkoutOptions(options);
+    };
+    updateOptions();
+
+  }, [authToken, loggedIn, userData, exercisePlan, exercises]);
+
+  async function onPress_func(expect_ex: ExpectedExercise) {
+    await startExerciseDirect(authToken, expect_ex);
+    setWrkSlctVisible(false);
+    await updateUserData();
+  }
+
+
+  function renderExcerciseSelector(expect_ex:ExpectedExercise){
+    const style = StyleSheet.create({
+      button: {
+        backgroundColor: '#00B5EE',
+        borderRadius: 15,
+        margin: 10,
+        padding: 10,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+      },
+      buttonText: {
+        color: '#FFFFFF',
+        fontSize: 16,
+        fontWeight: '500',
+      }
+    });
+    return(
+      <TouchableOpacity onPress={() => onPress_func(expect_ex)} style={style.button}>
+          <Text style={style.buttonText}>{expect_ex.name+ "for "+returnNumberAsTime(expect_ex.time)}</Text>
+      </TouchableOpacity>
+    )
+  }
+
   
+
   function returnButtonSelector(user:UserType|null, plan:Plan|null){
     if(user?.isWorking){
-      return(<TouchableOpacity style={styles.button} onPress={()=>{
-        endExercise(authToken);
-        updateUserData();
+      return(<TouchableOpacity style={styles1.button} onPress={async ()=>{
+        await endExercise(authToken);
+        await updateUserData();
       }}>
         
         <Ionicons name="checkmark-done-circle-outline" size={40} color="#fff" />
       </TouchableOpacity>)
     }
-    let next = getNextExercise(exercisePlan,exercises);
-    if(next){
+    if(workoutOptions.length > 0){
     return(
-      
-      <TouchableOpacity style={styles.button} onPress={()=>{
-        if(next){
-          startExerciseDirect(authToken,next);
-          updateUserData();
+      <TouchableOpacity style={styles1.button} onPress={()=>{
+        if(workoutOptions.length > 0){
+          setWrkSlctVisible(true);
         }
       }}>
         
@@ -69,7 +118,7 @@ export default () => {
     }
     return(
       
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles1.button}>
         
         <Ionicons name="bicycle" size={40} color="red" />
       </TouchableOpacity>
@@ -77,8 +126,24 @@ export default () => {
   }
   
   const { theme } = useTheme();
+
   return (
     <>
+    <Modal
+                        animationType="fade"
+                        transparent={true}
+                        visible={wrkSlct}
+                        onRequestClose={() => setWrkSlctVisible(false)}
+                    >
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalContent}>
+                                {workoutOptions.map((val,idx)=>{return renderExcerciseSelector(val)})}
+                                <TouchableOpacity onPress={() => setWrkSlctVisible(false)} style={styles.closeButton}>
+                                  <Ionicons name="close" size={20}  /> {/* Close icon */}
+                                  </TouchableOpacity>
+                            </View>
+                        </View>
+                    </Modal>
     <Tabs screenOptions={({ route }) => ({
       tabBarIcon: ({ focused, color, size }) => {
         let iconName;
