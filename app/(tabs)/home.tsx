@@ -300,9 +300,9 @@ export default function HomePage() {
   // Render component
   return (
     <View style = {styles.heading}>
-      <View style = {styles.header}>
-        <Text style = {styles.headerText}>Hello, USER!</Text>
-        <Image source={require('assets/pfp.png')} style={styles.avatar}/>
+      <View style = {[styles.header, ]}>
+      <Text style = {styles.headerText} >Hello, {userData?.username ? userData.username : "USER"}</Text>
+      <Image source={require('assets/pfp.png')} style={styles.avatar}/>
       </View>
 
       <ButtonGroup 
@@ -345,6 +345,8 @@ export default function HomePage() {
             </View>
           </>
         ) : (
+
+        
           <>
             <LineChartComponent data={dailySteps ? dailySteps:stepsDataLastWeek} title="Steps" />
             <LineChartComponent data={exerciseDataLastWeek} title = "Exercise Minutes" />

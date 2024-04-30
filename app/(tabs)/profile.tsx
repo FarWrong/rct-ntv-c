@@ -156,22 +156,213 @@ export default function ProfilePage() {
         </TouchableOpacity>
       </View>
       <ScrollView showsVerticalScrollIndicator = {false}>
-        <View style = {styles.content}>
-          <EditDataField
-            dataType = 'username'
-            updateValue = {setNewUsername}
-            value = {newUsername}
-            request={request}
-          />
-          <EditDataField
-            dataType = 'email'
-            updateValue = {setNewEmail}
-            value = {newEmail}
-            request={request}
-          />
-            
-          <View style = {styles.row}>
-            <Text style = {styles.text}>Privacy</Text>
+          <View style = {styles.content}>
+              <View style = {styles.row}>
+                  <Text style = {styles.text}>Username</Text>
+                  <TouchableOpacity onPress= {() => setUsernameModalVisible(true)}>
+                  <Text style = {[styles.text, {fontWeight: 'bold',color: '#00B5EE'}]}>Edit</Text>
+                  </TouchableOpacity>
+
+              </View>
+              <Text style = {[styles.text, {marginTop: 5, fontWeight: 'bold'}]} >
+                 {userData.username?.toString() || 'NA'}
+              </Text>
+              <Modal
+                        animationType="fade"
+                        transparent={true}
+                        visible={UsernamemodalVisible}
+                        onRequestClose={() => setUsernameModalVisible(false)}
+                    >
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalContent}>
+                                <TextInput
+                                    style={styles.input}
+                                    onChangeText={setNewUsername}
+                                    value={newUsername}
+                                    placeholder="Enter new username"
+                                    placeholderTextColor="#888"
+                                />
+                                <TouchableOpacity onPress={handleUsernameUpdate}>
+                                  <View style = {styles.settingsbutton}>
+                                    <Text style={[styles.settingsbuttonText, { fontWeight: 'bold' }]}>Update</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => setUsernameModalVisible(false)} style={styles.closeButton}>
+                                  <Ionicons name="close" size={20}  /> {/* Close icon */}
+                                  </TouchableOpacity>
+                            </View>
+                        </View>
+                    </Modal>
+     
+              
+            <View style = {{marginVertical: 10}}></View>
+
+              <View style = {styles.row}>
+                  <Text style = {styles.text}>Email</Text>
+                  <TouchableOpacity onPress= {() => setEmailModalVisible(true)}>
+                  <Text style = {[styles.text, {fontWeight: 'bold',color: '#00B5EE'}]}>Edit</Text>
+                  </TouchableOpacity>
+
+              </View>
+              <Text style = {[styles.text, {marginTop: 5, fontWeight: 'bold'}]} >
+                  {userData.email?.toString() || 'NA'}
+              </Text>
+
+              <Modal
+                        animationType="fade"
+                        transparent={true}
+                        visible={EmailmodalVisible}
+                        onRequestClose={() => setEmailModalVisible(false)}
+                    >
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalContent}>
+                                <TextInput
+                                    style={styles.input}
+                                    onChangeText={setNewEmail}
+                                    value={newEmail}
+                                    placeholder="Enter new email"
+                                    placeholderTextColor="#888"
+                                />
+                                <TouchableOpacity onPress={handleEmailUpdate}>
+                                  <View style = {styles.settingsbutton}>
+                                    <Text style={[styles.settingsbuttonText, { fontWeight: 'bold' }]}>Update</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => setEmailModalVisible(false)} style={styles.closeButton}>
+                                  <Ionicons name="close" size={20}  /> {/* Close icon */}
+                                  </TouchableOpacity>
+                            </View>
+                        </View>
+                    </Modal>
+
+              
+              
+               
+
+              
+
+              <View style = {{marginVertical: 10}}></View>
+
+              <View style = {styles.row}>
+                  <Text style = {styles.text}>Age</Text>
+                  <TouchableOpacity onPress= {() => setAgeModalVisible(true)}>
+                  <Text style = {[styles.text, {fontWeight: 'bold',color: '#00B5EE'}]}>Edit</Text>
+                  </TouchableOpacity>
+
+              </View>
+              <Text style = {[styles.text, {marginTop: 5, fontWeight: 'bold'}]} >
+                  {userData.age?.toString() || 'NA'}
+                </Text>
+
+                <Modal
+                        animationType="fade"
+                        transparent={true}
+                        visible={AgemodalVisible}
+                        onRequestClose={() => setAgeModalVisible(false)}
+                    >
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalContent}>
+                                <TextInput
+                                    style={styles.input}
+                                    onChangeText={setNewAge}
+                                    value={newAge}
+                                    placeholder="Enter new age"
+                                    placeholderTextColor="#888"
+                                />
+                                <TouchableOpacity onPress={handleAgeUpdate}>
+                                  <View style = {styles.settingsbutton}>
+                                    <Text style={[styles.settingsbuttonText, { fontWeight: 'bold' }]}>Update</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => setAgeModalVisible(false)} style={styles.closeButton}>
+                                  <Ionicons name="close" size={20}  /> {/* Close icon */}
+                                  </TouchableOpacity>
+                            </View>
+                        </View>
+                    </Modal>
+
+            <View style = {{marginVertical: 10}}></View>
+
+              <View style = {styles.row}>
+                  <Text style = {styles.text}>Weight</Text>
+                  <TouchableOpacity onPress= {() => setWeightModalVisible(true)}>
+                  <Text style = {[styles.text, {fontWeight: 'bold',color: '#00B5EE'}]}>Edit</Text>
+                  </TouchableOpacity>
+
+              </View>
+              <Text style = {[styles.text, {marginTop: 5, fontWeight: 'bold'}]} >
+                  {userData.weight?.toString() || ''}
+              </Text>
+
+              <Modal
+                        animationType="fade"
+                        transparent={true}
+                        visible={WeightmodalVisible}
+                        onRequestClose={() => setWeightModalVisible(false)}
+                    >
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalContent}>
+                                <TextInput
+                                    style={styles.input}
+                                    onChangeText={setNewWeight}
+                                    value={newWeight}
+                                    placeholder="Enter new weight"
+                                    placeholderTextColor="#888"
+                                />
+                                <TouchableOpacity onPress={handleWeightUpdate}>
+                                  <View style = {styles.settingsbutton}>
+                                    <Text style={[styles.settingsbuttonText, { fontWeight: 'bold' }]}>Update</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => setWeightModalVisible(false)} style={styles.closeButton}>
+                                  <Ionicons name="close" size={20}  /> {/* Close icon */}
+                                  </TouchableOpacity>
+                            </View>
+                        </View>
+                    </Modal>
+
+
+            <View style = {{marginVertical: 10}}></View>
+
+              <View style = {styles.row}>
+                  <Text style = {styles.text}>Height</Text>
+                  <TouchableOpacity onPress= {() => setHeightModalVisible(true)}>
+                  <Text style = {[styles.text, {fontWeight: 'bold',color: '#00B5EE'}]}>Edit</Text>
+                  </TouchableOpacity>
+
+              </View> 
+              <Text style = {[styles.text, {marginTop: 5, fontWeight: 'bold'}]} >
+                {userData?.height?.toString() || 'NA'}
+              </Text>
+              <Modal
+                        animationType="fade"
+                        transparent={true}
+                        visible={HeightmodalVisible}
+                        onRequestClose={() => setHeightModalVisible(false)}
+                    >
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalContent}>
+                                <TextInput
+                                    style={styles.input}
+                                    onChangeText={setNewHeight}
+                                    value={newHeight}
+                                    placeholder="Enter new height"
+                                    placeholderTextColor="#888"
+                                />
+                                <TouchableOpacity onPress={handleHeightUpdate}>
+                                  <View style = {styles.settingsbutton}>
+                                    <Text style={[styles.settingsbuttonText, { fontWeight: 'bold' }]}>Update</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => setWeightModalVisible(false)} style={styles.closeButton}>
+                                  <Ionicons name="close" size={20}  /> {/* Close icon */}
+                                  </TouchableOpacity>
+                            </View>
+                        </View>
+                    </Modal>
+
+
+
           </View>
           <Text style = {[styles.text, {marginTop: 5, fontWeight: 'bold'}]} >
               CURRENT SETTINGS
