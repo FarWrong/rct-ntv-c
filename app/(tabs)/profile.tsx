@@ -16,25 +16,26 @@ type ProfileType = 'username' | 'email' | 'age' | 'weight' | 'height' | undefine
 /** Detemines API token to connect with the database */
 
 /** Helper function that automatically updates the user information */
-async function handleUpdate(dataType: ProfileType, togglePopup, value) {
-  const {authToken, updateUserData, userData} = useApiContext();
-
-
+async function handleUpdate(request: UserAPIRequest, dataType: ProfileType,
+                            togglePopup: (boolean) => void, value) {
   var updatedUserData: UserType|null;
+  const token = request.authToken;
+  const data = request.userData;
+  const update = request.updateUserData;
 
-  if (dataType === 'username') updatedUserData = {...userData, username: value};
-  else if (dataType === 'email') updatedUserData = {...userData, email: value};
-  else if (dataType === 'age') updatedUserData = {...userData, age: value};
-  else if (dataType === 'weight') updatedUserData = {...userData, weight: value};
-  else if (dataType === 'height') updatedUserData = {...userData, height: value};
-  else updatedUserData = {...userData};
+  if (dataType === 'username') updatedUserData = {...data, username: value};
+  else if (dataType === 'email') updatedUserData = {...data, email: value};
+  else if (dataType === 'age') updatedUserData = {...data, age: value};
+  else if (dataType === 'weight') updatedUserData = {...data, weight: value};
+  else if (dataType === 'height') updatedUserData = {...data, height: value};
+  else updatedUserData = {...data};
   
   try {
-    const response = await setUserInfo(authToken, updatedUserData);
+    const response = await setUserInfo(token, updatedUserData);
     console.log(response);
     if (response === "success!") {
       // Update user data displayed on the profile page
-      updateUserData();
+      update();
       togglePopup(false);
     } else {
       console.log(value);
@@ -48,6 +49,13 @@ async function handleUpdate(dataType: ProfileType, togglePopup, value) {
 }
 
 
+/** Keeps user request in a single object */
+interface UserAPIRequest {
+  authToken: string;
+  updateUserData: () => Promise<String|null>;
+  userData: UserType | null;
+}
+
 /**
  * Custom component to update user data via a popup component
  * 
@@ -59,30 +67,33 @@ async function handleUpdate(dataType: ProfileType, togglePopup, value) {
  */
 interface EditDataFieldProps {
   dataType: ProfileType;
-  togglePopup: (boolean) => void;
-  visible: boolean;
   updateValue: (string) => void;
   value: string;
+  request: UserAPIRequest;
 }
 
-const EditDataField: React.FC<EditDataFieldProps> = ({ dataType, togglePopup, visible,
-                                                       updateValue, value }) => {
-  const {authToken, updateUserData, userData} = useApiContext();                                 
-  const dataText = (dataType !== undefined) ? dataType.toUpperCase() : "Error";
-  var dataVar: string|undefined;
+const EditDataField: React.FC<EditDataFieldProps> = ({ dataType, updateValue,
+                                                       value, request }) => {                               
+  // Determines whether to enable popup or not
+  const [popupVisible, setPopupVisible] = useState(false);
 
-  if (dataType === 'username') dataVar = userData?.username?.toString();
-  else if (dataType === 'email') dataVar = userData?.email?.toString();
-  else if (dataType === 'age') dataVar = userData?.age?.toString();
-  else if (dataType === 'weight') dataVar = userData?.weight?.toString();
-  else if (dataType === 'height') dataVar = userData?.height?.toString();
+  const dataText = (dataType !== undefined) ? dataType.toUpperCase() : "Error";
+  
+  var dataVar: string|undefined;
+  const data = request.userData;
+
+  if (dataType === 'username') dataVar = data?.username?.toString();
+  else if (dataType === 'email') dataVar = data?.email?.toString();
+  else if (dataType === 'age') dataVar = data?.age?.toString();
+  else if (dataType === 'weight') dataVar = data?.weight?.toString();
+  else if (dataType === 'height') dataVar = data?.height?.toString();
   else dataVar = "Error";
 
   return (
     <View>
       <View style = {styles.row}>
         <Text style = {styles.text}>{dataText}</Text>
-        <TouchableOpacity onPress= {() => togglePopup(true)}>
+        <TouchableOpacity onPress= {() => setPopupVisible(true)}>
           <Text style = {[styles.text, {fontWeight: 'bold',color: '#00B5EE'}]}>Edit</Text>
         </TouchableOpacity>
       </View>
@@ -91,8 +102,8 @@ const EditDataField: React.FC<EditDataFieldProps> = ({ dataType, togglePopup, vi
       </Text>
       
       <Popup
-        visible={visible}
-        togglePopup={togglePopup}
+        visible={popupVisible}
+        togglePopup={setPopupVisible}
       >
         <TextBox
           placeholder={"Enter new " + dataType}
@@ -101,7 +112,7 @@ const EditDataField: React.FC<EditDataFieldProps> = ({ dataType, togglePopup, vi
         />
         <Button
           title={"Update"}
-          onPress={() => handleUpdate(dataType, togglePopup, value)}
+          onPress={() => handleUpdate(request, dataType, setPopupVisible, value)}
         />
       </Popup>
     </View>
@@ -112,14 +123,8 @@ const EditDataField: React.FC<EditDataFieldProps> = ({ dataType, togglePopup, vi
 
 
 export default function ProfilePage() {
-  const {authToken, updateUserData, userData} = useApiContext();
+  const request : UserAPIRequest = useApiContext();
 
-
-  const [usernameModalVisible, setUsernameModalVisible] = useState(false);
-  const [emailModalVisible, setEmailModalVisible] = useState(false);
-  const [ageModalVisible, setAgeModalVisible] = useState(false);
-  const [weightModalVisible, setWeightModalVisible] = useState(false);
-  const [heightModalVisible, setHeightModalVisible] = useState(false);
   const [newUsername, setNewUsername] = useState('');
   const [newEmail, setNewEmail] = useState('');
   const [newAge, setNewAge] = useState('');
@@ -129,73 +134,68 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userInfo = await updateUserData();
+        const userInfo = await request.updateUserData();
         if (userInfo) {
           console.log("what");
-          console.log(userData); // Logging userData onto the console
+          console.log(request.userData); // Logging userData onto the console
         }
       } catch (error) {
         console.error('Error fetching user info:', error);
       }
     };
     fetchData();
-  }, [authToken]);
+  }, [request.authToken]);
 
   
   return (
     <View style = {styles.heading}>
-        <View style = {styles.header}>
-          <Text style = {styles.headerText}>Profile Settings</Text>
-          <TouchableOpacity>
-            <Image source={require('assets/pfp.png')} style={styles.avatar}/>
-          </TouchableOpacity>
-        </View>
-        <ScrollView showsVerticalScrollIndicator = {false}>
-          <View style = {styles.content}>
-            <EditDataField
-              dataType = 'username'
-              togglePopup = {setUsernameModalVisible}
-              visible = {usernameModalVisible}
-              updateValue = {setNewUsername}
-              value = {newUsername}
-            />
-            <EditDataField
-              dataType = 'email'
-              togglePopup = {setEmailModalVisible}
-              visible = {emailModalVisible}
-              updateValue = {setNewEmail}
-              value = {newEmail}
-            />
+      <View style = {styles.header}>
+        <Text style = {styles.headerText}>Profile Settings</Text>
+        <TouchableOpacity>
+          <Image source={require('assets/pfp.png')} style={styles.avatar}/>
+        </TouchableOpacity>
+      </View>
+      <ScrollView showsVerticalScrollIndicator = {false}>
+        <View style = {styles.content}>
+          <EditDataField
+            dataType = 'username'
+            updateValue = {setNewUsername}
+            value = {newUsername}
+            request={request}
+          />
+          <EditDataField
+            dataType = 'email'
+            updateValue = {setNewEmail}
+            value = {newEmail}
+            request={request}
+          />
             
-            <View style = {styles.row}>
-              <Text style = {styles.text}>Privacy</Text>
-            </View>
-            <Text style = {[styles.text, {marginTop: 5, fontWeight: 'bold'}]} >
-                CURRENT SETTINGS
-            </Text>
-
-            <EditDataField
-              dataType = 'age'
-              togglePopup = {setAgeModalVisible}
-              visible = {ageModalVisible}
-              updateValue = {setNewAge}
-              value = {newAge}
-            />
-            <EditDataField
-              dataType = 'weight'
-              togglePopup = {setWeightModalVisible}
-              visible = {weightModalVisible}
-              updateValue = {setNewWeight}
-              value = {newWeight}
-            />
-            <EditDataField
-              dataType = 'height'
-              togglePopup = {setHeightModalVisible}
-              visible = {heightModalVisible}
-              updateValue = {setNewHeight}
-              value = {newHeight}
-            />
+          <View style = {styles.row}>
+            <Text style = {styles.text}>Privacy</Text>
           </View>
+          <Text style = {[styles.text, {marginTop: 5, fontWeight: 'bold'}]} >
+              CURRENT SETTINGS
+          </Text>
+
+          <EditDataField
+            dataType = 'age'
+            updateValue = {setNewAge}
+            value = {newAge}
+            request={request}
+          />
+          <EditDataField
+            dataType = 'weight'
+            updateValue = {setNewWeight}
+            value = {newWeight}
+            request={request}
+          />
+          <EditDataField
+            dataType = 'height'
+            updateValue = {setNewHeight}
+            value = {newHeight}
+            request={request}
+          />
+        </View>
       </ScrollView>
     </View>
   )

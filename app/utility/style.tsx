@@ -59,21 +59,13 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   popupContainer: {
-    flex: 1,
-    flexDirection: 'column',
-    width: '75%',
+    alignItems: 'center',
+    justifyContent: 'center',
     minHeight: 200,
-    alignItems: 'center',
-    justifyContent: 'center',
+    minWidth: 150,
     margin: 50,
-    padding: 20,
-    borderRadius: 10,
-  },
-  popupBody: {
-    flex: 1,
     padding: paddingMedium,
-    alignItems: 'center',
-    justifyContent: 'center',
+    borderRadius: 10,
   },
   popupClose: {
     position: 'absolute',
@@ -90,7 +82,6 @@ export const styles = StyleSheet.create({
   buttonContainer:{
     alignItems: 'center',
     justifyContent: 'center',
-    //height: 40,
     borderRadius: 9999, // perfectly round
     paddingHorizontal: paddingExtraLarge,
     paddingVertical: paddingSmall,
@@ -99,6 +90,15 @@ export const styles = StyleSheet.create({
     fontSize: fontLarge,
     fontWeight: 'bold'
   },
+
+  /** Plan CSS */
+  planPopupText: {
+    fontSize: fontTitle,
+    fontWeight: 'bold'
+  },
+
+  //textTitle
+  
 
   /** FIX PLEASE!!!!! */
   container: {
