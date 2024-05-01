@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { Text, StyleSheet, View, FlatList } from 'react-native';
 import { useApiContext } from '../../api/ApiContext';
 import { defaultPageTheme } from '../utility/style';
-import { feedType, getFriendFeed } from '../../api/Feed';
+import { FeedType, getFriendFeed } from '../../api/Feed';
 import { workout_category } from '../../api/Workouts';
 
 export default function FriendsPage() {
   const { authToken } = useApiContext();
-  const [friendFeed, setFriendFeed] = useState<feedType[]>([]);
+  const [friendFeed, setFriendFeed] = useState<FeedType[]>([]);
 
   useEffect(() => {
     const fetchFeed = async () => {
@@ -44,7 +44,7 @@ export default function FriendsPage() {
     }
   };
 
-  const renderFeedItem = ({item}:{item:feedType}) => {
+  const renderFeedItem = ({item}:{item:FeedType}) => {
     console.log("END TIME", item.end.toISOString());
     console.log(item.expectedTime);
     const actualDuration = (item.end && item.start) ? Math.floor((item.end.getTime() - item.start.getTime()) / 1000) : 0;

@@ -23,7 +23,7 @@ interface TextboxProps {
     field?: KeyboardTypeOptions;
     validate?: (string) => string;
     style?: StyleProp<ViewStyle>;
-    //[x: string]: any;
+    [x: string]: any;
 }
 
 export const TextBox: React.FC<TextboxProps> = ({ placeholder, value, 

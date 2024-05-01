@@ -2,11 +2,11 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { Redirect, router, Stack, useRootNavigationState } from 'expo-router';
 import { Tabs } from 'expo-router/tabs';
 import React, { DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_FORM_ACTIONS, useEffect, useState } from 'react';
-import { Modal,Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Modal,Text, TouchableOpacity, View } from 'react-native';
 import { useApiContext } from '../../api/ApiContext';
 import { useTheme } from '../utility/ThemeContext';
 import { StyleSheet } from 'react-native';
-import { endExercise, exerciseType, getNextExercises,startExerciseDirect } from '../../api/Exercise';
+import { endExercise, ExerciseType, getNextExercises,startExerciseDirect } from '../../api/Exercise';
 import { UserType } from '../../api/User';
 import { ExpectedExercise, Plan } from '../../api/Workouts';
 import { styles } from '../utility/style';
@@ -107,7 +107,7 @@ export default () => {
     });
     return(
       <TouchableOpacity onPress={() => onPress_func(expect_ex)} style={style.button}>
-          <Text style={style.buttonText}>{expect_ex.name+ "for "+returnNumberAsTime(expect_ex.time)}</Text>
+          <Text style={style.buttonText}>{expect_ex.name+ " for "+returnNumberAsTime(expect_ex.time)}</Text>
       </TouchableOpacity>
     )
   }
@@ -115,9 +115,9 @@ export default () => {
   
 
   function returnButtonSelector(user:UserType|null, plan:Plan|null){
-    if(user?.isWorking){
+    if(user?.isWorking) {
       return (
-          <View style={{top: -30}}>
+        <View style={{top: -30}}>
           <CountdownCircleTimer
             isPlaying
             duration={duration}
@@ -129,39 +129,35 @@ export default () => {
               setisPlaying(false);
               return { } // repeat animation in 1.5 seconds
             }}
-        
           >
             {({ remainingTime }) => (
               <TouchableOpacity
-              style={styles1.countdownTimer}
-              onPress={async () => {
-                await endExercise(authToken);
-                await updateUserData();
-              }}
-            >
-    
+                style={styles1.countdownTimer}
+                onPress={async () => {
+                  await endExercise(authToken);
+                  await updateUserData();
+                }}
+              >
                 <Ionicons name="checkmark-done-circle-outline" size={40} color="blue" />
-    
-
-          </TouchableOpacity>
+              </TouchableOpacity>
             )}
           </CountdownCircleTimer>
-          </View>
+        </View>
       );
     }
-    if(workoutOptions.length > 0){
-    return(
-      <TouchableOpacity style={styles1.button} onPress={()=>{
-        if(workoutOptions.length > 0){
-          setWrkSlctVisible(true);
-        }
-      }}>
-        
-        <Ionicons name="bicycle" size={40} color="#fff" />
-      </TouchableOpacity>
-    )
+
+    if(workoutOptions.length > 0) {
+      return (
+        <TouchableOpacity 
+          style={styles1.button} 
+          onPress={() => {if(workoutOptions.length > 0) setWrkSlctVisible(true)}}
+        >
+          <Ionicons name="bicycle" size={40} color="#fff" />
+        </TouchableOpacity>
+      )
     }
-    return(
+    
+    return (
       
       <TouchableOpacity style={styles1.button}>
         
@@ -175,20 +171,20 @@ export default () => {
   return (
     <>
     <Modal
-                        animationType="fade"
-                        transparent={true}
-                        visible={wrkSlct}
-                        onRequestClose={() => setWrkSlctVisible(false)}
-                    >
-                        <View style={styles.modalContainer}>
-                            <View style={styles.modalContent}>
-                                {workoutOptions.map((val,idx)=>{return renderExcerciseSelector(val)})}
-                                <TouchableOpacity onPress={() => setWrkSlctVisible(false)} style={styles.closeButton}>
-                                  <Ionicons name="close" size={20}  /> {/* Close icon */}
-                                  </TouchableOpacity>
-                            </View>
-                        </View>
-                    </Modal>
+      animationType="fade"
+      transparent={true}
+      visible={wrkSlct}
+      onRequestClose={() => setWrkSlctVisible(false)}
+    >
+      <View style={styles.modalContainer}>
+        <View style={styles.modalContent}>
+          {workoutOptions.map((val,idx)=>{return renderExcerciseSelector(val)})}
+          <TouchableOpacity onPress={() => setWrkSlctVisible(false)} style={styles.closeButton}>
+            <Ionicons name="close" size={20}  /> {/* Close icon */}
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
     <Tabs screenOptions={({ route }) => ({
       tabBarIcon: ({ focused, color, size }) => {
         let iconName;
@@ -208,27 +204,23 @@ export default () => {
       },
       tabBarActiveTintColor: theme.colors.primary,
       tabBarInactiveTintColor: 'gray',
-    })    
-  }
-    >
+    })}>
       
+    { /*Order of tabs*/ }
+    <Tabs.Screen name="home" options={{title: "Home"}}/>
+    <Tabs.Screen name="workout" options={{title: "Workout"}}/>
+    <Tabs.Screen name="feed" options={{title: "Feed"}}/>
+    <Tabs.Screen
+      name="exercise"
+      options={{
+        tabBarButton: () => (returnButtonSelector(userData,exercisePlan))
+      }}
+    />
+    <Tabs.Screen name="friends" options={{title: "Friends"}}/>
+    <Tabs.Screen name="profile" options={{title: "Profile"}}/>
+    <Tabs.Screen name="plan" options={{title: "Plan"}}/>
 
-      { /*Order of tabs*/ }
-      <Tabs.Screen name="home" options={{title: "Home"}}/>
-      <Tabs.Screen name="workout" options={{title: "Workout"}}/>
-      <Tabs.Screen name="feed" options={{title: "Feed"}}/>
-      <Tabs.Screen
-        name="exercise"
-        options={{
-          tabBarButton: () => (returnButtonSelector(userData,exercisePlan)
-          ),
-        }}
-      />
-      <Tabs.Screen name="friends" options={{title: "Friends"}}/>
-      <Tabs.Screen name="profile" options={{title: "Profile"}}/>
-      <Tabs.Screen name="plan" options={{title: "Plan"}}/>
-
-    </Tabs>
+  </Tabs>
   </>
   );
 }
