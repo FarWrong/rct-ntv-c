@@ -25,6 +25,7 @@ function returnTimeAsNumber(time:string | undefined){
     return 0;
   }
   let timelist = {
+    "30s":0.5,
     "30min":30,
     "1hr":60,
     "1hr 30min":90,
@@ -33,11 +34,12 @@ function returnTimeAsNumber(time:string | undefined){
   return timelist[time];
 }
 
-function returnNumberAsTime(time:number | undefined){
+export function returnNumberAsTime(time:number | undefined){
   if(!time){
     return "ERR";
   }
   let timelist = {
+    0.5:"30s",
     30:"30 min",
     60:"1hr",
     90:"1hr 30min",
@@ -198,7 +200,7 @@ function renderPlanMaker(workout_types:WorkoutTypeType[],plans:Plan | null,authT
         </View>
       );
     } else if (modalChildren === "time") {
-      return ["30min", "1hr", "1hr 30min", "2hr"].map((val, idx) => 
+      return ["30s","30min", "1hr", "1hr 30min", "2hr"].map((val, idx) => 
         renderClickableSelector(val, '#007AFF', time_onPress)
       );
     } else {

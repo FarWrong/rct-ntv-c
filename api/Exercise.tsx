@@ -4,14 +4,14 @@ import { router } from 'expo-router';
 import { ApiContextType } from './ApiContext';
 import { workout_category } from './Workouts';
 import { ExpectedExercise } from './Workouts';
-function string_to_date(input: string): Date {
+export function string_to_date(input: string): Date | undefined {
   // Parse the input string into a Date object
   const date = new Date(input);
 
   // Check if the parsed date is valid
   if (isNaN(date.getTime())) {
     // If the parsed date is invalid, throw an error
-    throw new Error('Invalid date string');
+    return undefined;
   }
 
   // Return the parsed Date object
@@ -58,14 +58,17 @@ export interface WorkoutTypeType {
   category: workout_category;
 }
 
-export const getNextExercise = (plan_data: Plan | null, ex_data: exerciseType[]): ExpectedExercise | null => {
+export const getNextExercises = (plan_data: Plan | null, ex_data: exerciseType[]): ExpectedExercise[] => {
+  console.log("plan data doesn't exist?");
   if (!plan_data) {
-    return null;
+    return [];
   }
-
+  console.log("MEP");
+  
   const currentDate = new Date();
   const day_data: ExpectedExercise[] = plan_data.workout_days[currentDate.getDay()];
-
+  console.log("Planned for today",day_data);
+  
   // Filter ex_data to get exercises done on the same day
   const exercisesDoneToday = ex_data.filter((exercise) => {
     const exerciseDate = exercise.start;
@@ -76,16 +79,48 @@ export const getNextExercise = (plan_data: Plan | null, ex_data: exerciseType[])
       exerciseDate.getDate() === currentDate.getDate()
     );
   });
+  console.log("exDone Today",exercisesDoneToday);
 
-  // Create a Set of completed exercise names from exercisesDoneToday
-  const completedExercisesToday = new Set(exercisesDoneToday.map((exercise) => exercise.workout_type.name));
+  // Create a copy of day_data to avoid modifying the original array
+  const remainingExercises = [...day_data];
 
-  // Find the first exercise in day_data that is not in the completedExercisesToday Set
-  const nextExercise = day_data.find((exercise) => !completedExercisesToday.has(exercise.name));
+  // Iterate over each completed exercise
+  exercisesDoneToday.forEach((completedExercise) => {
+    
+    
+    let completedTime = 0;
 
-  return nextExercise || null;
+    if (completedExercise.start && completedExercise.end) {
+      completedTime = completedExercise.end.getTime() - completedExercise.start.getTime();
+    } else {
+      completedTime = -1;
+    }
+    completedTime = completedTime/ 60000
+    console.log("start", completedExercise.start);
+    console.log("end", completedExercise.end);
+    console.log("completed Time", completedTime);
+    // Find the index of the expected exercise with the largest time that is still lower than the completed time
+    let indexToRemove = -1;
+    let maxTime = -30;
+    remainingExercises.forEach((expectedExercise, index) => {
+      if (
+        expectedExercise.name.trim() === completedExercise.workout_type.name.trim() &&
+        expectedExercise.time <= completedTime &&
+        expectedExercise.time > maxTime
+      ) {
+        console.log(completedExercise,"WE've FOUND ONE ")
+        indexToRemove = index;
+        maxTime = expectedExercise.time;
+      } 
+    });
+
+    // Remove the expected exercise from remainingExercises if a match is found
+    if (indexToRemove !== -1) {
+      remainingExercises.splice(indexToRemove, 1);
+    }
+  });
+  return remainingExercises;
 };
-
 
 export function workout_category_to_color(category: workout_category) {
   switch (category) {
