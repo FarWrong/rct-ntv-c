@@ -1,16 +1,14 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View,Image, LogBox, ImageBackground, TouchableOpacity , TextInput} from 'react-native';
-import registerRootComponent from 'expo/build/launch/registerRootComponent';
-import { createClient, Provider } from 'urql';
-import React, {useState, useEffect} from 'react';
-import { Link } from 'expo-router';
-import { Button } from './components/button';
 import { router } from 'expo-router';
-import { defaultPageTheme , styles} from './utility/style';
+import { StatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
+import { Text, View, Image } from 'react-native';
+
 import { useApiContext } from './../api/ApiContext';
-import { setUserInfo } from './../api/User';
+import { UserType, setUserInfo } from './../api/User';
+import { Button } from './components/button';
 import { TextBox } from './components/textbox';
-import { UserType } from './../api/User';
+import * as form from './utility/formValidation';
+import { defaultPageTheme , styles} from './utility/style';
 
 
 export default function Page() {
@@ -19,7 +17,6 @@ export default function Page() {
 
   return (
     <View style={defaultPageTheme().container}>
-      {/*<Image source={require('../../assets/ricehat.jpg')} style={{width: bidenSize, height: bidenSize}}/>*/}
       <Image source={require('./../assets/logo.png')} 
       style={{width: 120, height: 120}}/> 
       <Text style = {[styles.headerText, {fontSize: 20}]}>
@@ -28,64 +25,41 @@ export default function Page() {
       <Text style = {[styles.headerText, {fontSize: 15, fontWeight: 'normal', marginTop: 5}]}>
         Please import from Apple Health or fill out the following information:
       </Text>
-      
-  
-
-<TextInput
-  style = {[styles.input, {marginTop: 50}]}
-  placeholder="First Name"
-  value={userData.first_name?.toString() || ''}
-  onChangeText={(text) => setUserData({ ...userData, first_name: text })}
- 
-/>
-
-<TextInput
-  style = {styles.input}
-  placeholder="Last Name"
-  value={userData.last_name?.toString() || ''}
-  onChangeText={(text) => setUserData({ ...userData, last_name: text })}
-  
-/>
-
-<TextInput
-  style = {styles.input}
-  placeholder="Gender"
-  value={userData.gender?.toString() || ''}
-  onChangeText={(text) => setUserData({ ...userData, gender: text })}
-  
-/>
-
-<TextInput
-  style = {styles.input}
-  placeholder="Weight"
-  value={userData.weight?.toString() || ''}
-  onChangeText={(text) => {
-    const weight = parseInt(text, 10);
-    if (!isNaN(weight)) {
-      setUserData({ ...userData, weight });
-    }
-  }}
-  
-/>
-
-<TextInput
-  style = {styles.input}
-  placeholder="Height"
-  value={userData.height?.toString() || ''}
-  onChangeText={(text) => {
-    const height = parseInt(text, 10);
-    if (!isNaN(height)) {
-      setUserData({ ...userData, height });
-    }
-  }}
-
-/>
-        <Button onPress={async ()=>{await setUserInfo(authToken,userData);await updateUserData();router.navigate("/")}} title="Okay I'm done"></Button>
-        <Button title="Import!" style = {{marginTop: 5,}} />
+      <TextBox 
+        style={{marginTop:50}}
+        placeholder={'First Name'}
+        value={userData.first_name?.toString() || ''}
+        onChangeText={(text) => setUserData({ ...userData, first_name: text })}
+        validate={form.ValidateName}
+      />
+      <TextBox 
+        placeholder={'Last Name'}
+        value={userData.last_name?.toString() || ''}
+        onChangeText={(text) => setUserData({ ...userData, last_name: text })}
+        validate={form.ValidateName}
+      />
+      <TextBox 
+        placeholder={'Gender (Male/Female/Other)'}
+        value={userData.gender?.toString() || ''}
+        onChangeText={(text) => setUserData({ ...userData, gender: text })}
+        validate={form.ValidateGender}
+      />
+      {/* Do not edit, it only changes if the form is valid */}
+      <TextBox 
+        placeholder={'Weight (lbs)'}
+        value={userData.weight?.toString() || ''}
+        onChangeText={(text) => setUserData({ ...userData, weight: text })}
+        validate={form.ValidateNumber}
+      />
+      <TextBox 
+        placeholder={'Height (in)'}
+        value={userData.weight?.toString() || ''}
+        onChangeText={(text) => setUserData({ ...userData, height: text })}
+        validate={form.ValidateNumber}
+      />
+      <Button onPress={async ()=>{await setUserInfo(authToken,userData);await updateUserData();router.navigate("/")}} title="Okay I'm done"></Button>
+      <Button title="Import!" style = {{marginTop: 5,}} />
       <StatusBar style="auto" />
     </View>
-     
-
   );
 }
-

@@ -40,7 +40,7 @@ export const TextBox: React.FC<TextboxProps> = ({ placeholder, value,
 
     const handleUpdateText = (val) => {
         if (validate !== undefined) setError(validate(val));
-        onChangeText(val);
+        if (!error) onChangeText(val); // Will only run onChangeText if valid form
     }
 
     return (

@@ -233,8 +233,8 @@ function renderPlanMaker(workout_types:WorkoutTypeType[],plans:Plan | null,authT
       let submit_item:ExpectedExercise = {name:WorkoutType.name,time:returnTimeAsNumber(time),type:WorkoutType.name} 
       let new_plan = JSON.parse(JSON.stringify(plans));
 
-      let submit_blank:expectedExercise[][] = [[],[],[],[],[],[],[]]
-      let day_index = returnDayasNumber(day);
+      let submit_blank:ExpectedExercise[][] = [[],[],[],[],[],[],[]]
+      let day_index = returnDayAsNumber(day);
       if(!new_plan){
         new_plan = {
           workout_days:submit_blank
@@ -251,7 +251,7 @@ function renderPlanMaker(workout_types:WorkoutTypeType[],plans:Plan | null,authT
       if(!new_plan.plan_name){
         new_plan.plan_name ="test"
       }
-      new_plan.time = returnTimeasNumber(time);
+      new_plan.time = returnTimeAsNumber(time);
 
       await setUserPlan(authToken,new_plan);
       await updateUserData(); 
