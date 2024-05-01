@@ -4,6 +4,8 @@ import { router } from 'expo-router';
 import { ApiContextType } from './ApiContext';
 import { workout_category } from './Workouts';
 import { ExpectedExercise } from './Workouts';
+
+
 export function string_to_date(input: string): Date | undefined {
   // Parse the input string into a Date object
   const date = new Date(input);
@@ -18,7 +20,7 @@ export function string_to_date(input: string): Date | undefined {
   return date;
 }
 
-export interface exerciseType{
+export interface ExerciseType{
   start: Date | undefined,
   workout_type: WorkoutTypeType
   end: Date | undefined,
@@ -58,7 +60,7 @@ export interface WorkoutTypeType {
   category: workout_category;
 }
 
-export const getNextExercises = (plan_data: Plan | null, ex_data: exerciseType[]): ExpectedExercise[] => {
+export const getNextExercises = (plan_data: Plan | null, ex_data: ExerciseType[]): ExpectedExercise[] => {
   console.log("plan data doesn't exist?");
   if (!plan_data) {
     return [];
@@ -232,10 +234,10 @@ export const getExercise = async(token:string) =>{
           return [];
       } 
         const data = await response.json();
-        let return_list:exerciseType[] = []
+        let return_list:ExerciseType[] = []
         for (let i=0;i<data.ex.length;i++){
           let ex =data.ex[i];
-          let return_item:exerciseType = {
+          let return_item:ExerciseType = {
             start:string_to_date(ex.start),
             end:string_to_date(ex.end),
             workout_type:{
@@ -273,10 +275,10 @@ export const startExerciseDirect = async(token:string,exp:ExpectedExercise) =>{
           return null;
       } 
         const data = await response.json();
-        let return_list:exerciseType[] = []
+        let return_list:ExerciseType[] = []
         for (let i=0;i<data.ex.length;i++){
           let ex =data.ex[i];
-          let return_item:exerciseType = {
+          let return_item:ExerciseType = {
             start:string_to_date(ex.start),
             end:string_to_date(ex.end),
             workout_type:{

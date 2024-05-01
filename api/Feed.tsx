@@ -3,11 +3,11 @@ import { router } from 'expo-router';
 import React, { createContext, useContext, ReactNode, useState } from 'react';
 
 import { ApiContextType } from './ApiContext';
-import { expectedExercise, workoutTypeType } from './Workouts';
-import { exerciseType, string_to_date } from './Exercise';
+import { ExpectedExercise, WorkoutTypeType } from './Workouts';
+import { ExerciseType, string_to_date } from './Exercise';
 
 
-export interface feedType extends exerciseType{
+export interface FeedType extends ExerciseType{
   user:string,
 }
 
@@ -30,10 +30,10 @@ export const getFriendFeed = async(token:string) =>{
       }
         const data = await response.json();
         
-        let ret:feedType[] = []
+        let ret:FeedType[] = []
         for (let i=0;i<data.length;i++){
           let ex =data[i];
-          let return_item:feedType = {
+          let return_item:FeedType = {
             start:string_to_date(ex.start),
             end:string_to_date(ex.end),
             workout_type:{

@@ -164,7 +164,7 @@ const handleHeightUpdate = async () => {
 
               </View>
               <Text style = {[styles.text, {marginTop: 5, fontWeight: 'bold'}]} >
-                 {userData.username?.toString() || 'NA'}
+                 {userData?.username?.toString() || 'NA'}
               </Text>
               <Modal
                         animationType="fade"
@@ -204,7 +204,7 @@ const handleHeightUpdate = async () => {
 
               </View>
               <Text style = {[styles.text, {marginTop: 5, fontWeight: 'bold'}]} >
-                  {userData.email?.toString() || 'NA'}
+                  {userData?.email?.toString() || 'NA'}
               </Text>
 
               <Modal
@@ -250,7 +250,7 @@ const handleHeightUpdate = async () => {
 
               </View>
               <Text style = {[styles.text, {marginTop: 5, fontWeight: 'bold'}]} >
-                  {userData.age?.toString() || 'NA'}
+                  {userData?.age?.toString() || 'NA'}
                 </Text>
 
                 <Modal
@@ -290,7 +290,7 @@ const handleHeightUpdate = async () => {
 
               </View>
               <Text style = {[styles.text, {marginTop: 5, fontWeight: 'bold'}]} >
-                  {userData.weight?.toString() || ''}
+                  {userData?.weight?.toString() || ''}
               </Text>
 
               <Modal

@@ -23,7 +23,7 @@ interface TextboxProps {
     field?: KeyboardTypeOptions;
     validate?: (string) => string;
     style?: StyleProp<ViewStyle>;
-    //[x: string]: any;
+    [x: string]: any;
 }
 
 export const TextBox: React.FC<TextboxProps> = ({ placeholder, value, 
@@ -40,7 +40,7 @@ export const TextBox: React.FC<TextboxProps> = ({ placeholder, value,
 
     const handleUpdateText = (val) => {
         if (validate !== undefined) setError(validate(val));
-        onChangeText(val);
+        if (!error) onChangeText(val); // Will only run onChangeText if valid form
     }
 
     return (

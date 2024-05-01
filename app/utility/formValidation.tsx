@@ -1,8 +1,12 @@
+import { validate } from "graphql";
+
 /** RegEx Constants */ 
 const userRegex:RegExp =/^[A-Za-z0-9_]{3,32}$/;
 const passRegex:RegExp = /^(?=.*[\d])(?=.*[!@#$%^&*_])(?=.*[A-Z])(?=.*[a-z])[\w!@#$%^&*]{8,32}$/;
 const emailRegex:RegExp = /^[\w!#$%&'*+/=?`{|}~^-]+(?:\.[\w!#$%&'*+/=?`{|}~^-]+)*@(?:[A-Z0-9-]+\.)+[A-Z]{2,6}$/;
 const numberRegex:RegExp = /^\d+$/;
+const nameRegex:RegExp = /^[\p{L}]+$/u;
+const genderRegex:RegExp = /(?:m|M|male|Male|MALE|f|F|female|Female|FEMALE|o|O|other|Other|OTHER)$/;
 
 
 /** Error messages for invalid inputs */
@@ -16,52 +20,44 @@ const passInvalid:string = 'Your password must be between 8 ' +
 const passMatchInvalid:string = 'Both passwords must match.';
 const emailInvalid:string = 'Type in a valid email address.';
 const numberInvalid:string = 'The following value is not a valid number.';
+const nameInvalid:string = 'Please enter a valid name.';
+const genderInvalid:string = 'Please enter either a valid gender ' +
+                             ' (Male/Female/Other).';
 
 
 /** Performs form validation on a given string */
-function CheckValue(value:string, form:RegExp) {
-    return (value && form.test(value)) ? true : false;
-}
+function CheckValue(value:string, form:RegExp) { return (value && form.test(value)) ? true : false; }
 
 
-/** Determines if the username is valid */
-function IsValidUser(username:string) {
-    return CheckValue(username, userRegex);
-}
-/** Returns error message if the username is invalid */
-export function ValidateUser(username:string) {
-    return !IsValidUser(username) ? userInvalid : ''; 
-}
+/** Username */
+function IsValidUser(username:string) { return CheckValue(username, userRegex); }
+export function ValidateUser(username:string) { return !IsValidUser(username) ? userInvalid : ''; }
 
 
-/** Determines if the password is valid */
-function IsValidPass(password:string) {
-    return CheckValue(password, passRegex);
-}
-/** Returns error message if the username is invalid */
-export function ValidatePass(password:string) {
-    return !IsValidPass(password) ? passInvalid : ''; 
-}
+/** Password */
+function IsValidPass(password:string) { return CheckValue(password, passRegex); }
+export function ValidatePass(password:string) { return !IsValidPass(password) ? passInvalid : ''; }
 
 
-/** Determines if the password is valid */
-function IsValidEmail(email:string) {
-    return CheckValue(email, emailRegex);
-}
-/** Returns error message if the username is invalid */
-export function ValidateEmail(email:string) {
-    return !IsValidEmail(email) ? emailInvalid : ''; 
-}
+/** Email */
+function IsValidEmail(email:string) { return CheckValue(email, emailRegex); }
+export function ValidateEmail(email:string) { return !IsValidEmail(email) ? emailInvalid : ''; }
 
 
-/** Determines if the string is also a number */
-function IsValidNumber(num:string) {
-    return CheckValue(num, numberRegex);
-}
+/** Number */
+function IsValidNumber(num:string) { return CheckValue(num, numberRegex); }
 /** Returns error message if the string isn't a number */
-export function ValidateNumber(num:string) {
-    return !IsValidNumber(num) ? numberInvalid : '';
-}
+export function ValidateNumber(num:string) { return !IsValidNumber(num) ? numberInvalid : ''; }
+
+
+/** Name */
+function IsValidName(name:string) { return CheckValue(name, nameRegex); }
+export function ValidateName(name:string) { return !IsValidName(name) ? nameInvalid : ''; }
+
+
+/** Gender */
+function IsValidGender(gender:string) { return CheckValue(gender, genderRegex); }
+export function ValidateGender(gender:string) { return !IsValidGender(gender) ? genderInvalid : ''; }
 
 
 /** Validates the entire form */
@@ -74,3 +70,5 @@ export function ValidateForm(username, password, passConfirm?, email?) {
         if (!IsValidEmail(email)) return emailInvalid;
     return '';
 }
+
+//export function ValidateAllForm
