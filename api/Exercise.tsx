@@ -101,17 +101,17 @@ export const getNextExercises = (plan_data: Plan | null, ex_data: exerciseType[]
     console.log("completed Time", completedTime);
     // Find the index of the expected exercise with the largest time that is still lower than the completed time
     let indexToRemove = -1;
-    let maxTime = -Infinity;
-
+    let maxTime = -30;
     remainingExercises.forEach((expectedExercise, index) => {
       if (
-        expectedExercise.name === completedExercise.workout_type.name &&
+        expectedExercise.name.trim() === completedExercise.workout_type.name.trim() &&
         expectedExercise.time <= completedTime &&
         expectedExercise.time > maxTime
       ) {
+        console.log(completedExercise,"WE've FOUND ONE ")
         indexToRemove = index;
         maxTime = expectedExercise.time;
-      }
+      } 
     });
 
     // Remove the expected exercise from remainingExercises if a match is found
@@ -119,7 +119,6 @@ export const getNextExercises = (plan_data: Plan | null, ex_data: exerciseType[]
       remainingExercises.splice(indexToRemove, 1);
     }
   });
-  console.log("Done today",remainingExercises);
   return remainingExercises;
 };
 

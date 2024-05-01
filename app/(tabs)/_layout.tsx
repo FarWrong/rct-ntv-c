@@ -11,6 +11,8 @@ import { UserType } from '../../api/User';
 import { ExpectedExercise, Plan } from '../../api/Workouts';
 import { styles } from '../utility/style';
 import { returnNumberAsTime } from './plan';
+import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
+
 const styles1 = StyleSheet.create({
   tabBar: {
     position: 'absolute',
@@ -35,6 +37,21 @@ const styles1 = StyleSheet.create({
     justifyContent: 'center',
     elevation: 5,
   },
+  buttonContainer: {
+    top: -30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 5,
+  },
+  countdownTimer: {
+    backgroundColor: '#007AFF',
+    borderRadius: 30,
+    width: 60,
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 5,
+  },
 });
 
 
@@ -46,8 +63,8 @@ export default () => {
   const [wrkSlct, setWrkSlctVisible] = useState(false);
   const [workoutOptions, setWorkoutOptions] = useState<ExpectedExercise[]>([]);
   const [time, setTime] = useState(Date.now());
-
-
+  const [duration,setDuration] = useState(0);
+  const [isplaying,setisPlaying] = useState(false);
   useEffect(() => {
     const updateOptions = async () => {
       console.log("Updating workout options");
@@ -60,8 +77,11 @@ export default () => {
 
   async function onPress_func(expect_ex: ExpectedExercise) {
     await startExerciseDirect(authToken, expect_ex);
+    
     setWrkSlctVisible(false);
     await updateUserData();
+    setDuration(expect_ex.time * 60);
+    setisPlaying(true);
   }
 
 
@@ -96,13 +116,38 @@ export default () => {
 
   function returnButtonSelector(user:UserType|null, plan:Plan|null){
     if(user?.isWorking){
-      return(<TouchableOpacity style={styles1.button} onPress={async ()=>{
-        await endExercise(authToken);
-        await updateUserData();
-      }}>
+      return (
+          <View style={{top: -30}}>
+          <CountdownCircleTimer
+            isPlaying
+            duration={duration}
+            colors={['#004777', '#F7B801', '#A30000', '#A30000']}
+            colorsTime={[7, 5, 2, 0]}
+            size={70}
+            onComplete={() => {
+              // do your stuff here
+              setisPlaying(false);
+              return { } // repeat animation in 1.5 seconds
+            }}
         
-        <Ionicons name="checkmark-done-circle-outline" size={40} color="#fff" />
-      </TouchableOpacity>)
+          >
+            {({ remainingTime }) => (
+              <TouchableOpacity
+              style={styles1.countdownTimer}
+              onPress={async () => {
+                await endExercise(authToken);
+                await updateUserData();
+              }}
+            >
+    
+                <Ionicons name="checkmark-done-circle-outline" size={40} color="blue" />
+    
+
+          </TouchableOpacity>
+            )}
+          </CountdownCircleTimer>
+          </View>
+      );
     }
     if(workoutOptions.length > 0){
     return(
