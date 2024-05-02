@@ -40,13 +40,14 @@ export const TextBox: React.FC<TextboxProps> = ({ placeholder, value,
 
     const handleUpdateText = (val) => {
         if (validate !== undefined) setError(validate(val));
-        if (!error) onChangeText(val); // Will only run onChangeText if valid form
+        onChangeText(val);
     }
 
     return (
         <View style={styles.textboxContainer}>
             <View style={styles.textboxDefault}/>
             <View style={[{justifyContent: 'center'}, styles.textboxDefault]}>
+                
                 <TextInput
                     {...props}
                     onFocus={toggleFocus} // Become primary color
@@ -70,6 +71,9 @@ export const TextBox: React.FC<TextboxProps> = ({ placeholder, value,
                 <View style={[{
                     backgroundColor: '#ffffff',
                     borderRadius: 5,
+                    borderWidth:1,
+                    left:60,
+                    padding:5
                 }, styles.textboxDefault]}>
                     <Text style={{flexWrap:'wrap', fontSize:10}}>{error}</Text>
                 </View>

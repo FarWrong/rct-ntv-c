@@ -237,13 +237,13 @@ const EditGraphPopup: React.FC<EditGraphPopupProps> = ({graphType, graphData,
       <Popup visible={popupVisible} togglePopup={setPopupVisible}>
         <View style={{padding:10, rowGap:20}}>
           <View style={{marginBottom:30}}>
-            <Text style={styles.planPopupText}>{'Edit '+capitalize(graphVar)+' Data Point'}</Text>
+            <Text style={[styles.planPopupText, {textAlign:'center'}]}>{'Edit '+capitalize(graphVar)+' Data Point'}</Text>
           </View>
           <View style={{paddingVertical:5}}>
-            <Text style={{fontSize:16}}>{capitalize(timeframe) + ' to Edit:'}</Text>
+            <Text style={{fontSize:16, textAlign:'center'}}>{capitalize(timeframe) + ' to Edit:'}</Text>
             <Button title={writeTimeButtonText()} onPress={() => setTimePopupVisible(true)}/>
             <Popup visible={timePopupVisible} togglePopup={setTimePopupVisible}>
-              <Text style={[{marginBottom:30}, styles.planPopupText]}>Pick a Day:</Text>
+              <Text style={[styles.planPopupText,{marginBottom:30}, ]}>Pick a Time:</Text>
               <View style={{gap:10}}>
                 {(timeframe === 'Week') ? (
                   <DayButton 
@@ -265,7 +265,7 @@ const EditGraphPopup: React.FC<EditGraphPopupProps> = ({graphType, graphData,
             </Popup>
           </View>
           <View>
-            <Text style={{fontSize:16}}>New data:</Text>
+            <Text style={{fontSize:16, textAlign:'center'}}>New data:</Text>
             <TextBox
               placeholder='Enter updated data'
               value={newData}
@@ -344,7 +344,6 @@ const capitalize = (str:string) => {
 }
 
 
-/** Hard coded data */
 // Steps
 const stepsWeekGraphData = {
   labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
@@ -390,7 +389,7 @@ const weightYearGraphData = {
 
 export default function HomePage() {
   // Authentication
-  const { loggedIn, authToken, updateUserData, userData } = useApiContext();
+  const { loggedIn, userData } = useApiContext();
   
   // Steps from Apple Health
   const {steps,dailySteps} = useHealthData();
@@ -427,18 +426,18 @@ export default function HomePage() {
   // Render component
   return (
     <View style = {styles.heading}>
-      <View style = {[styles.header, ]}>
-      <Text style = {styles.headerText} >Hello, {userData?.username ? userData.username : "USER"}</Text>
-      <Image source={require('assets/pfp.png')} style={styles.avatar}/>
+      <View style = {styles.header}>
+        <Text style = {styles.headerText} >Hello, {userData?.username ? userData.username : "USER"}</Text>
+        <Image source={require('assets/pfp.png')} style={styles.avatar}/>
       </View>
       <ButtonGroup 
         onPress = {handleTimeChange}
         selectedIndex = {selectedTime}
         buttons= {timeOptions}
         containerStyle = {styles.buttonGroupContainer}
+        selectedButtonStyle = {styles.buttonGroupContainer}
         textStyle = {styles.text}
       />
-        
       <ScrollView contentContainerStyle = {styles.charts}>
         {(selectedTime === 0) ? (
           <GraphPage

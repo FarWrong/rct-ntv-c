@@ -1,4 +1,4 @@
-import { validate } from "graphql";
+import { UserType } from '../../api/User';
 
 /** RegEx Constants */ 
 const userRegex:RegExp =/^[A-Za-z0-9_]{3,32}$/;
@@ -71,4 +71,15 @@ export function ValidateForm(username, password, passConfirm?, email?) {
     return '';
 }
 
-//export function ValidateAllForm
+/*
+// TODO FIX!!!
+function verifyUserData(userData, type) {
+
+}
+
+export function ValidateFirstLogin(userData: UserType) {
+    if (!IsValidName(userData.first_name?) || !IsValidName(lname) || !IsValidGender(gender) ||
+        !IsValidNumber(weight) || !IsValidNumber(height)) return false;
+    else return true;
+}
+*/

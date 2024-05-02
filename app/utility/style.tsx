@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { useTheme } from './ThemeContext';
 
 
@@ -30,41 +30,45 @@ export const styles = StyleSheet.create({
   textboxContainer: { 
     flexDirection: 'row', 
     alignItems:'center',
-    justifyContent:'space-evenly',
-    width:600, 
-    margin:5,
+    justifyContent:'center',
+    width:600,
   },
   textboxDefault: {
-    flex:1,
-    padding: paddingSmall
+    position:'relative',
+    alignSelf:'center',
+    justifyContent:'center',
+    width: 100,
+    paddingVertical: paddingMedium
   },
   textboxField: {
-    //backgroundColor: '#F0F0F0',
+    alignSelf:'center',
     borderWidth: 1,
     borderRadius: 10,
     paddingHorizontal: 15,
     paddingVertical: 5,
-    height: 30,
+    width:200,
     fontSize: fontLarge,
   },
   textboxErrorText: {
-    flexWrap:'wrap',
-    fontSize: fontSmall
+    flexWrap: 'wrap',
+    fontSize: fontSmall,
+    padding: 10,
   },
 
   /** Popup Component */
   popupBackground: {
     flex: 1,
-    alignContent: 'center',
+    alignItems:'center',
     justifyContent: 'center',
   },
   popupContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 200,
-    minWidth: 150,
+    maxWidth: Dimensions.get('window').width *.8,
     margin: 50,
     padding: paddingMedium,
+    paddingHorizontal:paddingExtraLarge,
     borderRadius: 10,
   },
   popupClose: {
@@ -80,10 +84,12 @@ export const styles = StyleSheet.create({
 
   /** Button Component */
   buttonContainer:{
+    //alignContent: 'center',
     alignItems: 'center',
+    alignSelf: 'center',
     justifyContent: 'center',
     borderRadius: 9999, // perfectly round
-    paddingHorizontal: paddingExtraLarge,
+    paddingHorizontal: paddingLarge,
     paddingVertical: paddingSmall,
   },
   buttonText:{
@@ -96,9 +102,6 @@ export const styles = StyleSheet.create({
     fontSize: fontTitle,
     fontWeight: 'bold'
   },
-
-  //textTitle
-  
 
   /** FIX PLEASE!!!!! */
   container: {
@@ -195,6 +198,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     width: '30%'
   },
+  
   // wdym padding?
   padding: {
     flexDirection: 'row',
@@ -229,9 +233,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 10,
-    borderRadius: 10,
+    marginVertical:5,
+    borderRadius: 5,
   },
   modalContainer: {
     flex: 1,

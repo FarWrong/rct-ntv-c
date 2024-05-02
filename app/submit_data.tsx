@@ -44,7 +44,6 @@ export default function Page() {
         onChangeText={(text) => setUserData({ ...userData, gender: text })}
         validate={form.ValidateGender}
       />
-      {/* Do not edit, it only changes if the form is valid */}
       <TextBox 
         placeholder={'Weight (lbs)'}
         value={userData.weight?.toString() || ''}
@@ -57,7 +56,13 @@ export default function Page() {
         onChangeText={(text) => setUserData({ ...userData, height: text })}
         validate={form.ValidateNumber}
       />
-      <Button onPress={async ()=>{await setUserInfo(authToken,userData);await updateUserData();router.navigate("/")}} title="Okay I'm done"></Button>
+      <Button onPress={async ()=> {
+        /*if (form.ValidateFirstLogin()) {
+          await setUserInfo(authToken,userData);
+          await updateUserData();
+          router.navigate("/");
+        }*/}}
+        title="Okay I'm done"></Button>
       <Button title="Import!" style = {{marginTop: 5,}} />
       <StatusBar style="auto" />
     </View>

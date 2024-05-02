@@ -70,8 +70,8 @@ export default function FriendsPage() {
               placeholder='Friend Name'
               value={friendName}
               onChangeText={setFriendName}
-              secure={false}
-              style = {styles.input}
+              //secureTextEntry={false}
+              //style = {styles.input}
             />
             <Button
                 onPress={async () => {let xd = await sendFriendRequest(authToken,friendName);await updateUserData();setErrorMessage(xd)}}

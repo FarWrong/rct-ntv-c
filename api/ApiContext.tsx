@@ -6,7 +6,7 @@ import { getUserInfo } from './User';
 import { acceptFriendRequest } from './Friends';
 import { ExpectedExercise, getExercisePlan, Plan } from './Workouts'
 import { WorkoutTypeType } from './Workouts';
-import { getExercise, exerciseType } from './Exercise'
+import { getExercise, ExerciseType } from './Exercise'
 
 
 export interface ApiContextType {
@@ -17,7 +17,7 @@ export interface ApiContextType {
   updateUserData: () => Promise<String | null>;
   userData: UserType | null;
   exercisePlan: Plan | null;
-  exercises:Array<exerciseType>
+  exercises:Array<ExerciseType>
 }
 
 
@@ -28,7 +28,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [userData, setUserData] = useState<UserType | null>(null);
   const [exercisePlan, setExercisePlan] = useState<Plan| null>(null);
-  const [exercises, setExercises] = useState<Array<exerciseType>>([]);
+  const [exercises, setExercises] = useState<Array<ExerciseType>>([]);
 
 
 

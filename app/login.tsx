@@ -44,7 +44,7 @@ export default function LoginPage() {
         secureTextEntry={true} // Hides password input
       />
       <Button 
-        onPress={async () => {await loginUser(username,password);}}
+        onPress={async () => await loginUser(username,password)}
         title="Log In"
         style = {styles.setupbutton}
       />
