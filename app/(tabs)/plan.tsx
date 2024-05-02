@@ -232,7 +232,31 @@ function renderPlanMaker(workout_types:WorkoutTypeType[],plans:Plan | null,authT
     )
   }
  
+  async function resetPlan(){
+   
+      let submit_item:ExpectedExercise = {name:WorkoutType.name,time:returnTimeAsNumber(time),type:WorkoutType.name} 
 
+      let submit_blank:ExpectedExercise[][] = [[],[],[],[],[],[],[]]
+      let day_index = returnDayAsNumber(day);
+
+      let new_plan:any = {
+          workout_days:submit_blank
+        }
+
+      
+      new_plan.workout_days = submit_blank;
+
+
+      if(!new_plan.plan_name){
+        new_plan.plan_name ="test"
+      }
+      new_plan.time = returnTimeAsNumber(time);
+
+      await setUserPlan(authToken,new_plan);
+      await updateUserData(); 
+    
+
+  }
 
   async function addToPlan(){
     if(WorkoutType && day && time){
@@ -296,7 +320,9 @@ function renderPlanMaker(workout_types:WorkoutTypeType[],plans:Plan | null,authT
       {renderButtonSelector(()=>{setModalChildren("days");setIsModalVisible(true);return;}, day )}
       <Text style={styles.planPopupText}> for </Text>
       {renderButtonSelector(()=>{setModalChildren("time");setIsModalVisible(true);return;}, time )}
-
+      <TouchableOpacity onPress={() => resetPlan()}>
+          <Ionicons name="close-circle-outline" size={24} color="black" />
+        </TouchableOpacity>
       <EmojiPicker isVisible={isModalVisible} onClose={onModalClose}>
         {renderModalChildren()}
       </EmojiPicker>
@@ -310,9 +336,7 @@ function renderDay(ex:ExpectedExercise[],index:number){
     {ex.map((val, idx) => (
       <View key={idx} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         {RenderE(val, index)}
-        <TouchableOpacity onPress={() => removeDay(index)}>
-          <Ionicons name="close-circle-outline" size={24} color="black" />
-        </TouchableOpacity>
+        
       </View>
     ))}
   </View>

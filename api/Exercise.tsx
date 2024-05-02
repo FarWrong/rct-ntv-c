@@ -4,9 +4,12 @@ import { router } from 'expo-router';
 import { ApiContextType } from './ApiContext';
 import { workout_category } from './Workouts';
 import { ExpectedExercise } from './Workouts';
-function differenceInMinutes(date1: Date, date2: Date): number {
+function differenceInMinutes(date1?: Date, date2?: Date): number {
+  if(!date1 || !date2){
+    return 0
+  }
   const diffInMilliseconds = Math.abs(date1.getTime() - date2.getTime());
-  const diffInMinutes = Math.round(diffInMilliseconds / (1000 * 60));
+  const diffInMinutes = diffInMilliseconds / (1000 * 60);
   return diffInMinutes;
 }
 
@@ -31,25 +34,38 @@ export interface exerciseType{
   expectedTime:number,
   avg_heartrate?:number
 }
-function isSameDay(date1: Date, date2: Date): boolean {
+function isSameDay(date1?: Date, date2?: Date): boolean {
+  if(!date1 || !date2){
+    return false
+  }
   return (
-    date1.getFullYear() === date2.getFullYear() &&
-    date1.getMonth() === date2.getMonth() &&
-    date1.getDate() === date2.getDate()
+    date1?.getDay() === date2?.getDay()
   );
 }
 
 export function getTimeofExcercisesDone(exercises: exerciseType[], day: Date): number {
   let totalTime = 0;
+  console.log(exercises)
+  const exercisesDoneToday = exercises.filter((exercise) => {
+    const exerciseDate = exercise.start;
+    console.log("ex data day",exerciseDate?.getDay())
+    console.log("ex data day",day?.getDay())
+    return (
+      exerciseDate &&
+      exerciseDate.getDay() == day.getDay()
+    );
+  });
 
-  exercises?.forEach((exercise) => {
-    if (exercise.start && isSameDay(exercise.start, day)) {
+  exercisesDoneToday?.forEach((exercise) => {
+     console.log("PING")
       const startTime = exercise.start;
-      const endTime = exercise.end || new Date(); // If end time is undefined, use the current date/time
+      const endTime = exercise.end || new Date(); // If end time is undefined, use the current date/tim
       const duration = differenceInMinutes(endTime, startTime);
       totalTime += duration;
-    }
+
   });
+  console.log("exercises",exercises)
+  console.log("TOTAL TIME",totalTime)
   return totalTime;
 }
 

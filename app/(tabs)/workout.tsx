@@ -81,17 +81,33 @@ function renderWorkoutItem(item: exerciseType) {
   );
 }
 
+function getIndexOfDay(inputDate: Date): number {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const thirtyDaysAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+  const inputDateOnly = new Date(inputDate.getFullYear(), inputDate.getMonth(), inputDate.getDate());
+  const timeDiff = today.getTime() - inputDateOnly.getTime();
+  const daysDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
+
+  if (daysDiff < 0 || daysDiff > 30) {
+    throw new Error("Input date is outside the range of the last 30 days.");
+  }
+  console.log("DAYS DIFF",daysDiff)
+  return 30 - daysDiff;
+}
 
 export default function WorkoutPage() {
   const { exercises,exercisePlan,authToken,userData } = useApiContext();
   const [currentDate, setCurrentDate] = useState(new Date());
-  const { steps } = useHealthData();
+  const { steps,dailySteps } = useHealthData();
   const [friendFeed, setFriendFeed] = useState<feedType[]>([]);
   const screenWidth = Dimensions.get('window').width;
 
   const handleDateSelected = (date) => {
-    setCurrentDate(date);
+    setCurrentDate(new Date(date));
   };
+
 
   const isSameDay = (d1, d2) => {
     return new Date(d1).toDateString() === new Date(d2).toDateString();
@@ -99,7 +115,7 @@ export default function WorkoutPage() {
   
 
   useEffect(() => {
-    console.log("EXERCISE DATA HERE:", exercises);
+    console.log("EXERCISE DATA HERE:", (getTimeofExcercisesDone(exercises, currentDate) / getTimeofExcercisesDone(friendFeed, currentDate)));
     setCurrentDate(new Date());
   }, [exercises]);
 
@@ -135,7 +151,7 @@ export default function WorkoutPage() {
       <View style={styles.box}>
         <Text style={[styles.text, {fontWeight: 'bold'}]}>Steps</Text>
         <Text style={[styles.text, {marginTop: 5, fontWeight: 'bold', fontSize: 20}]}>
-          {steps}
+          {dailySteps?.datasets[0].data[getIndexOfDay(currentDate)]}
         </Text>
       </View>
 

@@ -78,7 +78,7 @@ export default function FriendsPage() {
                 onPress={async () => {let xd = await sendFriendRequest(authToken,friendName);await updateUserData();setErrorMessage(xd)}}
                 title="Send Friend Request"
             />
-            {errrorMessage}
+            <Text>{errrorMessage}</Text>
             <StatusBar style="auto"/>
         </View>
     );

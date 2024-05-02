@@ -42,7 +42,7 @@ export interface UserType {
 export const sendFriendRequest = async(token:string,username:string) =>{
   let errorMessage = "success"
   try{
-      const response = await fetch('http://127.0.0.1:8000/users/friend/', {
+      const response = await fetch('https://fithub-backend-d06l.onrender.com/users/friend/', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ export const sendFriendRequest = async(token:string,username:string) =>{
         console.log(data);
         return "success!";
   }catch(error:any){
-      console.log(error);
+      console.log("ERR",error);
       errorMessage = error;
       return "BIg error";
   }
@@ -73,7 +73,7 @@ export const sendFriendRequest = async(token:string,username:string) =>{
 export const acceptFriendRequest = async(token: string,username:string) => {
   let errorMessage = "success"
   try{
-      const response = await fetch('http://127.0.0.1:8000/users/friend/', {
+      const response = await fetch('https://fithub-backend-d06l.onrender.com/users/friend/', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',

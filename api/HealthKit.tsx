@@ -118,7 +118,7 @@ const useHealthData = () => {
         let stepcounts:number[] = [];
         const dayOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-        for (let i = 0; i < 30; i++) {
+        for (let i = 0; i < 31; i++) {
           const date = new Date(lastSevenDays);
           date.setDate(date.getDate() + i);
           const day = dayOfWeek[date.getDay()];

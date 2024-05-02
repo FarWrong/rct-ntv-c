@@ -16,7 +16,7 @@ export interface feedType extends exerciseType{
 export const getFriendFeed = async(token:string) =>{
   let errorMessage = "success"
   try{
-      const response = await fetch('http://127.0.0.1:8000/users/get_feed/', {
+      const response = await fetch('https://fithub-backend-d06l.onrender.com/users/get_feed/', {
           method: 'GET',
           headers: {
               'Content-Type': 'application/json',
