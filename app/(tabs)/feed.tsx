@@ -2,9 +2,10 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { Text, StyleSheet, View, FlatList } from 'react-native';
 import { useApiContext } from '../../api/ApiContext';
-import { defaultPageTheme } from '../utility/style';
+import { defaultPageTheme} from '../utility/style';
 import { feedType, getFriendFeed } from '../../api/Feed';
 import { workout_category } from '../../api/Workouts';
+
 
 export default function FriendsPage() {
   const { authToken } = useApiContext();
@@ -64,9 +65,9 @@ export default function FriendsPage() {
   };
 
   return (
-    <View style={defaultPageTheme().container}>
-      <View style={styles.feedContainer}>
-        <Text style={styles.feedTitle}>Friend Feed</Text>
+    <View style = {styles.heading}>
+      <View style = {[styles.header, ]}>
+      <Text style = {styles.headerText} >Feed</Text>
         <FlatList
           data={friendFeed}
           renderItem={renderFeedItem}
@@ -123,5 +124,22 @@ const styles = StyleSheet.create({
   fulfilled: {
     fontSize: 14,
     fontWeight: 'bold',
+  },
+  headerText: {
+    fontSize: 24,
+    fontWeight: 'bold'
+  },
+  heading: {
+    flex: 1,
+    backgroundColor: 'white',
+    paddingTop: 24,
+    paddingLeft: 12,
+    paddingRight: 12
+  },
+  header: {
+    padding: 24,
+    justifyContent: 'space-between',
+    flexDirection : 'row', 
+    alignItems: 'center'
   },
 });

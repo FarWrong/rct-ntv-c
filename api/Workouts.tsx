@@ -2,6 +2,8 @@
 import React, { createContext, useContext, ReactNode, useState } from 'react';
 import { router } from 'expo-router';
 import { ApiContextType } from './ApiContext';
+import { exerciseType } from './Exercise';
+import { View,Text } from 'react-native';
 
 export const getUserGender = (context:ApiContextType) => {
   context
@@ -59,6 +61,7 @@ export function workout_category_to_color(category: workout_category) {
   }
 
 }
+
 export const getExercisePlan = async(token:string) =>{
   let errorMessage = "success"
   try{

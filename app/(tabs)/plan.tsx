@@ -8,6 +8,7 @@ import { defaultPageTheme, styles } from '../utility/style';
 import { ApiContext, useApiContext } from '../../api/ApiContext';
 import { useTheme } from '../utility/ThemeContext';
 import { getWorkoutTypes, WorkoutTypeType,workout_category,workout_category_to_color,ExpectedExercise,Plan,setUserPlan} from '../../api/Workouts';
+import { Ionicons } from '@expo/vector-icons';
 
 
 export function returnDayAsNumber(day:string) {
@@ -87,7 +88,7 @@ function renderClickableSelector(name: string, color: string, onPressFunc: (name
   const {theme} = useTheme();
   const style = StyleSheet.create({
     button: {
-      backgroundColor: color,
+      backgroundColor: '#00B5EE',
       borderRadius: 15,
       margin: 10,
       padding: 10,
@@ -99,7 +100,7 @@ function renderClickableSelector(name: string, color: string, onPressFunc: (name
       elevation: 5,
     },
     buttonText: {
-      color: theme.colors?.primary || '#FFFFFF',
+      color: '#FFFFFF',
       fontSize: 16,
       fontWeight: '500',
     }
@@ -144,13 +145,13 @@ function renderPlanMaker(workout_types:WorkoutTypeType[],plans:Plan | null,authT
 
   function workoutCategoryToColor(category) {
     const categoryColors = {
-      'Strength': '#FF5733',  
-      'Cardio': '#33C1FF',   
-      'Flexibility': '#D633FF', 
-      'Balance': '#33FF57'    
+      'Strength': 'red',  
+      'Cardio': 'red',   
+      'Flexibility': 'red', 
+      'Balance': 'red'    
     };
   
-    return categoryColors[category] || '#007AFF'; 
+    return categoryColors[category] || '#00B5EE'; 
   }
   
 
@@ -170,6 +171,8 @@ function renderPlanMaker(workout_types:WorkoutTypeType[],plans:Plan | null,authT
           padding: 10,
         },
         button: {
+          paddingHorizontal: 50,
+          paddingVertical: 50,
           backgroundColor: theme.colors?.primary || '#007AFF', 
           width: '13%', 
           margin: 4,
@@ -223,12 +226,13 @@ function renderPlanMaker(workout_types:WorkoutTypeType[],plans:Plan | null,authT
     return(
     <TouchableOpacity onPress={onPress_func} style={clickStyle}>
       <View style={{justifyContent:'center',flex:1}}>
-        {text ? <Text style={styles.planPopupText}>{text}</Text> : <Text></Text>}
+        {text ? <Text style={styles.newPopupText}>{text}</Text> : <Text></Text>}
       </View>
     </TouchableOpacity>
     )
   }
  
+
 
   async function addToPlan(){
     if(WorkoutType && day && time){
@@ -301,13 +305,24 @@ function renderPlanMaker(workout_types:WorkoutTypeType[],plans:Plan | null,authT
 }
 
 function renderDay(ex:ExpectedExercise[],index:number){
-  return(<View>{ex.map((val,idx)=>(RenderE(val,index)))}</View>)
+  return(
+    <View>
+    {ex.map((val, idx) => (
+      <View key={idx} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        {RenderE(val, index)}
+        <TouchableOpacity onPress={() => removeDay(index)}>
+          <Ionicons name="close-circle-outline" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
+    ))}
+  </View>
+  )
 }
 
 function RenderE(ex:ExpectedExercise,index:number){
   const {theme} = useTheme();
   let fontStyle = {
-    fontSize: 19, //temp
+    fontSize: 15, //temp
   };
 
   return(
@@ -318,7 +333,7 @@ function RenderE(ex:ExpectedExercise,index:number){
       alignItems: 'center',
       margin: 20,
     }}>
-      <Text style={fontStyle}>I will do </Text>
+      <Text style = {fontStyle}>I will do </Text>
       <Text style={fontStyle}>{ex.name}</Text>
       <Text style={fontStyle}>On</Text>
       <Text style={fontStyle}>{returnNumberAsDay(index)}</Text>
@@ -347,8 +362,21 @@ export default function Page() {
     getTypesType();
   }, []);
 
+
+  async function removeDay(index: number) {
+    if (exercisePlan) {
+      const newPlan = JSON.parse(JSON.stringify(exercisePlan));
+      newPlan.workout_days[index] = [];
+      await setUserPlan(authToken, newPlan);
+      await updateUserData();
+    }
+  }
+
   return (
     <View style = {styles.heading}>
+          <View style = {[styles.header, ]}>
+          <Text style = {styles.headerText} >Plans</Text>
+         </View>
       {renderPlanMaker(WorkoutTypes,exercisePlan,authToken,updateUserData)}
       <ScrollView>
         {exercisePlan?.workout_days.map((val, idx) => (
