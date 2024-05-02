@@ -47,9 +47,7 @@ export default function WorkoutPage() {
           </Text>
         </View>
       </View>
-      {(exercisePlan && exercisePlan[2]) 
-          ? exercisePlan[2]?.map((val, idx) => <Text>val.name</Text>)
-          : <Text>lmao</Text>}
+  
       <View style={styles.content}>
         <View style={styles.row}>
           <Text style={[styles.text, { fontWeight: 'bold' }]}>Compared to your friends</Text>

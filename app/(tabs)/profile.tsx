@@ -8,7 +8,7 @@ import { defaultPageTheme, styles } from '../utility/style';
 import { ApiContext, useApiContext } from '../../api/ApiContext';
 import { UserType , getUserInfo, setUserInfo} from '../../api/User';
 import { Ionicons } from '@expo/vector-icons';
-
+import { TextBox } from '../components/textbox';
 
 
 export default function ProfilePage() {
@@ -163,7 +163,7 @@ const handleHeightUpdate = async () => {
                   </TouchableOpacity>
 
               </View>
-              <Text style = {[styles.text, {marginTop: 5, fontWeight: 'bold'}]} >
+              <Text style = {[styles.text, {marginTop: -5, marginBottom: -30, fontWeight: 'bold'}]} >
                  {userData.username?.toString() || 'NA'}
               </Text>
               <Modal
@@ -203,7 +203,7 @@ const handleHeightUpdate = async () => {
                   </TouchableOpacity>
 
               </View>
-              <Text style = {[styles.text, {marginTop: 5, fontWeight: 'bold'}]} >
+              <Text style = {[styles.text, {marginTop: -5, marginBottom: -30, fontWeight: 'bold'}]} >
                   {userData.email?.toString() || 'NA'}
               </Text>
 
@@ -249,7 +249,7 @@ const handleHeightUpdate = async () => {
                   </TouchableOpacity>
 
               </View>
-              <Text style = {[styles.text, {marginTop: 5, fontWeight: 'bold'}]} >
+              <Text style = {[styles.text, {marginTop: -5, marginBottom: -30, fontWeight: 'bold'}]} >
                   {userData.age?.toString() || 'NA'}
                 </Text>
 
@@ -289,7 +289,7 @@ const handleHeightUpdate = async () => {
                   </TouchableOpacity>
 
               </View>
-              <Text style = {[styles.text, {marginTop: 5, fontWeight: 'bold'}]} >
+              <Text style = {[styles.text, {marginTop: -5, marginBottom: -30, fontWeight: 'bold'}]} >
                   {userData.weight?.toString() || ''}
               </Text>
 
@@ -330,7 +330,7 @@ const handleHeightUpdate = async () => {
                   </TouchableOpacity>
 
               </View> 
-              <Text style = {[styles.text, {marginTop: 5, fontWeight: 'bold'}]} >
+              <Text style = {[styles.text, {marginTop: -5, fontWeight: 'bold'}]} >
                 {userData?.height?.toString() || 'NA'}
               </Text>
               <Modal
@@ -353,7 +353,7 @@ const handleHeightUpdate = async () => {
                                     <Text style={[styles.settingsbuttonText, { fontWeight: 'bold' }]}>Update</Text>
                                     </View>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={() => setWeightModalVisible(false)} style={styles.closeButton}>
+                                <TouchableOpacity onPress={() => setHeightModalVisible(false)} style={styles.closeButton}>
                                   <Ionicons name="close" size={20}  /> {/* Close icon */}
                                   </TouchableOpacity>
                             </View>

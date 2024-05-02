@@ -17,6 +17,7 @@ const fontSmall:number = 10;
 const fontMedium:number = 13;
 const fontLarge:number = 16;
 const fontTitle:number = 24;
+const fonttitle: number = 20;
 
 const paddingSmall:number = 6;
 const paddingMedium:number = 12;
@@ -88,13 +89,22 @@ export const styles = StyleSheet.create({
   },
   buttonText:{
     fontSize: fontLarge,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+
   },
 
   /** Plan CSS */
   planPopupText: {
-    fontSize: fontTitle,
-    fontWeight: 'bold'
+    fontSize: fonttitle,
+    fontWeight: 'bold',
+  },
+  newPopupText: {
+    fontSize: fonttitle,
+    fontWeight: 'bold',
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    color: 'white',
+
   },
 
   //textTitle
