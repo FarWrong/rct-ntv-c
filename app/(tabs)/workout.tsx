@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import { Text, View, StyleSheet, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import { useApiContext } from '../../api/ApiContext';
 import useHealthData from '../../api/HealthKit';
@@ -36,6 +36,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#000'
   },
+  heartRateContainer: {
+    backgroundColor: 'red',
+    borderRadius: 50,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    marginLeft: 10,
+  },
+  heartRateText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
   workoutItem: {
     backgroundColor: '#FFFFFF',
     marginHorizontal: 10,
@@ -69,16 +81,22 @@ const styles = StyleSheet.create({
 function renderWorkoutItem(item: exerciseType) {
   return (
     <View style={styles.workoutItem}>
-      <Text style={[styles.text, styles.boldText]}>{item.workout_type.name}</Text>
-      <View style={{ flexDirection: 'column' }}>
+    <Text style={[styles.text, styles.boldText]}>{item.workout_type.name}</Text>
+    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <View style={{ flexDirection: 'column', flex: 1 }}>
         <Text style={styles.text}>Start: {item.start?.toLocaleTimeString()}</Text>
         {item.end && <Text style={styles.text}>End: {item.end.toLocaleTimeString()}</Text>}
         <Text style={styles.text}>Duration: {item.expectedTime} min</Text>
-        <Text style={styles.text}>Heartrate: {item.avg_heartrate}</Text>
-
+      </View>
+      <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+        <Text style={styles.text}>Heart Rate</Text>
+        <View style={styles.heartRateContainer}>
+          <Text style={styles.heartRateText}>{item.avg_heartrate}</Text>
+        </View>
       </View>
     </View>
-  );
+  </View>
+    );
 }
 
 function getIndexOfDay(inputDate: Date): number {
