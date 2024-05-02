@@ -12,7 +12,7 @@ import { ExpectedExercise, Plan } from '../../api/Workouts';
 import { styles } from '../utility/style';
 import { returnNumberAsTime } from './plan';
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
-
+import { getAverageHeartRate } from '../../api/HealthKit';
 const styles1 = StyleSheet.create({
   tabBar: {
     position: 'absolute',
@@ -64,6 +64,7 @@ export default () => {
   const [workoutOptions, setWorkoutOptions] = useState<ExpectedExercise[]>([]);
   const [time, setTime] = useState(Date.now());
   const [duration,setDuration] = useState(0);
+  const [starter,setStarter] = useState(new Date());
   const [isplaying,setisPlaying] = useState(false);
   useEffect(() => {
     const updateOptions = async () => {
@@ -77,9 +78,9 @@ export default () => {
 
   async function onPress_func(expect_ex: ExpectedExercise) {
     await startExerciseDirect(authToken, expect_ex);
-    
     setWrkSlctVisible(false);
     await updateUserData();
+    setStarter(new Date());
     setDuration(expect_ex.time * 60);
     setisPlaying(true);
   }
@@ -135,16 +136,13 @@ export default () => {
               <TouchableOpacity
               style={styles1.countdownTimer}
               onPress={async () => {
-                await endExercise(authToken);
+                let hrt_rate = await getAverageHeartRate(starter)
+                await endExercise(authToken,hrt_rate);
                 await updateUserData();
               }}
             >
-    
-                <Ionicons name="checkmark-done-circle-outline" size={40} color="blue" />
-    
-
-          </TouchableOpacity>
-            )}
+          <Ionicons name="checkmark-done-circle-outline" size={40} color="blue" />
+          </TouchableOpacity>)}
           </CountdownCircleTimer>
           </View>
       );
@@ -184,7 +182,7 @@ export default () => {
                             <View style={styles.modalContent}>
                                 {workoutOptions.map((val,idx)=>{return renderExcerciseSelector(val)})}
                                 <TouchableOpacity onPress={() => setWrkSlctVisible(false)} style={styles.closeButton}>
-                                  <Ionicons name="close" size={20}  /> {/* Close icon */}
+                                  <Ionicons name="close" size={20}  /> 
                                   </TouchableOpacity>
                             </View>
                         </View>

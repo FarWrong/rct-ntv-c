@@ -43,12 +43,19 @@
       <key>NSAllowsLocalNetworking</key>
       <true/>
     </dict>
+    <key>NSHealthClinicalHealthRecordsShareUsageDescription</key>
+    <string>Custom health share permission for clinical data</string>
     <key>NSHealthShareUsageDescription</key>
-    <string>Allow $(PRODUCT_NAME) to check health info</string>
+    <string>Custom health share permission</string>
     <key>NSHealthUpdateUsageDescription</key>
-    <string>Allow $(PRODUCT_NAME) to update health info</string>
+    <string>Custom health update permission</string>
     <key>NSUserActivityTypes</key>
     <array>
+      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
+      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
+      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
+      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
+      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
     </array>
     <key>UIBackgroundModes</key>

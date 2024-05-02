@@ -5,6 +5,7 @@ import AppleHealthKit, {
   HealthInputOptions,
   HealthKitPermissions,
   HealthUnit,
+  HealthValue,
 } from "react-native-health";
 
 const { Permissions } = AppleHealthKit.Constants;
@@ -14,10 +15,15 @@ const permissions: HealthKitPermissions = {
     read: [
       Permissions.BloodType,
       Permissions.Weight,
+      Permissions.HeartRate,
+      Permissions.HeartRateVariability,
+      Permissions.HeartbeatSeries,
       Permissions.Height,
       Permissions.Steps,
       Permissions.FlightsClimbed,
+      Permissions.Electrocardiogram,
       Permissions.DistanceWalkingRunning,
+      Permissions.WalkingHeartRateAverage,
     ],
     write: [],
   },
@@ -40,6 +46,34 @@ export interface GraphData {
   datasets: SimpleData[]
 };
 
+export const getAverageHeartRate = (startDate: Date): Promise<number> => {
+  return new Promise((resolve, reject) => {
+    const twoMinutesBeforeStartDate = new Date(startDate.getTime() - 2 * 60 * 1000);
+
+    const options: HealthInputOptions = {
+      startDate: twoMinutesBeforeStartDate.toISOString(),
+    };
+    try{
+    AppleHealthKit.getHeartRateSamples(options, (err, results:Array<HealthValue>) => {
+      if (err) {
+        console.log('Error getting heart rate samples');
+        resolve(0);
+      }
+      console.log("HERE DEM REAL",results);
+      if (results.length > 0) {
+        const totalHeartRate = results.reduce((sum, sample) => sum + sample.value, 0);
+        const averageHeartRate = totalHeartRate / results.length;
+        resolve(averageHeartRate);
+      } else {
+        resolve(0);
+      }
+    });
+   }catch{
+    resolve(0);
+   }
+  });
+  
+};
 
 const useHealthData = () => {
   const [steps, setSteps] = useState(0);
@@ -63,7 +97,7 @@ const useHealthData = () => {
     AppleHealthKit.getStepCount(options, (err, results) => {
       const today = new Date();
       const lastSevenDays = new Date(today);
-      lastSevenDays.setDate(lastSevenDays.getDate() - 6);
+      lastSevenDays.setDate(lastSevenDays.getDate() - 30);
 
       const stepOptions = {
         startDate: lastSevenDays.toISOString(),
@@ -74,7 +108,7 @@ const useHealthData = () => {
         return;
       }
    
-      console.log(results.value);
+      console.log("STEPS",results.value);
       AppleHealthKit.getDailyStepCountSamples(stepOptions, (err, results) => {
         if (err) {
           return;
@@ -84,7 +118,7 @@ const useHealthData = () => {
         let stepcounts:number[] = [];
         const dayOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-        for (let i = 0; i < 7; i++) {
+        for (let i = 0; i < 30; i++) {
           const date = new Date(lastSevenDays);
           date.setDate(date.getDate() + i);
           const day = dayOfWeek[date.getDay()];

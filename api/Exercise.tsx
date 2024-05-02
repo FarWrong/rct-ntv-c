@@ -22,7 +22,8 @@ export interface exerciseType{
   start: Date | undefined,
   workout_type: WorkoutTypeType
   end: Date | undefined,
-  expectedTime:number
+  expectedTime:number,
+  avg_heartrate?:number
 }
 
 
@@ -59,15 +60,12 @@ export interface WorkoutTypeType {
 }
 
 export const getNextExercises = (plan_data: Plan | null, ex_data: exerciseType[]): ExpectedExercise[] => {
-  console.log("plan data doesn't exist?");
   if (!plan_data) {
     return [];
   }
-  console.log("MEP");
   
   const currentDate = new Date();
   const day_data: ExpectedExercise[] = plan_data.workout_days[currentDate.getDay()];
-  console.log("Planned for today",day_data);
   
   // Filter ex_data to get exercises done on the same day
   const exercisesDoneToday = ex_data.filter((exercise) => {
@@ -79,7 +77,6 @@ export const getNextExercises = (plan_data: Plan | null, ex_data: exerciseType[]
       exerciseDate.getDate() === currentDate.getDate()
     );
   });
-  console.log("exDone Today",exercisesDoneToday);
 
   // Create a copy of day_data to avoid modifying the original array
   const remainingExercises = [...day_data];
@@ -96,10 +93,7 @@ export const getNextExercises = (plan_data: Plan | null, ex_data: exerciseType[]
       completedTime = -1;
     }
     completedTime = completedTime/ 60000
-    console.log("start", completedExercise.start);
-    console.log("end", completedExercise.end);
-    console.log("completed Time", completedTime);
-    // Find the index of the expected exercise with the largest time that is still lower than the completed time
+     // Find the index of the expected exercise with the largest time that is still lower than the completed time
     let indexToRemove = -1;
     let maxTime = -30;
     remainingExercises.forEach((expectedExercise, index) => {
@@ -134,14 +128,16 @@ export function workout_category_to_color(category: workout_category) {
 
 }
 
-export const endExercise = async(token:string) =>{
+export const endExercise = async(token:string,avg_heartrate?:number) =>{
   try{
+    console.log("HERE IS THE BIG MONEY",avg_heartrate);
       const response = await fetch('http://127.0.0.1:8000/users/end_ex/', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
               "Authorization": "Bearer "  + token
           },
+          body: JSON.stringify({avg_heartrate:avg_heartrate}),
           });
       if (!response.ok) {
           console.error("Failed to fetch token.");
@@ -246,7 +242,6 @@ export const getExercise = async(token:string) =>{
           }
           return_list.push(return_item)
         }
-        console.log("Excersises here : ",return_list)
         return return_list;
   }catch(error:any){
       console.log(error);
@@ -287,7 +282,6 @@ export const startExerciseDirect = async(token:string,exp:ExpectedExercise) =>{
           }
           return_list.push(return_item)
         }
-        console.log("Excersises here : ",return_list)
         return return_list;
   }catch(error:any){
       console.log(error);

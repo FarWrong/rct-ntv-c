@@ -55,6 +55,7 @@ export default function FriendsPage() {
         <Text style={styles.username}>{item.user}</Text>
         <Text style={styles.workoutType}>{item.workout_type.name}</Text>
         <Text style={styles.category}>Category: {item.workout_type.category ? item.workout_type.category : "d"}</Text>
+        <Text style={styles.category}>Heartrate: {item.avg_heartrate ? item.avg_heartrate : "N/A"}</Text>
         <Text style={styles.duration}>Expected Duration: {formatDuration(item.expectedTime)}</Text>
         <Text style={styles.actualDuration}>Actual Duration: {formatDuration(actualDuration)}</Text>
         <Text style={styles.fulfilled}>{isFulfilled ? 'Fulfilled' : 'Not Fulfilled'}</Text>
