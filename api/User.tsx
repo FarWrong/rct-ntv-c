@@ -50,7 +50,7 @@ export const setUserInfo = async(token:string,user:UserType) =>{
   user.first_login = false;
   let errorMessage = "success"
   try {
-    const response = await fetch('http://127.0.0.1:8000/users/userinfo/', {
+    const response = await fetch('https://fithub-backend-d06l.onrender.com/users/userinfo/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ export const getUserInfo = async(token: string) => {
   let userInfo: UserType = {}
   let errorMessage = "success"
   try{
-    const response = await fetch('http://127.0.0.1:8000/users/userinfo/', {
+    const response = await fetch('https://fithub-backend-d06l.onrender.com/users/userinfo/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

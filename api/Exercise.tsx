@@ -4,6 +4,12 @@ import { router } from 'expo-router';
 import { ApiContextType } from './ApiContext';
 import { workout_category } from './Workouts';
 import { ExpectedExercise } from './Workouts';
+function differenceInMinutes(date1: Date, date2: Date): number {
+  const diffInMilliseconds = Math.abs(date1.getTime() - date2.getTime());
+  const diffInMinutes = Math.round(diffInMilliseconds / (1000 * 60));
+  return diffInMinutes;
+}
+
 export function string_to_date(input: string): Date | undefined {
   // Parse the input string into a Date object
   const date = new Date(input);
@@ -25,7 +31,27 @@ export interface exerciseType{
   expectedTime:number,
   avg_heartrate?:number
 }
+function isSameDay(date1: Date, date2: Date): boolean {
+  return (
+    date1.getFullYear() === date2.getFullYear() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate()
+  );
+}
 
+export function getTimeofExcercisesDone(exercises: exerciseType[], day: Date): number {
+  let totalTime = 0;
+
+  exercises?.forEach((exercise) => {
+    if (exercise.start && isSameDay(exercise.start, day)) {
+      const startTime = exercise.start;
+      const endTime = exercise.end || new Date(); // If end time is undefined, use the current date/time
+      const duration = differenceInMinutes(endTime, startTime);
+      totalTime += duration;
+    }
+  });
+  return totalTime;
+}
 
 export const getUserGender = (context:ApiContextType) => {
   context
@@ -131,7 +157,7 @@ export function workout_category_to_color(category: workout_category) {
 export const endExercise = async(token:string,avg_heartrate?:number) =>{
   try{
     console.log("HERE IS THE BIG MONEY",avg_heartrate);
-      const response = await fetch('http://127.0.0.1:8000/users/end_ex/', {
+      const response = await fetch('https://fithub-backend-d06l.onrender.com/users/end_ex/', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
@@ -160,6 +186,7 @@ interface exportedExercise {
   time?: number;
   days?: number;
 }
+
 
 export const setUserPlan = async(token:string,plan:Plan) =>{
   let errorMessage = "success"
@@ -191,7 +218,7 @@ export const setUserPlan = async(token:string,plan:Plan) =>{
   }
 
   try{
-      const response = await fetch('http://127.0.0.1:8000/users/plan/', {
+      const response = await fetch('https://fithub-backend-d06l.onrender.com/users/plan/', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
@@ -216,7 +243,7 @@ export const setUserPlan = async(token:string,plan:Plan) =>{
 export const getExercise = async(token:string) =>{
   let errorMessage = "success"
   try{
-      const response = await fetch('http://127.0.0.1:8000/users/exercise_all/', {
+      const response = await fetch('https://fithub-backend-d06l.onrender.com/users/exercise_all/', {
           method: 'GET',
           headers: {
               'Content-Type': 'application/json',
@@ -238,7 +265,8 @@ export const getExercise = async(token:string) =>{
               name:ex.name,
               category:ex.category
             },
-            expectedTime:ex.fuffilment
+            expectedTime:ex.fuffilment,
+            avg_heartrate:ex.avg_heartrate
           }
           return_list.push(return_item)
         }
@@ -255,7 +283,7 @@ export const getExercise = async(token:string) =>{
 export const startExerciseDirect = async(token:string,exp:ExpectedExercise) =>{
   let errorMessage = "success"
   try{
-      const response = await fetch('http://127.0.0.1:8000/users/strt_ex/', {
+      const response = await fetch('https://fithub-backend-d06l.onrender.com/users/strt_ex/', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',

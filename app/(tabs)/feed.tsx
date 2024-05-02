@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { Text, StyleSheet, View, FlatList } from 'react-native';
+import { Text, StyleSheet, View, FlatList, ScrollView } from 'react-native';
 import { useApiContext } from '../../api/ApiContext';
 import { defaultPageTheme} from '../utility/style';
 import { feedType, getFriendFeed } from '../../api/Feed';
@@ -8,7 +8,7 @@ import { workout_category } from '../../api/Workouts';
 
 
 export default function FriendsPage() {
-  const { authToken } = useApiContext();
+  const { authToken,userData } = useApiContext();
   const [friendFeed, setFriendFeed] = useState<feedType[]>([]);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export default function FriendsPage() {
       }
     };
     fetchFeed();
-  }, []);
+  }, [userData]);
 
   const formatDuration = (duration: number) => {
     console.log("DURRR",duration)
@@ -45,10 +45,11 @@ export default function FriendsPage() {
     }
   };
 
-  const renderFeedItem = ({item}:{item:feedType}) => {
+  const renderFeedItem = (item:feedType) => {
     console.log("END TIME", item.end.toISOString());
     console.log(item.expectedTime);
     const actualDuration = (item.end && item.start) ? Math.floor((item.end.getTime() - item.start.getTime()) / 1000) : 0;
+    const expectDuration =item.expectedTime * 60
     const isFulfilled = actualDuration >= item.expectedTime;
 
     return (
@@ -57,26 +58,22 @@ export default function FriendsPage() {
         <Text style={styles.workoutType}>{item.workout_type.name}</Text>
         <Text style={styles.category}>Category: {item.workout_type.category ? item.workout_type.category : "d"}</Text>
         <Text style={styles.category}>Heartrate: {item.avg_heartrate ? item.avg_heartrate : "N/A"}</Text>
-        <Text style={styles.duration}>Expected Duration: {formatDuration(item.expectedTime)}</Text>
+        <Text style={styles.duration}>Expected Duration: {formatDuration(expectDuration)}</Text>
         <Text style={styles.actualDuration}>Actual Duration: {formatDuration(actualDuration)}</Text>
-        <Text style={styles.fulfilled}>{isFulfilled ? 'Fulfilled' : 'Not Fulfilled'}</Text>
       </View>
     );
   };
 
   return (
-    <View style = {styles.heading}>
-      <View style = {[styles.header, ]}>
+    <>
+    <ScrollView style = {styles.heading}>
       <Text style = {styles.headerText} >Feed</Text>
-        <FlatList
-          data={friendFeed}
-          renderItem={renderFeedItem}
-          keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={styles.feedList}
-        />
-      </View>
-      <StatusBar style="auto" />
-    </View>
+
+      {friendFeed?.map((val,idx)=>{return renderFeedItem(val)})}
+  
+
+    </ScrollView>
+    </>
   );
 }
 

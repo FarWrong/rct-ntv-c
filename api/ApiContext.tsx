@@ -62,7 +62,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
 
   const loginUser = async(username:string,password:string) => {
     try{
-      const response = await fetch('http://127.0.0.1:8000/api/token/', {
+      const response = await fetch('https://fithub-backend-d06l.onrender.com/api/token/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
@@ -88,7 +88,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
 
   const signupUser = async (username: string, password: string, email: string) => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/users/signup/', {
+      const response = await fetch('https://fithub-backend-d06l.onrender.com/users/signup/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

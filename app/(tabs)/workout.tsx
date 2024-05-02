@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import { useApiContext } from '../../api/ApiContext';
 import useHealthData from '../../api/HealthKit';
 import { exerciseType } from '../../api/Exercise';
-
+import { getTimeofExcercisesDone } from '../../api/Exercise';
+import { feedType, getFriendFeed } from '../../api/Feed';
 const styles = StyleSheet.create({
   heading: {
     flex: 1,
@@ -53,15 +54,15 @@ const styles = StyleSheet.create({
   progressBar: {
     height: 7,  
     backgroundColor: '#00B5EE',  
-    width: '50%',  
     borderRadius: 2,  
   },
   progressBarContainer: {
-    backgroundColor: '#E0E0E0',  
+    backgroundColor: 'red',  
     borderRadius: 2,
     overflow: 'hidden', 
     height: 4,
     marginVertical: 9,
+    justifyContent: 'space-between'
   }
 });
 
@@ -73,6 +74,8 @@ function renderWorkoutItem(item: exerciseType) {
         <Text style={styles.text}>Start: {item.start?.toLocaleTimeString()}</Text>
         {item.end && <Text style={styles.text}>End: {item.end.toLocaleTimeString()}</Text>}
         <Text style={styles.text}>Duration: {item.expectedTime} min</Text>
+        <Text style={styles.text}>Heartrate: {item.avg_heartrate}</Text>
+
       </View>
     </View>
   );
@@ -80,9 +83,11 @@ function renderWorkoutItem(item: exerciseType) {
 
 
 export default function WorkoutPage() {
-  const { exercises } = useApiContext();
+  const { exercises,exercisePlan,authToken,userData } = useApiContext();
   const [currentDate, setCurrentDate] = useState(new Date());
   const { steps } = useHealthData();
+  const [friendFeed, setFriendFeed] = useState<feedType[]>([]);
+  const screenWidth = Dimensions.get('window').width;
 
   const handleDateSelected = (date) => {
     setCurrentDate(date);
@@ -91,11 +96,24 @@ export default function WorkoutPage() {
   const isSameDay = (d1, d2) => {
     return new Date(d1).toDateString() === new Date(d2).toDateString();
   };
+  
 
   useEffect(() => {
     console.log("EXERCISE DATA HERE:", exercises);
     setCurrentDate(new Date());
   }, [exercises]);
+
+  useEffect(() => {
+    const fetchFeed = async () => {
+      try {
+        const feed = await getFriendFeed(authToken);
+        setFriendFeed(feed);
+      } catch (error) {
+        console.error('Error fetching friend feed:', error);
+      }
+    };
+    fetchFeed();
+  }, [userData]);
 
   return (
     <ScrollView style={styles.heading}>
@@ -120,24 +138,18 @@ export default function WorkoutPage() {
           {steps}
         </Text>
       </View>
-      <View style={styles.box}>
-        <Text style={[styles.text, {fontWeight: 'bold'}]}>Compared to your friends</Text>
-        <View style={styles.progressBarContainer}>
-          <View style={styles.progressBar}></View>
-        </View>
-      </View>
-      {(exercisePlan && exercisePlan[2]) 
-          ? exercisePlan[2]?.map((val, idx) => <Text>val.name</Text>)
-          : <Text>lmao</Text>}
-      <View style={styles.content}>
-        <View style={styles.row}>
+
+  
+      <View >
+        <View >
           <Text style={[styles.text, { fontWeight: 'bold' }]}>Compared to your friends</Text>
         </View>
       </View>
       <View style={styles.box}>
-        <Text style={[styles.text, {fontWeight: 'bold'}]}>Workouts Failed</Text>
+        <Text style={[styles.text, {fontWeight: 'bold'}]}>Time Spent Working Out</Text>
         <View style={styles.progressBarContainer}>
-          <View style={styles.progressBar}></View>
+          <View style={[styles.progressBar,{width: `${(getTimeofExcercisesDone(exercises, currentDate) / getTimeofExcercisesDone(friendFeed, currentDate)) * 100}%`}]}>
+</View>
         </View>
       </View>
       <View style={{height: 20}}></View>

@@ -122,6 +122,17 @@ interface MonthButtonProps {
   changeMonth: (Month) => void;
 }
 
+function modifyDailySteps(insert:GraphData,offsetindex:number) {
+  let new_insert:GraphData = {
+    datasets:[{data:[]}],
+    labels:[]
+  };
+  let datasetLength = insert.datasets[0].data.length
+  let startIndex = Math.max(0, datasetLength - offsetindex)
+  new_insert.datasets = [{data:insert.datasets[0].data.slice(startIndex)}]
+  new_insert.labels = insert.labels.slice(startIndex)
+  return new_insert
+}
 /** Month Popup layout */
 const MonthButton: React.FC<MonthButtonProps> = ({togglePopup, changeMonth}) => {
   // Chooses day to change and closes day popup
@@ -287,7 +298,7 @@ export default function HomePage() {
   console.log(steps);
   
   // Handles graph time range
-  const timeOptions = ['D', 'W', 'M', 'Y'];
+  const timeOptions = ['W', 'M'];
   const [selectedTime, setSelectedTime] = useState(0);
   const handleTimeChange = (timeIndex) => {
     setSelectedTime(timeIndex);
@@ -317,13 +328,7 @@ export default function HomePage() {
         {selectedTime === 0 ? (
           <>
             <View style={{padding:20}}>
-              <LineChartComponent data={stepsDataLastWeek} title="Steps" />
-              <EditGraphPopup
-                graphType='steps'
-                graphData={stepsDataLastWeek}
-                timeframe={'day'}
-                changeData={setStepsDataLastWeek}
-              />
+              <LineChartComponent data={dailySteps ? modifyDailySteps(dailySteps,7) : stepsDataLastWeek} title="Steps" />
             </View>
             <View style={{padding:20}}>
               <LineChartComponent data={exerciseData} title = "Exercise Minutes" />

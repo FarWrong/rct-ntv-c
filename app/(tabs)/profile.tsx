@@ -164,7 +164,7 @@ const handleHeightUpdate = async () => {
 
               </View>
               <Text style = {[styles.text, {marginTop: -5, marginBottom: -30, fontWeight: 'bold'}]} >
-                 {userData.username?.toString() || 'NA'}
+                 {userData?.username ? userData.username?.toString() : 'NA'}
               </Text>
               <Modal
                         animationType="fade"

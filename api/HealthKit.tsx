@@ -137,6 +137,7 @@ const useHealthData = () => {
         };
 
         setDailySteps(res_data);
+        console.log(res_data)
       });
 
       

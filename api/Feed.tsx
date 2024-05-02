@@ -41,7 +41,8 @@ export const getFriendFeed = async(token:string) =>{
               category:ex.workout_type.category
             },
             expectedTime:ex.expectedTime,
-            user:ex.user
+            user:ex.user,
+            avg_heartrate:ex.avg_heartrate
           }
           ret.push(return_item)
         }

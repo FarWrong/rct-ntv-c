@@ -65,7 +65,7 @@ export function workout_category_to_color(category: workout_category) {
 export const getExercisePlan = async(token:string) =>{
   let errorMessage = "success"
   try{
-      const response = await fetch('http://127.0.0.1:8000/users/plan/', {
+      const response = await fetch('https://fithub-backend-d06l.onrender.com/users/plan/', {
           method: 'GET',
           headers: {
               'Content-Type': 'application/json',
@@ -125,7 +125,7 @@ export const setUserPlan = async(token:string,plan:Plan) =>{
   }
 
   try{
-      const response = await fetch('http://127.0.0.1:8000/users/plan/', {
+      const response = await fetch('https://fithub-backend-d06l.onrender.com/users/plan/', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
@@ -150,7 +150,7 @@ export const setUserPlan = async(token:string,plan:Plan) =>{
 export const getWorkoutTypes = async(token:string) =>{
   let errorMessage = "success"
   try{
-      const response = await fetch('http://127.0.0.1:8000/users/wktypes/', {
+      const response = await fetch('https://fithub-backend-d06l.onrender.com/users/wktypes/', {
           method: 'GET',
           headers: {
               'Content-Type': 'application/json',
