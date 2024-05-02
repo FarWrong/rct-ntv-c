@@ -13,6 +13,7 @@ export interface ApiContextType {
   authToken: string;
   loggedIn: boolean;
   loginUser: (username:string,password:string) => Promise<String | null>;
+  signupUser: (username: string, password: string, email: string) => Promise<null | string>; 
   signoutUser: () => void;
   updateUserData: () => Promise<String | null>;
   userData: UserType | null;
@@ -82,13 +83,37 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
       return error;
     }
   }
+
+
+
+  const signupUser = async (username: string, password: string, email: string) => {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/users/signup/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password, email }),
+      });
+      if (!response.ok) {
+        return "Could not connect to server";
+      }
+      const data = await response.json();
+      return 'User created successfully.'; // Return null if signup is successful
+    } catch (error) {
+      console.error('Signup error:', error);
+      return "Failed to create user"; // Return error message if signup fails
+    }
+  };
+
+
   useEffect(() => {
   // Perform any necessary actions when userData changes
   console.log('userData updated:', userData);
   }, [userData]);
 
   return(
-    <ApiContext.Provider value={{ authToken,loggedIn,loginUser,signoutUser,updateUserData,userData,exercisePlan,exercises}}>
+    <ApiContext.Provider value={{ authToken,loggedIn,loginUser,signoutUser,updateUserData,userData,exercisePlan,exercises, signupUser}}>
       {children}
     </ApiContext.Provider>
   )

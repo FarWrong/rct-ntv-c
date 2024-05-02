@@ -31,7 +31,7 @@ export default function Page() {
       
   
 
-<TextInput
+<TextBox
   style = {[styles.input, {marginTop: 50}]}
   placeholder="First Name"
   value={userData.first_name?.toString() || ''}
@@ -39,7 +39,7 @@ export default function Page() {
  
 />
 
-<TextInput
+<TextBox
   style = {styles.input}
   placeholder="Last Name"
   value={userData.last_name?.toString() || ''}
@@ -47,7 +47,7 @@ export default function Page() {
   
 />
 
-<TextInput
+<TextBox
   style = {styles.input}
   placeholder="Gender"
   value={userData.gender?.toString() || ''}
@@ -55,7 +55,7 @@ export default function Page() {
   
 />
 
-<TextInput
+<TextBox
   style = {styles.input}
   placeholder="Weight"
   value={userData.weight?.toString() || ''}
@@ -71,7 +71,7 @@ export default function Page() {
   
 />
 
-<TextInput
+<TextBox
   style = {styles.input}
   placeholder="Height"
   value={userData.height?.toString() || ''}

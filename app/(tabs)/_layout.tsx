@@ -37,6 +37,16 @@ const styles1 = StyleSheet.create({
     justifyContent: 'center',
     elevation: 5,
   },
+  button2: {
+    top: -30,
+    backgroundColor: '#E0E0E0',
+    borderRadius: 30,
+    width: 60,
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 5,
+  },
   buttonContainer: {
     top: -30,
     alignItems: 'center',
@@ -117,6 +127,7 @@ export default () => {
   function returnButtonSelector(user:UserType|null, plan:Plan|null){
     if(user?.isWorking){
       return (
+          //is excercising
           <View style={{top: -30}}>
           <CountdownCircleTimer
             isPlaying
@@ -151,21 +162,22 @@ export default () => {
     }
     if(workoutOptions.length > 0){
     return(
+      //has workouts
       <TouchableOpacity style={styles1.button} onPress={()=>{
         if(workoutOptions.length > 0){
           setWrkSlctVisible(true);
         }
       }}>
         
-        <Ionicons name="bicycle" size={40} color="#fff" />
+        <Ionicons name="bicycle" size={40} color="white" />
       </TouchableOpacity>
     )
     }
     return(
-      
-      <TouchableOpacity style={styles1.button}>
+      //has no workouts
+      <TouchableOpacity style={styles1.button2}>
         
-        <Ionicons name="bicycle" size={40} color="red" />
+        <Ionicons name="bicycle" size={40} color="white" />
       </TouchableOpacity>
     )
   }

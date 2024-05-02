@@ -126,10 +126,12 @@ export default function WorkoutPage() {
           <View style={styles.progressBar}></View>
         </View>
       </View>
-      <View style={styles.box}>
-        <Text style={[styles.text, {fontWeight: 'bold'}]}>Workouts Completed</Text>
-        <View style={styles.progressBarContainer}>
-          <View style={styles.progressBar}></View>
+      {(exercisePlan && exercisePlan[2]) 
+          ? exercisePlan[2]?.map((val, idx) => <Text>val.name</Text>)
+          : <Text>lmao</Text>}
+      <View style={styles.content}>
+        <View style={styles.row}>
+          <Text style={[styles.text, { fontWeight: 'bold' }]}>Compared to your friends</Text>
         </View>
       </View>
       <View style={styles.box}>
