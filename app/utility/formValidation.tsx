@@ -2,6 +2,7 @@
 const userRegex:RegExp =/^[A-Za-z0-9_]{3,32}$/;
 const passRegex:RegExp = /^(?=.*[\d])(?=.*[!@#$%^&*_])(?=.*[A-Z])(?=.*[a-z])[\w!@#$%^&*]{8,32}$/;
 const emailRegex:RegExp = /^[\w!#$%&'*+/=?`{|}~^-]+(?:\.[\w!#$%&'*+/=?`{|}~^-]+)*@(?:[A-Z0-9-]+\.)+[A-Z]{2,6}$/;
+const numberRegex:RegExp = /^\d+$/;
 
 
 /** Error messages for invalid inputs */
@@ -14,6 +15,7 @@ const passInvalid:string = 'Your password must be between 8 ' +
                            'following: !@#$%^&*_';
 const passMatchInvalid:string = 'Both passwords must match.';
 const emailInvalid:string = 'Type in a valid email address.';
+const numberInvalid:string = 'The following value is not a valid number.';
 
 
 /** Performs form validation on a given string */
@@ -49,6 +51,16 @@ function IsValidEmail(email:string) {
 /** Returns error message if the username is invalid */
 export function ValidateEmail(email:string) {
     return !IsValidEmail(email) ? emailInvalid : ''; 
+}
+
+
+/** Determines if the string is also a number */
+function IsValidNumber(num:string) {
+    return CheckValue(num, numberRegex);
+}
+/** Returns error message if the string isn't a number */
+export function ValidateNumber(num:string) {
+    return !IsValidNumber(num) ? numberInvalid : '';
 }
 
 

@@ -1,16 +1,19 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Redirect, router, Stack, useRootNavigationState } from 'expo-router';
 import { Tabs } from 'expo-router/tabs';
-import React, { DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_FORM_ACTIONS, useEffect } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import React, { DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_FORM_ACTIONS, useEffect, useState } from 'react';
+import { Modal,Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useApiContext } from '../../api/ApiContext';
 import { useTheme } from '../utility/ThemeContext';
 import { StyleSheet } from 'react-native';
-import { getNextExercise,startExerciseDirect } from '../../api/Exercise';
+import { endExercise, exerciseType, getNextExercises,startExerciseDirect } from '../../api/Exercise';
 import { UserType } from '../../api/User';
-import { Plan } from '../../api/Workouts';
+import { ExpectedExercise, Plan } from '../../api/Workouts';
+import { styles } from '../utility/style';
+import { returnNumberAsTime } from './plan';
+import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 
-const styles = StyleSheet.create({
+const styles1 = StyleSheet.create({
   tabBar: {
     position: 'absolute',
     bottom: 0,
@@ -34,45 +37,158 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     elevation: 5,
   },
+  buttonContainer: {
+    top: -30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 5,
+  },
+  countdownTimer: {
+    backgroundColor: '#007AFF',
+    borderRadius: 30,
+    width: 60,
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 5,
+  },
 });
+
 
 
 
 
 export default () => {
   const { authToken,loggedIn,userData ,updateUserData,exercisePlan,exercises} = useApiContext();
-  
-  function returnButtonSelector(user:UserType,plan:Plan){
-    if(user?.isWorking){
-      return(<TouchableOpacity style={styles.button} onPress={()=>{
-        let next = getNextExercise(exercisePlan,exercises);
-        if(next){
-          startExerciseDirect(authToken,next);
-          updateUserData();
-        }
-      }}>
-        
-        <Ionicons name="checkmark-done-circle-outline" size={40} color="#fff" />
-      </TouchableOpacity>)
-    }
+  const [wrkSlct, setWrkSlctVisible] = useState(false);
+  const [workoutOptions, setWorkoutOptions] = useState<ExpectedExercise[]>([]);
+  const [time, setTime] = useState(Date.now());
+  const [duration,setDuration] = useState(0);
+  const [isplaying,setisPlaying] = useState(false);
+  useEffect(() => {
+    const updateOptions = async () => {
+      console.log("Updating workout options");
+      let options = getNextExercises(exercisePlan, exercises);
+      setWorkoutOptions(options);
+    };
+    updateOptions();
+
+  }, [authToken, loggedIn, userData, exercisePlan, exercises]);
+
+  async function onPress_func(expect_ex: ExpectedExercise) {
+    await startExerciseDirect(authToken, expect_ex);
+    
+    setWrkSlctVisible(false);
+    await updateUserData();
+    setDuration(expect_ex.time * 60);
+    setisPlaying(true);
+  }
+
+
+  function renderExcerciseSelector(expect_ex:ExpectedExercise){
+    const style = StyleSheet.create({
+      button: {
+        backgroundColor: '#00B5EE',
+        borderRadius: 15,
+        margin: 10,
+        padding: 10,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+      },
+      buttonText: {
+        color: '#FFFFFF',
+        fontSize: 16,
+        fontWeight: '500',
+      }
+    });
     return(
-      
-      <TouchableOpacity style={styles.button} onPress={()=>{
-        let next = getNextExercise(exercisePlan,exercises);
-        if(next){
-          startExerciseDirect(authToken,next);
-          updateUserData();
+      <TouchableOpacity onPress={() => onPress_func(expect_ex)} style={style.button}>
+          <Text style={style.buttonText}>{expect_ex.name+ "for "+returnNumberAsTime(expect_ex.time)}</Text>
+      </TouchableOpacity>
+    )
+  }
+
+  
+
+  function returnButtonSelector(user:UserType|null, plan:Plan|null){
+    if(user?.isWorking){
+      return (
+          <View style={{top: -30}}>
+          <CountdownCircleTimer
+            isPlaying
+            duration={duration}
+            colors={['#004777', '#F7B801', '#A30000', '#A30000']}
+            colorsTime={[7, 5, 2, 0]}
+            size={70}
+            onComplete={() => {
+              // do your stuff here
+              setisPlaying(false);
+              return { } // repeat animation in 1.5 seconds
+            }}
+        
+          >
+            {({ remainingTime }) => (
+              <TouchableOpacity
+              style={styles1.countdownTimer}
+              onPress={async () => {
+                await endExercise(authToken);
+                await updateUserData();
+              }}
+            >
+    
+                <Ionicons name="checkmark-done-circle-outline" size={40} color="blue" />
+    
+
+          </TouchableOpacity>
+            )}
+          </CountdownCircleTimer>
+          </View>
+      );
+    }
+    if(workoutOptions.length > 0){
+    return(
+      <TouchableOpacity style={styles1.button} onPress={()=>{
+        if(workoutOptions.length > 0){
+          setWrkSlctVisible(true);
         }
       }}>
         
         <Ionicons name="bicycle" size={40} color="#fff" />
       </TouchableOpacity>
     )
+    }
+    return(
+      
+      <TouchableOpacity style={styles1.button}>
+        
+        <Ionicons name="bicycle" size={40} color="red" />
+      </TouchableOpacity>
+    )
   }
   
   const { theme } = useTheme();
+
   return (
     <>
+    <Modal
+                        animationType="fade"
+                        transparent={true}
+                        visible={wrkSlct}
+                        onRequestClose={() => setWrkSlctVisible(false)}
+                    >
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalContent}>
+                                {workoutOptions.map((val,idx)=>{return renderExcerciseSelector(val)})}
+                                <TouchableOpacity onPress={() => setWrkSlctVisible(false)} style={styles.closeButton}>
+                                  <Ionicons name="close" size={20}  /> {/* Close icon */}
+                                  </TouchableOpacity>
+                            </View>
+                        </View>
+                    </Modal>
     <Tabs screenOptions={({ route }) => ({
       tabBarIcon: ({ focused, color, size }) => {
         let iconName;
@@ -100,6 +216,7 @@ export default () => {
       { /*Order of tabs*/ }
       <Tabs.Screen name="home" options={{title: "Home"}}/>
       <Tabs.Screen name="workout" options={{title: "Workout"}}/>
+      <Tabs.Screen name="feed" options={{title: "Feed"}}/>
       <Tabs.Screen
         name="exercise"
         options={{
@@ -109,7 +226,7 @@ export default () => {
       />
       <Tabs.Screen name="friends" options={{title: "Friends"}}/>
       <Tabs.Screen name="profile" options={{title: "Profile"}}/>
-      
+      <Tabs.Screen name="plan" options={{title: "Plan"}}/>
 
     </Tabs>
   </>

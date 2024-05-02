@@ -59,21 +59,13 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   popupContainer: {
-    flex: 1,
-    flexDirection: 'column',
-    width: '75%',
+    alignItems: 'center',
+    justifyContent: 'center',
     minHeight: 200,
-    alignItems: 'center',
-    justifyContent: 'center',
+    minWidth: 150,
     margin: 50,
-    padding: 20,
-    borderRadius: 10,
-  },
-  popupBody: {
-    flex: 1,
     padding: paddingMedium,
-    alignItems: 'center',
-    justifyContent: 'center',
+    borderRadius: 10,
   },
   popupClose: {
     position: 'absolute',
@@ -90,7 +82,6 @@ export const styles = StyleSheet.create({
   buttonContainer:{
     alignItems: 'center',
     justifyContent: 'center',
-    //height: 40,
     borderRadius: 9999, // perfectly round
     paddingHorizontal: paddingExtraLarge,
     paddingVertical: paddingSmall,
@@ -99,6 +90,15 @@ export const styles = StyleSheet.create({
     fontSize: fontLarge,
     fontWeight: 'bold'
   },
+
+  /** Plan CSS */
+  planPopupText: {
+    fontSize: fontTitle,
+    fontWeight: 'bold'
+  },
+
+  //textTitle
+  
 
   /** FIX PLEASE!!!!! */
   container: {
@@ -232,7 +232,60 @@ export const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     borderRadius: 10,
-  }
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    width: '50%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 200
+  },
+  settingsbutton: {
+    backgroundColor: '#00B5EE',
+    marginTop: 5,
+    marginBottom: 2,
+    paddingHorizontal: 40,
+    paddingVertical: 2,
+    borderRadius: 50,
+    alignItems:'center',
+  },
+  settingsbuttonText: {
+    backgroundColor: '#00B5EE',
+    color: 'white',
+    marginTop: 5,
+    marginBottom: 5,
+    paddingHorizontal: 10,
+    borderRadius: 50,
+    alignItems:'center',
+  },
+  input: {
+    backgroundColor: '#F0F0F0',
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    marginBottom: 10,
+    width: '40%', // Adjust width as needed
+    color: '#333', // Text color
+    fontSize: 16,
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    borderRadius: 20,
+    width: 30,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
 
 

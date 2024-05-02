@@ -15,7 +15,6 @@ import { useTheme } from '../utility/ThemeContext';
  * @param field        - Determines the keyboard used for the input
  * @param validate     - A function used to validate the input
  * @param style        - Allows custom styles to be passed
- * @param x            - Other components that can be passed to TextBox
  */
 interface TextboxProps {
     placeholder: string;
@@ -24,7 +23,7 @@ interface TextboxProps {
     field?: KeyboardTypeOptions;
     validate?: (string) => string;
     style?: StyleProp<ViewStyle>;
-    [x: string]: any;
+    //[x: string]: any;
 }
 
 export const TextBox: React.FC<TextboxProps> = ({ placeholder, value, 

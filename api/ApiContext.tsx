@@ -1,12 +1,12 @@
 // ThemeContext.tsx
-import React, { createContext, useContext, ReactNode, useState } from 'react';
+import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 import { router } from 'expo-router';
-import {UserType} from './User'
+import { UserType } from './User'
 import { getUserInfo } from './User';
 import { acceptFriendRequest } from './Friends';
-import {expectedExercise,getExercisePlan, Plan} from './Workouts'
-import { workoutTypeType } from './Workouts';
-import {getExercise,exerciseType} from './Exercise'
+import { ExpectedExercise, getExercisePlan, Plan } from './Workouts'
+import { WorkoutTypeType } from './Workouts';
+import { getExercise, exerciseType } from './Exercise'
 
 
 export interface ApiContextType {
@@ -82,7 +82,10 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
       return error;
     }
   }
-
+  useEffect(() => {
+  // Perform any necessary actions when userData changes
+  console.log('userData updated:', userData);
+  }, [userData]);
 
   return(
     <ApiContext.Provider value={{ authToken,loggedIn,loginUser,signoutUser,updateUserData,userData,exercisePlan,exercises}}>

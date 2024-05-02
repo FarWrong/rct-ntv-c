@@ -60,8 +60,11 @@ export default function Page() {
   placeholder="Weight"
   value={userData.weight?.toString() || ''}
   onChangeText={(text) => {
-    const weight = parseInt(text, 10);
+    let weight = parseInt(text, 10);
     if (!isNaN(weight)) {
+      setUserData({ ...userData, weight });
+    } else{
+      weight=0;
       setUserData({ ...userData, weight });
     }
   }}
@@ -73,8 +76,11 @@ export default function Page() {
   placeholder="Height"
   value={userData.height?.toString() || ''}
   onChangeText={(text) => {
-    const height = parseInt(text, 10);
+    let height = parseInt(text, 10);
     if (!isNaN(height)) {
+      setUserData({ ...userData, height });
+    }else{
+      height=0;
       setUserData({ ...userData, height });
     }
   }}

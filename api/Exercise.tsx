@@ -3,15 +3,15 @@ import React, { createContext, useContext, ReactNode, useState } from 'react';
 import { router } from 'expo-router';
 import { ApiContextType } from './ApiContext';
 import { workout_category } from './Workouts';
-import { expectedExercise } from './Workouts';
-function string_to_date(input: string): Date {
+import { ExpectedExercise } from './Workouts';
+export function string_to_date(input: string): Date | undefined {
   // Parse the input string into a Date object
   const date = new Date(input);
 
   // Check if the parsed date is valid
   if (isNaN(date.getTime())) {
     // If the parsed date is invalid, throw an error
-    throw new Error('Invalid date string');
+    return undefined;
   }
 
   // Return the parsed Date object
@@ -19,9 +19,10 @@ function string_to_date(input: string): Date {
 }
 
 export interface exerciseType{
-  start:Date | undefined,
-  workout_type:workoutTypeType
+  start: Date | undefined,
+  workout_type: WorkoutTypeType
   end: Date | undefined,
+  expectedTime:number
 }
 
 
@@ -45,26 +46,29 @@ enum BloodType {
 }
 
 export interface Plan{
-  workout_days:Array<Array<expectedExercise>>;
+  workout_days:Array<Array<ExpectedExercise>>;
   difficulty_level?:string;
   plan_name?:string;
   description?:string;
 }
 
 
-export interface workoutTypeType {
+export interface WorkoutTypeType {
   name: string;
   category: workout_category;
 }
 
-export const getNextExercise = (plan_data: Plan | null, ex_data: exerciseType[]): expectedExercise | null => {
+export const getNextExercises = (plan_data: Plan | null, ex_data: exerciseType[]): ExpectedExercise[] => {
+  console.log("plan data doesn't exist?");
   if (!plan_data) {
-    return null;
+    return [];
   }
-
+  console.log("MEP");
+  
   const currentDate = new Date();
-  const day_data: expectedExercise[] = plan_data.workout_days[currentDate.getDay()];
-
+  const day_data: ExpectedExercise[] = plan_data.workout_days[currentDate.getDay()];
+  console.log("Planned for today",day_data);
+  
   // Filter ex_data to get exercises done on the same day
   const exercisesDoneToday = ex_data.filter((exercise) => {
     const exerciseDate = exercise.start;
@@ -75,16 +79,48 @@ export const getNextExercise = (plan_data: Plan | null, ex_data: exerciseType[])
       exerciseDate.getDate() === currentDate.getDate()
     );
   });
+  console.log("exDone Today",exercisesDoneToday);
 
-  // Create a Set of completed exercise names from exercisesDoneToday
-  const completedExercisesToday = new Set(exercisesDoneToday.map((exercise) => exercise.workout_type.name));
+  // Create a copy of day_data to avoid modifying the original array
+  const remainingExercises = [...day_data];
 
-  // Find the first exercise in day_data that is not in the completedExercisesToday Set
-  const nextExercise = day_data.find((exercise) => !completedExercisesToday.has(exercise.name));
+  // Iterate over each completed exercise
+  exercisesDoneToday.forEach((completedExercise) => {
+    
+    
+    let completedTime = 0;
 
-  return nextExercise || null;
+    if (completedExercise.start && completedExercise.end) {
+      completedTime = completedExercise.end.getTime() - completedExercise.start.getTime();
+    } else {
+      completedTime = -1;
+    }
+    completedTime = completedTime/ 60000
+    console.log("start", completedExercise.start);
+    console.log("end", completedExercise.end);
+    console.log("completed Time", completedTime);
+    // Find the index of the expected exercise with the largest time that is still lower than the completed time
+    let indexToRemove = -1;
+    let maxTime = -30;
+    remainingExercises.forEach((expectedExercise, index) => {
+      if (
+        expectedExercise.name.trim() === completedExercise.workout_type.name.trim() &&
+        expectedExercise.time <= completedTime &&
+        expectedExercise.time > maxTime
+      ) {
+        console.log(completedExercise,"WE've FOUND ONE ")
+        indexToRemove = index;
+        maxTime = expectedExercise.time;
+      } 
+    });
+
+    // Remove the expected exercise from remainingExercises if a match is found
+    if (indexToRemove !== -1) {
+      remainingExercises.splice(indexToRemove, 1);
+    }
+  });
+  return remainingExercises;
 };
-
 
 export function workout_category_to_color(category: workout_category) {
   switch (category) {
@@ -134,7 +170,7 @@ export const setUserPlan = async(token:string,plan:Plan) =>{
   let real_work:exportedExercise[] = []
   for(let i =0;i<plan.workout_days.length;i++){
     for(let j=0;j<plan.workout_days[i].length;j++){
-      let expect:expectedExercise = plan.workout_days[i][j]
+      let expect:ExpectedExercise = plan.workout_days[i][j]
       let real = real_work.find((val)=> (val.name == expect.name) && val.time == expect.time)
       if(!real){
         real_work.push({
@@ -205,7 +241,8 @@ export const getExercise = async(token:string) =>{
             workout_type:{
               name:ex.name,
               category:ex.category
-            }
+            },
+            expectedTime:ex.fuffilment
           }
           return_list.push(return_item)
         }
@@ -220,7 +257,7 @@ export const getExercise = async(token:string) =>{
 
 
 
-export const startExerciseDirect = async(token:string,exp:expectedExercise) =>{
+export const startExerciseDirect = async(token:string,exp:ExpectedExercise) =>{
   let errorMessage = "success"
   try{
       const response = await fetch('http://127.0.0.1:8000/users/strt_ex/', {
@@ -245,7 +282,8 @@ export const startExerciseDirect = async(token:string,exp:expectedExercise) =>{
             workout_type:{
               name:ex.name,
               category:ex.category
-            }
+            },
+            expectedTime:ex.fuffilment
           }
           return_list.push(return_item)
         }
